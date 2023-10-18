@@ -7,5 +7,19 @@
 }
 body {
   background-color: rgb(17 17 17);
-  color: white;
+  color: red;
 }
+    .container {
+      max-width: 100%;
+      padding: 0 1rem;
+      margin: 0 auto;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .col {
+      flex: 1;
+      padding: 0 1rem;
+    }
