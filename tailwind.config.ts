@@ -20,5 +20,9 @@ const config: Config = {
       }
   },
   plugins: [],
+  corePlugins: {
+    // ...other core plugins
+    gradientColorStops: false, 
+  },
 }
 export default config

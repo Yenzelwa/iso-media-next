@@ -3,22 +3,24 @@ import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDownIcon, PlayIcon } from "@heroicons/react/24/outline";
 
-import { Movie } from "../../../typings";
+import { Video } from "../../../typings";
 
 interface MovieCardProps {
-  data: Movie;
+  data: Video;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
   const router = useRouter();
+ 
+  const url = (category : string) =>{ return category === 'Series' ? '/series' : '/watch';}
 
   const redirectToWatch = useCallback(
-    () => router.push(`/watch/${data.id}`),
+    () => router.push(`${url(data.category.name)}/${data.id}`),
     [router, data.id]
   );
 
   return (
-    <div className="group bg-zinc-900 col-span relative h-[12vw]">
+    <div className="group bg-zinc-900 col-span relative ">
       <img
         onClick={redirectToWatch}
         src={data.image_path}
@@ -111,7 +113,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-start gap-1 mt-2 text-[8px] text-white lg:text-sm">
+      <div className="flex flex-col items-start gap-1 mt-2 text-[8px] lg:text-sm">
     <p className="text-white text-[10px] lg:text-sm">
         {data.title}
     </p>

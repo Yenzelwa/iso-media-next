@@ -4,10 +4,11 @@
 
 :root {
   --foreground-rgb:  rgb(17 17 17);
+  color: white;
 }
 body {
   background-color: rgb(17 17 17);
-  color: red;
+  color: white;
 }
     .container {
       max-width: 100%;

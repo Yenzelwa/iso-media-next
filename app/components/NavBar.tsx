@@ -23,10 +23,10 @@ const NavBar = () => {
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
           <div className="lg:flex-grow text-sm font-semibold text-gray-900 uppercase dark:text-white">
             <Link
-              href="/"
+              href="/browse"
               className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
             >
-              Home
+              Browse
             </Link>
             <Link
               href="/series"
