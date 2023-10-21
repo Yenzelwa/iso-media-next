@@ -11,10 +11,25 @@ export interface Video {
   image_path: string;
   video_id: number;
   video_path: string;
-  category: {
+  type: {
     id: number;
     name: string;
+    category: {
+      id:number;
+      name:string;
+    }
   };
+}
+
+export interface VideoCardModel{
+  id:number;
+  title: string;
+  sub_title: string;
+  description: string;
+  release_date: Date;
+  rating: number;
+  image_path: string;
+  url:string;
 }
 
 export interface Series {
