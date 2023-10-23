@@ -1,6 +1,9 @@
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 :root {
   --foreground-rgb:  rgb(17 17 17);
@@ -450,3 +453,12 @@ section.show-movie-section {
   border: none !important;
 }
 .hover-buttons .btn { padding: 5px 15px; font-size: 12px; }
+
+.iq-widget-menu .post-blog {line-height: 0px;}
+.iq-widget-menu .post-img .post-blog .blog-box ul li {margin-bottom: 13px;}
+.widget ul li:last-child {padding-bottom: 0;}
+.widget ul { padding: 0; margin: 20px 0px 15px 0px;}
+.iq-widget-menu .iq-post li a.date-widget {color: var(--iq-primary); display: block; font-size: 18px; font-weight: 700;}
+.iq-widget-menu ul.iq-post li { margin-bottom: 24px;}
+.iq-widget-menu ul.iq-post li .post-img {display: flex;}
+.list-inline {padding-left: 0;list-style: none;}

@@ -28,13 +28,13 @@ const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
 
   return (
     <>
-      <div className="px-4  pb-5 md:px-12 mt-4 space-y-8">
+      <div className="relative px-4  pb-5 md:px-12 mt-4 space-y-8">
         <div>
           <p className="text-white text-md md:text-xl lg:text-2xl font-semibold mb-4">
             {title}
           </p>
 
-          <div id="prev1" className="swiper-button swiper-button-prev relative"><i className="fa fa-chevron-left"></i></div>
+          <div id="prev1" className="swiper-button swiper-button-prev relative pl-8"><i className="fa fa-chevron-left pl-8"></i></div>
          <div id="next1" className="swiper-button swiper-button-next relative"><i className="fa fa-chevron-right"></i></div>
                                     <Swiper
                                         slidesPerView={4}
