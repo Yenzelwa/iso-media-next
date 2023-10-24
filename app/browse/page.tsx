@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     rating: 4.5,
     type: {
       id:1,
-      name:'Series',
+      name:'Documentary',
       category : {
         id: 1,
         name : 'Education'
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
       rating: 4.5,
       type: {
         id:1,
-        name:'Series',
+        name:'Documentary',
         category : {
           id: 1,
           name : 'Education'
@@ -97,7 +97,7 @@ export const metadata: Metadata = {
       rating: 4.5,
       type: {
         id:1,
-        name:'Series',
+        name:'Documentary',
         category : {
           id: 1,
           name : 'Personal Development'

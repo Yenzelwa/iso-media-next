@@ -1,17 +1,70 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const Player = () =>{
  const [btnPlay, setBtnPlay] = useState(true);
  const [btnMute, setBtnMute] = useState(false);
  const [btnFullScreen, setBtnFullScreen] = useState(false);
+ const [duration, setDuration] = useState('00:00');
+ const currentTimeElem = useRef<HTMLDivElement | null>(null);
  
- const btnPlayPause = document.querySelector('.play-pause-btn');
- const togglePlay = () =>{
-    if(btnPlay) { setBtnPlay(true) ; }
-    else { setBtnPlay(false); }
- }
- btnPlayPause?.addEventListener("click", togglePlay);
+ const videoRef = useRef<HTMLVideoElement | null>(null);
+
+
+ const timelineContainerRef = useRef<HTMLDivElement | null>(null);
+
+ useEffect(() => {
+   if (videoRef.current) {
+     const videoElement = videoRef.current;
+     const timelineContainer = timelineContainerRef.current;
+
+     let currentDuration = formatDuration(videoElement.duration);
+     setDuration(currentDuration);
+
+     if (btnPlay) {
+       videoElement.play();
+     } else {
+       videoElement.pause();
+     }
+
+     videoElement.muted = btnMute;
+
+     if (timelineContainer) {
+       videoElement.addEventListener('timeupdate', () => {
+         // Assuming currentTimeElem is also a ref
+         if (currentTimeElem.current) {
+           currentTimeElem.current.textContent = formatDuration(videoElement.currentTime);
+         }
+
+         const percent = videoElement.currentTime / videoElement.duration;
+
+         if (timelineContainer.style) {
+           timelineContainer.style.setProperty('--progress-position', percent.toString());
+         }
+       });
+     }
+   }
+ }, [btnPlay, btnMute, duration]);
+
+
+
+
+ const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
+  minimumIntegerDigits: 2,
+})
+ function formatDuration(time: any) {
+  debugger;
+  const seconds = Math.floor(time % 60)
+  const minutes = Math.floor(time / 60) % 60
+  const hours = Math.floor(time / 3600)
+  if (hours === 0) {
+      return `${minutes}:${leadingZeroFormatter.format(seconds)}`
+  } else {
+      return `${hours}:${leadingZeroFormatter.format(
+          minutes
+      )}:${leadingZeroFormatter.format(seconds)}`
+  }
+}
 
     return(
         <div className="video-container">
@@ -44,7 +97,7 @@ const Player = () =>{
               </button> 
               
               <div className="volume-container">
-                <button className="mute-btn">
+                <button onClick={() => setBtnMute(!btnMute)} className="mute-btn">
                     {btnMute ? 
                     <svg className="volume-muted-icon" viewBox="0 0 24 24">
                       <path
@@ -71,7 +124,7 @@ const Player = () =>{
               </div>
               <div className="duration-container">
                 <div className="current-time">0:00</div>/
-                <div className="total-time">21:26</div>
+                <div className="total-time">{duration}</div>
               </div>
               <button className="captions-btn">
                 <svg viewBox="0 0 24 24">
@@ -100,7 +153,7 @@ const Player = () =>{
               </button>
             </div>
           </div>
-          <video src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" autoPlay>
+          <video ref={videoRef} src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" autoPlay>
             <track kind="captions" src="../../../assets/subtitles.vtt" />
           </video>
         </div>

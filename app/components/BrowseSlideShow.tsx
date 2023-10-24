@@ -36,12 +36,11 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
           className="h-[480px] w-full  bg-center bg-cover duration-500"
         >
           <div className="absolute top-[20%] md:top-[20%] ml-4 md:ml-16 via-transparent to-transparent">
-          <div className="show-movie w-full flex">
-          <div className="epi-desc">
+          <div className="show-movie w-full flex pb-4">
             <div className="d-flex align-items-center justify-content-between mb-3">
-              <span className="text-white rel-date">Documentary</span>
+              <span className="type-container">Series</span>
             </div>
-          </div>
+         
           </div>
           <ul className="list-none p-0 m-0 flex items-center text-red-500 space-x-2">
       <li>
@@ -81,7 +80,7 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
             <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
               <button
       type="submit"
-      className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md ml-2"
+      className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md "
     >
       Play Now
     </button>

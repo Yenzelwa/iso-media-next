@@ -57,7 +57,7 @@ const SeriesPage = () =>{
         rating: 4.5,
         type: {
           id:1,
-          name:'Series',
+          name:'Documentary',
           category : {
             id: 1,
             name : 'Education'
@@ -76,7 +76,7 @@ const SeriesPage = () =>{
         rating: 4.5,
         type: {
           id:1,
-          name:'Series',
+          name:'Documentary',
           category : {
             id: 1,
             name : 'Education'
@@ -114,7 +114,7 @@ const SeriesPage = () =>{
         rating: 4.5,
         type: {
           id:1,
-          name:'Series',
+          name:'Documentary',
           category : {
             id: 1,
             name : 'Education'

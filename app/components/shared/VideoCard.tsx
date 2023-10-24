@@ -15,30 +15,24 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ data, sub_title}) => {
   const router = useRouter();
  
-  const url = (category : string) =>{ return category === 'Series' ? '/series' : '/watch';}
+  const url = (category : string) =>{ return category === 'Series' ? `/series/${data.video_id}` : `/watch/${data.video_id}`;}
 
   const redirectToWatch = useCallback(
-    () => router.push(`${url(data.type.name)}/${data.id}`),
-    [router, data.id]
+    () => router.push(`${url(data.type.name)}/${data.video_id}`),
+    [router, data.video_id]
   );
 
   return (
-    <div className="block-images1 block-images relative">
+    <Link href={url(data.type.name)} className="block-images1 block-images relative">
         <div className="img-box">
             <img src={data.image_path} className="img-fluid" alt="" />
-        </div>
-        <div className="block-description">
-            <h6 className="iq-title"><Link href="/documentary-details?id=">{data.type.name}</Link></h6>
-
-            <div className="hover-buttons">
-                <Link href={url(data.type.name)} role="button" className="btn-primary btn-hover"><i className="fa fa-play mr-1" aria-hidden="true"></i>
-                    Play Now
-                </Link>
-            </div>
         </div>
         <div className="flex flex-col items-start gap-1 mt-2 text-[8px] lg:text-sm">
     <p className="text-white text-[10px] lg:text-sm font-bold">
         {data.title}
+    </p>
+    <p className="text-white text-[10px] lg:text-sm">
+        {sub_title}
     </p>
     {/* <div className="rating">
         <div className="star-rating">
@@ -82,7 +76,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data, sub_title}) => {
       </li>
     </ul>
 </div>
-    </div>
+    </Link>
   );
 };
 
