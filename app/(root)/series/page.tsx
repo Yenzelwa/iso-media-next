@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import React from "react";
-import BrowseSlideShow from "../components/BrowseSlideShow";
+import BrowseSlideShow from "../../components/BrowseSlideShow";
 import { Video } from "@/typings";
-import Videos from "../components/shared/Videos";
+import Videos from "../../components/shared/Videos";
 
 export const metadata: Metadata = {
     title: 'isolakwamuntu series  ',

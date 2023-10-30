@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 import React, { useState } from 'react';
-import BrowseSlideShow from '../components/BrowseSlideShow';
+import BrowseSlideShow from '../../components/BrowseSlideShow';
 import { Video } from '@/typings';
-import BrowseVideos from '../components/shared/BrowseVideos';
+import BrowseVideos from '../../components/shared/BrowseVideos';
 
 
 export const metadata: Metadata = {

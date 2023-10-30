@@ -57,12 +57,16 @@ const SignUpAccount = () =>{
               Sign In
             </a>
           </p>
-          <button
-            className="bg-red text-white px-8 py-2 hover:bg-red-600 rounded-md"
+          
+        </div>
+        <div className='p-10'>
+        <button
+            className="w-80 bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md"
           >
-            Sign Up
+            Next
           </button>
         </div>
+       
       </div>
           );
         };
