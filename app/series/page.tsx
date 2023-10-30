@@ -130,7 +130,7 @@ const SeriesPage = () =>{
   ];
     return (
     <>
-     <BrowseSlideShow movies={movies}/>
+     <BrowseSlideShow videos={movies}/>
       <Videos  page="series" title="" data={movies} />
     </>
     )

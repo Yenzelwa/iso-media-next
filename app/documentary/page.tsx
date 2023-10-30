@@ -1,8 +1,8 @@
 import { Video } from "@/typings";
 import { Metadata } from "next";
 import React from "react";
-import BrowseSlideShow from "../components/BrowseSlideShow";
-import Videos from "../components/shared/Videos";
+import BrowseSlideShow from "@/app/components/BrowseSlideShow";
+import Videos from "@/app/components/shared/Videos";
 
 export const metadata: Metadata = {
     title: 'isolakwamuntu documentary  ',
@@ -130,7 +130,7 @@ const DocumentaryPage = () =>{
       ];
         return (
         <>
-         <BrowseSlideShow movies={movies}/>
+         <BrowseSlideShow videos={movies}/>
           <Videos page="documentary" title="" data={movies} />
         </>
         )

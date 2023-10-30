@@ -1,8 +1,5 @@
 "use client";
 import React, { useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { ChevronDownIcon, PlayIcon } from "@heroicons/react/24/outline";
-
 import { Video } from "../../../typings";
 import Link from "next/link";
 import StarIcon from "./StarIcon";
@@ -13,17 +10,14 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ data, sub_title}) => {
-  const router = useRouter();
+
  
   const url = (category : string) =>{ return category === 'Series' ? `/series/${data.video_id}` : `/watch/${data.video_id}`;}
 
-  const redirectToWatch = useCallback(
-    () => router.push(`${url(data.type.name)}/${data.video_id}`),
-    [router, data.video_id]
-  );
+ 
 
   return (
-    <Link href={url(data.type.name)} className="block-images1 block-images relative">
+    <Link href={url(sub_title)} className="block-images1 block-images relative">
         <div className="img-box">
             <img src={data.image_path} className="img-fluid" alt="" />
         </div>

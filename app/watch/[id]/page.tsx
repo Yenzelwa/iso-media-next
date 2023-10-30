@@ -188,7 +188,7 @@ const WatchVideo = () => {
   <div className="flex items-center mt-3">
     <textarea
       rows={1}
-      className="w-full p-2 rounded-md border border-gray-300 placeholder-gray-500"
+      className="w-80 p-2 rounded-md border border-gray placeholder-gray"
       placeholder="Share your thoughts"
       name="s"
     />
@@ -201,7 +201,7 @@ const WatchVideo = () => {
   </div>
 </div>
 
-        <div className="p-4">
+        <div className="p">
         <div className="p-4">
           <ul className="list-inside space-y-4">
             <li className="list-inside-item">

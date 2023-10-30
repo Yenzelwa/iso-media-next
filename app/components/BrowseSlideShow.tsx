@@ -1,24 +1,26 @@
 "use client";
 import { Video } from "@/typings"
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 import StarIcon from "./shared/StarIcon";
+import { useRouter } from "next/navigation";
 interface BrowseSlideShowProps {
-  movies: Video[];
+  videos: Video[];
 }
 
-const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
+const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? movies.length - 1 : currentIndex - 1;
+    const newIndex = isFirstSlide ? videos.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
   };
 
   const nextSlide = () => {
-    const isLastSlide = currentIndex === movies.length - 1;
+    const isLastSlide = currentIndex === videos.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
@@ -27,12 +29,17 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
     setCurrentIndex(slideIndex);
   };
 
+  const redirectToWatch = useCallback(
+    () => router.push(`/watch/${videos[currentIndex].video_id}`),
+    [router, videos[currentIndex].video_id]
+    
+  );
 
   return (
     <>
       <div className="shadow-md h-[780px] w-full m-auto relative group">
         <div
-          style={{ backgroundImage: `url(${movies[currentIndex].image_path})` }}
+          style={{ backgroundImage: `url(${videos[currentIndex].image_path})` }}
           className="h-[480px] w-full  bg-center bg-cover duration-500"
         >
           <div className="absolute top-[20%] md:top-[20%] ml-4 md:ml-16 via-transparent to-transparent">
@@ -70,7 +77,7 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
       </li>
     </ul>
             <p className="text-white text-1xl md:text-5xl font-bold drop-shadow-xl">
-              {movies[currentIndex]?.title}
+              {videos[currentIndex]?.title}
             </p>
        
             <p className="pb-2 trending-dec w-100 mb-0 text-white text-[8px] md:text-m mt-3 md:mt-8 w-[90%] md:w-[80%]  drop-shadow-xl">
@@ -79,6 +86,7 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
             </p>
             <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
               <button
+              onClick={() => redirectToWatch()}
       type="submit"
       className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md "
     >
@@ -94,7 +102,7 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ movies }) => {
           <BsChevronCompactRight onClick={nextSlide} size={30} />
         </div>
         <div className="flex top-4 justify-center py-2">
-          {movies.map((slide, slideIndex) => (
+          {videos.map((slide, slideIndex) => (
             <div
               key={slideIndex}
               onClick={() => goToSlide(slideIndex)}

@@ -17,7 +17,7 @@ const Videos: React.FC<VideosProps> = ({ data, title, page }) => {
         <p className="text-white text-md md:text-xl lg:text-2xl font-semibold mb-4">
             {title}
           </p>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-4 gap-2 h-42">
               {
               data.map((video) => {
                 return (

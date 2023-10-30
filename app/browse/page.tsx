@@ -136,7 +136,7 @@ export const metadata: Metadata = {
 const BrowsePage = () => {
     return (
         <>
-        <BrowseSlideShow movies={videos}/>
+        <BrowseSlideShow videos={videos}/>
         <BrowseVideos title="Trending Now" data={videos} />
         <BrowseVideos title="Top Rated" data={videos} />
         <BrowseVideos title="Resent Release" data={videos} />
