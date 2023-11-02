@@ -1,5 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
     title: 'isolakwamuntu account  ',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 const SignUpAccount = () =>{
     return (
    
-      <div className=" px-40 rounded-lg shadow-lg text-center">
+      <div className="p-6 bg-gray rounded-lg shadow-md max-w-md">
         <h1 className="font-bold text-2xl mb-4">1 of 3 steps</h1>
         <h2 className="font-bold text-3xl">Create Account</h2>
         <div className="grid grid-cols-2 gap-4 mt-4">
@@ -53,18 +54,18 @@ const SignUpAccount = () =>{
         <div className="flex space-x-4 mt-4">
           <p className="text-left text-sm">
             Already have an account?{' '}
-            <a className="text-red hover:underline" href="#">
-              Sign In
-            </a>
+            <Link  className="text-red hover:underline" href="/login">
+              Log In
+            </Link>
           </p>
           
         </div>
-        <div className='p-10'>
-        <button
-            className="w-80 bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md"
+        <div className='py-8'>
+        <Link href="/sign-up/pricing"
+            className="bg-red text-white items-center px-20 py-2 hover:bg-red-600 rounded-md"
           >
             Next
-          </button>
+          </Link>
         </div>
        
       </div>

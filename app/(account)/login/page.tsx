@@ -1,70 +1,58 @@
-import React from 'react';
-import { Metadata } from 'next';
+import Link from "next/link";
 
-export const metadata: Metadata = {
-    title: 'isolakwamuntu account  ',
-    description: 'Browse all categories',
-  }
-const LoginPage = () =>{
-    return (
+function Login() {
+  return (
    
-      <div className=" px-40 rounded-lg shadow-lg text-center">
-        <h1 className="font-bold text-2xl mb-4">1 of 3 steps</h1>
-        <h2 className="font-bold text-3xl">Create Account</h2>
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <div>
+    <div className="flex flex-col items-center justify-center">
+    <div className="bg-gray p-12 rounded-lg shadow-md max-w-md">
+        <h2 className="text-3xl font-bold mb-4">Login</h2>
+        <form>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-gray mb-2">
+              Email Address
+            </label>
             <input
-              type="text"
-              className="w-full py-2 px-3 rounded-lg bg-gray text-white placeholder-gray"
-              placeholder="Email Address"
-            />
-            <input
-              type="text"
-              className="w-full mt-4 py-2 px-3 rounded-lg bg-gray-800 text-white placeholder-gray"
-              placeholder="First Name"
-            />
-            <input
-              type="password"
-              className="w-full mt-4 py-2 px-3 rounded-lg bg-gray-800 text-white placeholder-gray"
-              placeholder="Password"
+              type="email"
+              id="email"
+              className="w-full p-3 border border-gray rounded-lg"
+              placeholder="Enter your email"
             />
           </div>
-          <div>
-            <input
-              type="text"
-              className="w-full mt-4 py-2 px-3 rounded-lg bg-gray-800 text-white placeholder-gray"
-              placeholder="Last Name"
-            />
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-gray-600 mb-2">
+              Password
+            </label>
             <input
               type="password"
-              className="w-full mt-4 py-2 px-3 rounded-lg bg-gray-800 text-white placeholder-gray"
-              placeholder="Confirm password"
+              id="password"
+              className="w-full p-3 border border-gray-300 rounded-lg"
+              placeholder="Enter your password"
             />
           </div>
-        </div>
-        <label className="text-left mt-4 flex items-center">
-          <input type="checkbox" className="mr-2" />
-          Please email me what's new on ISO
-        </label>
-        <label className="text-left mt-2 flex items-center">
-          <input type="checkbox" className="mr-2" />
-          You must agree to the Terms of Use and Privacy Policy
-        </label>
-        <div className="flex space-x-4 mt-4">
-          <p className="text-left text-sm">
-            Already have an account?{' '}
-            <a className="text-red hover:underline" href="#">
-              Sign In
-            </a>
-          </p>
           <button
-            className="bg-red text-white px-8 py-2 hover:bg-red-600 rounded-md"
+            type="submit"
+            className="w-full bg-red text-white py-2 rounded-md hover:bg-red-600"
           >
-            Sign Up
+            Login
           </button>
+        </form>
+        <div className="mt-4">
+          <Link href="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </Link>
+        </div>
+        <div className="mt-4">
+          <p className="text-left text-sm">
+          Don't have an account?{' '}
+          <Link href="/sign-up/account"className="text-red hover:underline" >
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
-          );
-        };
-        
-export default LoginPage;
+      </div>
+    
+  );
+}
+
+export default Login;

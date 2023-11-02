@@ -18,10 +18,10 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="px-4 py-8 rounded-lg shadow-lg text-center max-w-md mx-auto">
+    <div className="p-6 bg-gray rounded-lg shadow-md max-w-md">
       <h1 className="font-bold text-2xl mb-4">Step 3 of 3</h1>
       <h2 className="font-bold text-3xl mb-4">Choose a Plan</h2>
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="p-6">
         <form>
           <input
             type="text"

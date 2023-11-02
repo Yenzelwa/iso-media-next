@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from "react"
 
-const Player = () =>{
+ function Player() {
  const [btnPlay, setBtnPlay] = useState(true);
  const [btnMute, setBtnMute] = useState(false);
  const [btnFullScreen, setBtnFullScreen] = useState(false);
@@ -9,15 +9,15 @@ const Player = () =>{
  const currentTimeElem = useRef<HTMLDivElement | null>(null);
  
  const videoRef = useRef<HTMLVideoElement | null>(null);
-
-
- const timelineContainerRef = useRef<HTMLDivElement | null>(null);
+ const timelineContainerRef = useRef<HTMLDivElement | null>(document.querySelector(".timeline-container"));
 
  useEffect(() => {
    if (videoRef.current) {
      const videoElement = videoRef.current;
-     const timelineContainer = timelineContainerRef.current;
-
+     const timelineContainer = document.querySelector(".timeline-container");
+     if (timelineContainer) {
+       timelineContainerRef.current = timelineContainer as HTMLDivElement;
+     }
      let currentDuration = formatDuration(videoElement.duration);
      setDuration(currentDuration);
 
@@ -29,20 +29,7 @@ const Player = () =>{
 
      videoElement.muted = btnMute;
 
-     if (timelineContainer) {
-       videoElement.addEventListener('timeupdate', () => {
-         // Assuming currentTimeElem is also a ref
-         if (currentTimeElem.current) {
-           currentTimeElem.current.textContent = formatDuration(videoElement.currentTime);
-         }
 
-         const percent = videoElement.currentTime / videoElement.duration;
-
-         if (timelineContainer.style) {
-           timelineContainer.style.setProperty('--progress-position', percent.toString());
-         }
-       });
-     }
    }
  }, [btnPlay, btnMute, duration]);
 
@@ -65,7 +52,33 @@ const Player = () =>{
       )}:${leadingZeroFormatter.format(seconds)}`
   }
 }
+document.addEventListener("mousemove", e => {
+  debugger;
+  handleTimelineUpdate(e)
+})
+function handleTimelineUpdate(e : any){
+  const timelineContainer = timelineContainerRef.current;
+  if(timelineContainer){
+    const rect = timelineContainer.getBoundingClientRect();
+  const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
+  timelineContainer.style.setProperty("--preview-position", percent.toString())
+  }
+}
 
+  document.addEventListener('timeupdate', () => {
+    const timelineContainer = timelineContainerRef.current;
+    const videoElement = videoRef.current;
+    if (timelineContainer && videoElement) {
+    if (currentTimeElem.current) {
+      currentTimeElem.current.textContent = formatDuration(videoElement.currentTime);
+    }
+    const percent = videoElement.currentTime / videoElement.duration;
+
+    if (timelineContainer.style) {
+      timelineContainer.style.setProperty('--progress-position', percent.toString());
+    }
+  }
+});
     return(
         <div className="video-container">
         <div className="video-container paused" data-volume-level="high">

@@ -18,8 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <div className="flex items-center flex-shrink-0 text-white mr-6">
-          <svg
+      <div className="pt-12 flex items-center justify-center flex-shrink-0 text-white mr-6">    
+       <div className="flex items-center">
+       <svg
             className="fill-current h-8 w-8 mr-2 text-red"
             width="54"
             height="54"
@@ -31,6 +32,8 @@ export default function RootLayout({
           <span className="font-semibold text-xl tracking-tight">
             IsolaKwaMUNTU
           </span>
+       </div>
+          
         </div>
         <div className="w-60% p-12 flex items-center justify-center bg-black text-white">
 
