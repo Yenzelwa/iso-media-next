@@ -1,17 +1,17 @@
+import { Video } from "@/typings";
 import { Metadata } from "next";
 import React from "react";
-import BrowseSlideShow from "../../components/BrowseSlideShow";
-import { Video } from "@/typings";
-import Videos from "../../components/shared/Videos";
+import BrowseSlideShow from "@/src/components/BrowseSlideShow";
+import Videos from "@/src/components/shared/Videos";
 
 export const metadata: Metadata = {
-    title: 'isolakwamuntu series  ',
+    title: 'isolakwamuntu documentary  ',
     description: 'Browse all categories',
   }
   
-const SeriesPage = () =>{
-  const movies: Video[] = [
-    {
+const DocumentaryPage = () =>{
+    const movies: Video[] = [
+      {
         id: 1,
       title: 'Family Unit',
       rating: 4.5,
@@ -57,7 +57,7 @@ const SeriesPage = () =>{
         rating: 4.5,
         type: {
           id:1,
-          name:'Documentary',
+          name:'Series',
           category : {
             id: 1,
             name : 'Education'
@@ -76,7 +76,7 @@ const SeriesPage = () =>{
         rating: 4.5,
         type: {
           id:1,
-          name:'Documentary',
+          name:'Series',
           category : {
             id: 1,
             name : 'Education'
@@ -114,7 +114,7 @@ const SeriesPage = () =>{
         rating: 4.5,
         type: {
           id:1,
-          name:'Documentary',
+          name:'Series',
           category : {
             id: 1,
             name : 'Education'
@@ -127,12 +127,13 @@ const SeriesPage = () =>{
         video_path:'',
         likes:25,
     },
-  ];
-    return (
-    <>
-     <BrowseSlideShow videos={movies}/>
-      <Videos  page="series" title="" data={movies} />
-    </>
-    )
-}
-export default SeriesPage;
+      ];
+        return (
+        <>
+         <BrowseSlideShow videos={movies}/>
+          <Videos page="documentary" title="" data={movies} />
+        </>
+        )
+    }
+
+export default DocumentaryPage;

@@ -1,5 +1,5 @@
-import Player from "@/app/components/Player";
-import StarIcon from "@/app/components/shared/StarIcon";
+import Player from "@/src/components/Player";
+import StarIcon from "@/src/components/shared/StarIcon";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
