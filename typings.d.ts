@@ -9,7 +9,6 @@ export interface Video {
   rating: number;
   likes: number;
   image_path: string;
-  video_id: number;
   video_path: string;
   type: {
     id: number;
@@ -17,8 +16,9 @@ export interface Video {
     category: {
       id:number;
       name:string;
-    }
-  };
+    },
+    
+  }
 }
 
 export interface VideoCardModel{
@@ -46,13 +46,8 @@ export interface Season {
   episodes: Video[];
 }
 
-export interface Episode {
-  id: number;
-  episode_number: number;
-  title: string;
-  description: string;
-  realese_date: Date;
-  image_path: string;
-  video_id: number;
-  video_path: string;
+export interface WatchVideo {
+  episode_details: string;
+  video:Video;
+ next_video_id:number
 }

@@ -43,7 +43,7 @@ const PricingPlan = () => {
   const page = 'change'; // Set the page type ("change" or something else)
 
   return (
-    <div className="bg-black h-screen text-white">
+    <div className="bg-dark h-screen text-white">
       <div className="flex justify-center items-center h-screen">
         <div className="bg-red-600 p-8 rounded-lg shadow-lg text-center">
           <div className="flex items-center mb-4">

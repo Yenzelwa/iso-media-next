@@ -18,7 +18,7 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="p-6 bg-gray rounded-lg shadow-md max-w-md">
+    <div className="p-6 bg-dark rounded-lg shadow-md max-w-md">
       <h1 className="font-bold text-2xl mb-4">Step 3 of 3</h1>
       <h2 className="font-bold text-3xl mb-4">Choose a Plan</h2>
       <div className="p-6">

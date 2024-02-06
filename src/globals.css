@@ -41,10 +41,11 @@ body {
     
     .video-container {
       position: relative;
-      display: flex;
+      display: block;
       justify-content: center;
       margin-inline: auto;
       background-color: black;
+      width: 100%;
       
     }
     
@@ -92,7 +93,7 @@ body {
     }
     
     .video-controls-container .controls button {
-      background: none;
+      background-color: none;
       border: none;
       color: inherit;
       padding: 0;
@@ -102,6 +103,30 @@ body {
       cursor: pointer;
       opacity: .85;
       transition: opacity 150ms ease-in-out;
+    }
+    .video-controls-container .controls .relative .speedButtons button  {
+      background-color: black;
+    border: 1px solid gray;
+    height: 30px;
+    width: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: .85;
+    transition: opacity 150ms ease-in-out;
+    padding: 0px 58px 0 20px;
+    border-radius: 6px;
+    }
+    .video-controls-container .controls .relative .speedButtons strong button  {
+      background-color: black;
+    border: 1px solid red;
+    height: 30px;
+    width: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: .85;
+    transition: opacity 150ms ease-in-out;
+    padding: 0px 58px 0 20px;
+    border-radius: 6px;
     }
     
     .video-controls-container .controls button:hover {
@@ -175,10 +200,10 @@ body {
     }
     
     .timeline {
-      background-color: rgba(100, 100, 100, .5);
-      height: 3px;
+      background-color: rgba(100, 100, 100, .5);;
+      height: 2px;
       width: 100%;
-      position: relative
+      position: relative;
     }
     
     .timeline::before {
@@ -188,8 +213,9 @@ body {
       top: 0;
       bottom: 0;
       right: calc(100% - var(--preview-position) * 100%);
-      background-color: rgb(150, 150, 150);
+      background-color: rgba(100, 100, 100, .5);;
       display: none;
+      height: 4px;
     }
     
     .timeline::after {
@@ -199,7 +225,7 @@ body {
       top: 0;
       bottom: 0;
       right: calc(100% - var(--progress-position) * 100%);
-      background-color: red;
+      height: 4px;
     }
     
     .timeline .thumb-indicator {
@@ -215,17 +241,63 @@ body {
       aspect-ratio: 1 / 1;
     }
     
+    .timeline:hover .progress-line {
+      height: 7px;
+      background-color: red;
+    }
+    
+    .timeline .progress-line {
+      color: red;
+      background-color: red;
+      height: 2px;
+      position: relative;
+    }
+    
+    .timeline .progress-line::before {
+      content: "";
+      color: red;
+      background-color: red;
+      height: 4px;
+      display: none;
+    }
+    
+    .timeline:hover .progress-line::before {
+      display: block;
+      height: 4px;
+    }
+    
+    .timeline .progress-line::after {
+      content: "";
+      color: red;
+      background-color: red;
+      height: 4px;
+      position: absolute;
+    }
+    
+    .timeline:hover .progress-line::after {
+      display: block;
+      height: 4px;
+    }
+    .progress-line-outside-controls{
+      content: "";
+      background-color: red;
+      height: 4px;
+      position: absolute;
+    }
+    
     .timeline .preview-img {
       position: absolute;
       height: 80px;
       aspect-ratio: 16 / 9;
       top: -1rem;
       transform: translate(-50%, -100%);
-      left: calc(var(--preview-position) * 100%);
-      border-radius: .25rem;
+      left: calc(var(--preview-position) * 50%);
+      border-radius: 0.25rem;
       border: 2px solid white;
-      display: none;
+
     }
+   
+  
     
     .thumbnail-img {
       position: absolute;

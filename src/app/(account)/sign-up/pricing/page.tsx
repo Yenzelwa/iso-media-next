@@ -36,7 +36,7 @@ const PricingPlan = () => {
 
   return (
     <>
-      <div className="rounded-lg shadow-lg text-center">
+      <div className="rounded-lg shadow-lg text-center bg-dark">
       <div className="inline-flex items-center  space-x-40">
   <div className="text-center">
     <div className="w-8 h-8 flex items-center justify-center rounded-full border border-red">
@@ -68,7 +68,7 @@ const PricingPlan = () => {
             >
               <div
                 className={`iq-price-box py-4 p-4 border rounded-lg hover:bg-red-500 cursor-pointer relative ${
-                  pricing === item.type ? "bg-red" : "bg-blur-red"
+                  pricing === item.type ? "bg-" : "bg-blur-red"
                 }`}
                 onClick={() => setPricing(item.type)}
               >

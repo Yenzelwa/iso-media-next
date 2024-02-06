@@ -3,7 +3,7 @@ import Link from "next/link";
 const ResetPasswordPage = () =>{
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
-          <div className="bg-gray p-12 rounded-lg shadow-md max-w-md">
+          <div className="bg-dark p-12 rounded-lg shadow-md max-w-md">
             <h2 className="text-3xl font-bold mb-4">Reset Password</h2>
             <p className="text-gray-600 mb-6">
               Enter your new password to reset your account.

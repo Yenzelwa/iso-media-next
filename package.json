@@ -17,6 +17,7 @@
     "@types/react": "18.2.28",
     "@types/react-dom": "18.2.13",
     "@types/styled-components": "^5.1.28",
+    "alpinejs": "^3.13.3",
     "autoprefixer": "10.4.16",
     "eslint": "8.51.0",
     "eslint-config-next": "13.5.4",
@@ -25,6 +26,7 @@
     "postcss": "8.4.31",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-icons": "^4.11.0",
     "styled-components": "^6.1.0",
     "swiper": "^10.3.1",
@@ -32,6 +34,10 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.200"
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.2",
+    "@types/lodash": "^4.14.200",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
   }
 }

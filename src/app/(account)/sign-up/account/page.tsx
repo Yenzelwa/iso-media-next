@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const SignUpAccount = () =>{
     return (
    
-      <div className="p-6 bg-gray rounded-lg shadow-md max-w-md">
+      <div className="p-6 bg-dark rounded-lg shadow-md max-w-md">
         <h1 className="font-bold text-2xl mb-4">1 of 3 steps</h1>
         <h2 className="font-bold text-3xl">Create Account</h2>
         <div className="grid grid-cols-2 gap-4 mt-4">
