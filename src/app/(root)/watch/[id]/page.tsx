@@ -1,124 +1,198 @@
 'use client'
 import Player from "@/src/components/Player";
 import StarIcon from "@/src/components/shared/StarIcon";
-import { Video, WatchVideo } from "@/typings";
+import { Episode, Video } from "@/typings";
 import { Metadata } from "next";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
 
-// export const metadata: Metadata = {
-//   title: "isolakwamuntu watch a video",
-//   description: "Browse all categories",
-// };
 const WatchVideo = (id: number) => {
+  const [currentVideo, SetCurrentVideo] = useState<Episode>();
 
-  const currentVideoData: WatchVideo =
-  {
-    episode_details: '23 October 2023 - Season 2 - Episode 01',
-    next_video_id: 254,
-    video: {
+  useEffect(() => {
+    const currentVideoData: Episode =
+    {
+      episode_details: '23 October 2023 - Season 2 - Episode 01',
+      next_episode_id: 254,
       id: 253,
+      video_id: 125,
       title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
       description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
-        commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
-        et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
-        felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
-        consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
-        nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
-        venenatis vitae, justo.`,
-      image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-      release_date: new Date('2023-10-23'),
-      video_path: '',
-      likes: 25,
-      rating: 4.2,
-      type: {
-        id: 1,
-        name: 'Series',
-        category: {
-          id: 1,
-          name: 'Education'
-        }
-      },
-    }
-
-  };
-  const [currentVideo, SetCurrentVideo] = useState(currentVideoData);
-
-  const playNextVideo = () => {
-    const nexttVideoData: WatchVideo =
-    {
-      episode_details: '24 October 2023 - Season 2 - Episode 02',
-      next_video_id: 0,
-      video: {
-        id: 254,
-        title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit Next Episdose",
-        description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
           commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
           et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
           felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
           consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
           nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
           venenatis vitae, justo.`,
-        image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-        release_date: new Date('2023-10-24'),
-        video_path: '',
-        likes: 1225,
-        rating: 4.8,
-        type: {
-          id: 1,
-          name: 'Series',
-          category: {
-            id: 1,
-            name: 'Education'
-          }
-        },
+      image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+      video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      likes: 2551,
+      dislikes: 5,
+      ratings: 4.2,
+      realese_date: new Date('2023-05-25'),
+      user: {
+        id: 1,
+        like: true,
+        dislike: false,
+        rating: 4.9
       }
+    }
+    SetCurrentVideo(currentVideoData);
+  }, [])
+
+
+
+  const playNextVideo = async () => {
+
+
+
+    const nexttVideoData: Episode =
+    {
+      episode_details: '24 October 2023 - Season 2 - Episode 02',
+      next_episode_id: 0,
+      id: 254,
+      video_id: 5255,
+      title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit Next Episdose",
+      description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+          commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+          et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+          felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+          consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+          nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+          venenatis vitae, justo.`,
+      image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+      realese_date: new Date('2023-10-24'),
+      video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      likes: 1225234,
+      dislikes: 6436,
+      ratings: 4.8,
+      user: {
+        id: 1,
+        like: false,
+        dislike: false,
+        rating: 4.6
+      }
+
 
     };
     SetCurrentVideo(nexttVideoData);
   }
 
+  async function updateLikes(like: boolean) {
+    try {
+      const token = '';
+      const payload = {
+        userId: 1,
+        video_id: currentVideo?.video_id,
+        like: like
+      }
+      debugger;
+      const response = await axios.post("likes", payload, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data && currentVideo && currentVideo.user) {
+        if (!currentVideo.user.like && like) {
+          currentVideo.user.like = like;
+          currentVideo.likes =  currentVideo.likes + 1;
+        }
+        if(currentVideo.user.like && !like){
+          currentVideo.user.like = like,
+         currentVideo.likes =  currentVideo.likes - 1;
+        }
+        SetCurrentVideo({...currentVideo});
+
+      }
+    } catch (error) {
+      console.log(`Error occured updating likes - ${error}`)
+    }
+
+  }
+  function formatThumbsCount(count: number) {
+    if (count < 1000) {
+      return count;
+    }
+    if (count < 1000000) {
+      return (count / 1000).toFixed(1) + 'k';
+    }
+  
+    return (count / 1000000).toFixed(1) + 'M';
+  }
+  
+  
+  async function updateDisLikes(dislike: boolean) {
+    try {
+      const token = '';
+      const payload = {
+        userId: 1,
+        video_id: currentVideo?.video_id,
+        dislike: dislike
+      }
+      debugger;
+      const response = await axios.post("dislikes", payload, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data && currentVideo && currentVideo.user) {
+        if (!currentVideo.user.dislike && dislike) {
+          currentVideo.user.dislike = dislike;
+          currentVideo.dislikes =  currentVideo.dislikes + 1;
+        }
+        if(currentVideo.user.dislike && !dislike){
+          currentVideo.user.dislike = dislike,
+         currentVideo.dislikes =  currentVideo.dislikes - 1;
+        }
+        SetCurrentVideo({...currentVideo});
+
+      }
+    } catch (error) {
+      console.log(`Error occured updating likes - ${error}`)
+    }
+
+  }
   return (
     <>
-      <Player />
+      <Player key={currentVideo?.id} video_path={currentVideo?.video_path} />
       <section className="p-4">
         <div className="pb-2 flex items-center space-x-4 movie-content">
           <p className="text-gray text-md">
-            {currentVideo.episode_details}
+            {currentVideo?.episode_details}
           </p>
         </div>
         <h4 className="text-3xl font-bold text-uppercase mt-0">
-          {currentVideo.video.title}
+          {currentVideo?.title}
         </h4>
         <div className="flex items-center space-x-4 pt-4">
-          {currentVideo.next_video_id > 0 ?
+          {currentVideo?.next_episode_id != undefined && currentVideo?.next_episode_id > 0 ?
             <button onClick={() => playNextVideo()} className="bg-red hover:bg-red text-white font-bold py-2 px-4 rounded">
               Next Episode
             </button> : null}
-
-          <div className="flex items-center space-x-4">
-            <button className="flex items-center bg-gray rounded-full text-white px-4 py-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5 mr-2">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+          <div className="relative">
+            <button onClick={() => updateLikes(!currentVideo?.user.like)} className=" left-0 bg-gray rounded-full text-white px-4 py-2 z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className={`${currentVideo?.user.like ? 'font-bold text-red':''} bi bi-hand-thumbs-up`} viewBox="0 0 16 16">
+                <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z" />
               </svg>
-              Like
-              <span className="text-gray-600">10</span>
+              <span className="text-gray-600">{formatThumbsCount(currentVideo?.likes ?? 0)}</span>
             </button>
-             {/* Replace 10 with the actual number of likes */}
 
-            <button className="flex items-center bg-red rounded-full text-white px-4 py-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5 mr-2">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            <button onClick={() => updateDisLikes(!currentVideo?.user.dislike)} className=" right-0 bg-gray rounded-full text-white px-4 py-2 z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className={`${currentVideo?.user.dislike ? 'font-bold text-red':''} bi bi-hand-thumbs-down`} viewBox="0 0 16 16">
+                <path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1" />
               </svg>
-              Dislike
-              <span className="text-gray-600">5</span>
+              <span className="text-gray-600">{formatThumbsCount(currentVideo?.dislikes ?? 0)}</span>
             </button>
-             {/* Replace 5 with the actual number of dislikes */}
           </div>
+
+
 
         </div>
         <p className="pt-4 mt-4 mb-0 text-gray-700">
-          {currentVideo.video.description}
+          {currentVideo?.description}
         </p>
       </section>
 
@@ -257,7 +331,7 @@ const WatchVideo = (id: number) => {
               </li>
               <li>
                 <a className="text-red" href="#">
-                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" color="red" height="15" width="15" xmlns="http://www.w3.org/2000/svg" ><path fill="none" d="M0 0h24v24H0z"></path><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4V6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></svg>
+                  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" color="red" height="15" width="15" xmlns="http://www.w3.org/2000/svg" ><path fill="none" d="M0 0h24v24H0z"></path><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4V6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></svg>
                 </a>
               </li>
             </ul>

@@ -19,6 +19,7 @@
     "@types/styled-components": "^5.1.28",
     "alpinejs": "^3.13.3",
     "autoprefixer": "10.4.16",
+    "axios": "^1.6.7",
     "eslint": "8.51.0",
     "eslint-config-next": "13.5.4",
     "lodash": "^4.17.21",

@@ -1,8 +1,11 @@
 'use client'
 import React from "react";
 import { useEffect, useRef, useState } from "react"
+interface VideoPathProps{
+  video_path: string | undefined
+}
 
-function Player() {
+const  Player : React.FC<VideoPathProps> = ({video_path}) =>{
   const [btnPlay, setBtnPlay] = useState(true);
   const [btnMute, setBtnMute] = useState(false);
   const [btnFullScreen, setBtnFullScreen] = useState(false);
@@ -13,18 +16,26 @@ function Player() {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [toggleSpeedDropDown, setToggleSpeedDropDown] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(video_path);
 
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playbackSpeedOptions = [1, 1.25, 1.5, 1.75, 2];
-  const timelineContainerRef = useRef<HTMLDivElement | null>(document.querySelector(".timeline-container"));
+  const timelineContainerRef = useRef<HTMLDivElement | null>(null);
 
 
+useEffect(() =>{
+videoRef.current = document.createElement('video');
+if(video_path){
+//  videoRef.current.src = video_path;
+  setVideoUrl(video_path);
+}
 
+
+})
 
 
  const handleContextMenu = (e: { preventDefault: () => void; }) => {
-  debugger;
     e.preventDefault();
   }
   useEffect(() => {
@@ -33,7 +44,6 @@ function Player() {
       const video = videoRef.current;
       if (video && !video.paused) {
         const progress = (video?.currentTime / video?.duration) * 100;
-        debugger;
         setProgressTime(progress);
 
       }
@@ -76,6 +86,8 @@ function Player() {
     };
     const video = videoRef.current;
     if (video) {
+      if(video_path)
+      video.src = video_path;
       if (btnPlay) {
         video.play();
       } else {
@@ -414,7 +426,7 @@ function Player() {
           </div>
         </div>
         )}
-        <video ref={videoRef} src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" autoPlay>
+        <video ref={videoRef}  src={videoUrl} autoPlay>
           <track kind="captions" src="../../../assets/subtitles.vtt" />
         </video>
       </div>

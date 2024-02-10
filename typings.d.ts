@@ -45,9 +45,26 @@ export interface Season {
   seasonNumber: number;
   episodes: Video[];
 }
-
-export interface WatchVideo {
-  episode_details: string;
-  video:Video;
- next_video_id:number
+export interface Episode{
+  id: number,
+  episode_details: string,
+  title: string,
+  description: string,
+  realese_date:Date,
+  image_path: string,
+  video_id: number,
+  video_path: string,
+  likes:number,
+  dislikes: number,
+  ratings:number,
+  next_episode_id:number,
+  user:User
 }
+
+export interface User{
+  id:number,
+  like:boolean,
+  dislike:boolean,
+  rating:number
+}
+
