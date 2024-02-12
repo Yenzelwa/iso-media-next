@@ -43,10 +43,12 @@ export interface Series {
 export interface Season {
   id: number;
   seasonNumber: number;
-  episodes: Video[];
+  episodes: Episode[];
 }
 export interface Episode{
   id: number,
+  series_id:number,
+  season_id:number,
   episode_details: string,
   title: string,
   description: string,

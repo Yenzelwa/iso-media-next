@@ -1,20 +1,24 @@
 'use client'
 import Player from "@/src/components/Player";
 import StarIcon from "@/src/components/shared/StarIcon";
-import { Episode, Video } from "@/typings";
+import { Episode, Series, Video } from "@/typings";
 import { Metadata } from "next";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import DropdownSeasons from "@/src/components/DropDownSeasons";
 
 const WatchVideo = (id: number) => {
   const [currentVideo, SetCurrentVideo] = useState<Episode>();
+  const [series, setSeries] = useState<Series>();
 
   useEffect(() => {
     const currentVideoData: Episode =
     {
       episode_details: '23 October 2023 - Season 2 - Episode 01',
-      next_episode_id: 254,
+      next_episode_id: 254,   
+      series_id:1,
+      season_id:1,
       id: 253,
       video_id: 125,
       title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
@@ -41,6 +45,257 @@ const WatchVideo = (id: number) => {
     SetCurrentVideo(currentVideoData);
   }, [])
 
+  useEffect(() =>{
+    const series : Series = {
+      id : 1,
+      title:'Family Unit',
+      description:'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+      realese_date: new Date('2024/02/12'),
+      image_path:'',
+      seasons :  [
+         {
+          id: 1,
+          seasonNumber : 1,
+          episodes:[
+            {
+              episode_details: '23 October 2023 - Season 2 - Episode 01',
+              next_episode_id: 254,   
+              series_id:1,
+              season_id:1,
+              id: 253,
+              video_id: 125,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 2551,
+              dislikes: 5,
+              ratings: 4.2,
+              realese_date: new Date('2023-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 4.9
+              }
+            },
+            {
+              episode_details: '24 October 2023 - Season 2 - Episode 02',
+              next_episode_id: 256,   
+              series_id:1,
+              season_id:1,
+              id: 254,
+              video_id: 126,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 255158,
+              dislikes: 5,
+              ratings: 3.2,
+              realese_date: new Date('2024-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 3.9
+              }
+            },
+            {
+              episode_details: '25 October 2023 - Season 2 - Episode 03',
+              next_episode_id: 255,   
+              series_id:1,
+              season_id:1,
+              id: 256,
+              video_id: 127,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 85551,
+              dislikes: 558,
+              ratings: 1.2,
+              realese_date: new Date('2026-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 4.9
+              }
+            },
+            {
+              episode_details: '26 October 2023 - Season 2 - Episode 04',
+              next_episode_id: 254,   
+              series_id:1,
+              season_id:1,
+              id: 253,
+              video_id: 125,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 2551,
+              dislikes: 5,
+              ratings: 4.2,
+              realese_date: new Date('2023-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 4.9
+              }
+            }
+              
+          ]
+         },
+         {
+          id: 2,
+          seasonNumber : 2,
+          episodes:[
+            {
+              episode_details: '23 October 2023 - Season 2 - Episode 01',
+              next_episode_id: 254,   
+              series_id:1,
+              season_id:1,
+              id: 253,
+              video_id: 125,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 2551,
+              dislikes: 5,
+              ratings: 4.2,
+              realese_date: new Date('2023-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 4.9
+              }
+            },
+            {
+              episode_details: '24 October 2023 - Season 2 - Episode 02',
+              next_episode_id: 256,   
+              series_id:1,
+              season_id:1,
+              id: 254,
+              video_id: 126,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 255158,
+              dislikes: 5,
+              ratings: 3.2,
+              realese_date: new Date('2024-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 3.9
+              }
+            },
+            {
+              episode_details: '25 October 2023 - Season 2 - Episode 03',
+              next_episode_id: 255,   
+              series_id:1,
+              season_id:1,
+              id: 256,
+              video_id: 127,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 85551,
+              dislikes: 558,
+              ratings: 1.2,
+              realese_date: new Date('2026-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 4.9
+              }
+            },
+            {
+              episode_details: '26 October 2023 - Season 2 - Episode 04',
+              next_episode_id: 254,   
+              series_id:1,
+              season_id:1,
+              id: 253,
+              video_id: 125,
+              title: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+              description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean
+                  commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                  et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                  felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+                  consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+                  nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                  venenatis vitae, justo.`,
+              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
+              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              likes: 2551,
+              dislikes: 5,
+              ratings: 4.2,
+              realese_date: new Date('2023-05-25'),
+              user: {
+                id: 1,
+                like: true,
+                dislike: false,
+                rating: 4.9
+              }
+            }
+              
+          ]
+         }
+      ]
+    };
+    setSeries(series);
+  })
+
 
 
   const playNextVideo = async () => {
@@ -49,6 +304,8 @@ const WatchVideo = (id: number) => {
 
     const nexttVideoData: Episode =
     {
+      series_id:1,
+      season_id:1,
       episode_details: '24 October 2023 - Season 2 - Episode 02',
       next_episode_id: 0,
       id: 254,
@@ -195,22 +452,8 @@ const WatchVideo = (id: number) => {
           {currentVideo?.description}
         </p>
       </section>
-
-      <section className="relative p-4 flex items-center">
-        <select
-          name="cars"
-          className="bg-dark text-white rounded p-2 border border-white"
-          data-select2-id="1"
-          aria-hidden="true"
-        >
-          <option value="season1" data-select2-id="3" className="bg-black text-white">
-            Season 1
-          </option>
-          <option value="season2" data-select2-id="4" className="bg-black text-white">
-            Season 2
-          </option>
-        </select>
-      </section>
+      
+      <DropdownSeasons />
 
       <section className="show-movie w-full flex space-x-4">
         <div className="w-60 p-4">
