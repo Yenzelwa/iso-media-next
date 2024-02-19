@@ -14,22 +14,22 @@ export interface Video {
     id: number;
     name: string;
     category: {
-      id:number;
-      name:string;
+      id: number;
+      name: string;
     },
-    
+
   }
 }
 
-export interface VideoCardModel{
-  id:number;
+export interface VideoCardModel {
+  id: number;
   title: string;
   sub_title: string;
   description: string;
   release_date: Date;
   rating: number;
   image_path: string;
-  url:string;
+  url: string;
 }
 
 export interface Series {
@@ -45,28 +45,52 @@ export interface Season {
   seasonNumber: number;
   episodes: Episode[];
 }
-export interface Episode{
+export interface Episode {
   id: number,
-  series_id:number,
-  season_id:number,
-  episode_details: string,
+  episode_number: number,
+  series_id: number,
+  season_id: number,
+  episode_detail: string,
+  episode_short_detail: string,
   title: string,
   description: string,
-  realese_date:Date,
+  release_date: Date,
   image_path: string,
   video_id: number,
   video_path: string,
-  likes:number,
+  likes: number,
   dislikes: number,
-  ratings:number,
-  next_episode_id:number,
-  user:User
+  ratings: number,
+  next_episode_id: number,
+  user: User
 }
 
-export interface User{
-  id:number,
-  like:boolean,
-  dislike:boolean,
-  rating:number
+export interface User {
+  id: number,
+  like: boolean,
+  dislike: boolean,
+  rating: number
 }
-
+export interface IsoComment{
+  id: number,
+  comment: string,
+  customer_id:number
+}
+export interface VideoComment {
+  iso_comment: IsoComment,
+  post_date:Date,
+  customer: {
+    id: number,
+    name: string
+  },
+  reply: Reply[] | null
+}
+export interface Reply {
+  id: number,
+  reply: string,
+  posted_date: Date,
+  customer: {
+    id: number,
+    name: string
+  }
+}
