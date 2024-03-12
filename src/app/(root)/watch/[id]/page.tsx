@@ -511,6 +511,7 @@ const WatchVideo = (id: number) => {
   }
   return (
     <>
+    <div className="relative">
       <Player key={currentVideo?.id} video_path={currentVideo?.video_path} />
       <section className="p-4">
         <div className="pb-2 flex items-center space-x-4 movie-content">
@@ -553,6 +554,7 @@ const WatchVideo = (id: number) => {
       
       <Seasons seasons={series?.seasons ?? []} />
       <CommentSection video_id={currentVideo?.video_id ?? 0}/>
+      </div>
 
     </>
   );

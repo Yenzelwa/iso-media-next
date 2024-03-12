@@ -62,7 +62,7 @@ const PricingPlan = () => {
         <div className="grid grid-cols-2 gap-4">
           {pricingLists.map((item) => (
             <Link
-              href="/sign-up/payment"
+              href="/billing"
               key={item.id}
               className=" px-10  rounded-lg bg-dark text-left"
             >

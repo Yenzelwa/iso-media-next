@@ -18,6 +18,7 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
     const [replyVisible, setReplyVisible] = useState(false);
     const [replyText, setReplyText] = useState('');
     const [replyVisibleMap, setReplyVisibleMap] = useState<ReplyVisibleMap>({});
+    const [repliesVisibleMap, setRepliesVisibleMap] = useState<ReplyVisibleMap>({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -170,27 +171,71 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
             return 'Just now';
         }
     }
-   
+
     const toggleReply = (commentId: number) => {
+        debugger;
         setReplyVisibleMap(prevState => ({
             ...prevState,
             [commentId]: !prevState[commentId]
         }));
     };
 
-    const handleChange = (e: any) => {
-        setReplyText(e.target.value);
+    const toggleReplies = (commentId: number) => {
+        setRepliesVisibleMap(prevState => ({
+            ...prevState,
+            [commentId]: !prevState[commentId]
+        }));
     };
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e: Event, commentId: number) => {
+        debugger;
+        const newReply = {
+            id: comments.length + 1,
+            reply: replyText,
+            posted_date: new Date(),
+            customer: {
+                id: 2556,
+                name: "John Doe"
+            }
+        };
         e.preventDefault();
-        // Handle submitting the reply text here
+
+        const commentIndexToUpdate = 2;
+
+        const updatedComments = comments ? [...comments] : [];
+        if (
+            updatedComments &&
+            updatedComments[commentIndexToUpdate] &&
+            updatedComments[commentIndexToUpdate]?.reply !== null
+        ) {
+            updatedComments[commentIndexToUpdate]?.reply.push(newReply);
+        }
+        else {
+            updatedComments[commentIndexToUpdate].reply = [newReply];
+        }
+
         console.log('Reply submitted:', replyText);
-        // Clear reply text and hide reply box after submission
         setReplyText('');
         setReplyVisible(false);
+      updateComments(updatedComments);
+      toggleReply(commentId);
+    };
+    const updateComments = (updatedComments: VideoComment[]) => {
+        setComments(updatedComments);
     };
 
+    function handleTextareaChange(e: any) {
+        const textarea = e.target;
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+        setComment(textarea.value);
+    }
+    function handleReplyTextareaChange(e: any) {
+        const textarea = e.target;
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+        setReplyText(textarea.value);
+    }
     return (
         <section>
             <div className="p">
@@ -201,7 +246,7 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
                         placeholder="Share your thoughts"
                         name="s"
                         value={comment}
-                        onChange={(e) => setComment(e.target.value)}
+                        onChange={(e) => handleTextareaChange(e)}
                     />
                     <button
                         type="submit"
@@ -212,42 +257,83 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
                     </button>
                 </div>
                 {comments.map(videoComment => (
-                <div key={videoComment.iso_comment.id} className="p-4">
-                    <ul className="list-inside space-y-4">
-                        <li className="list-inside-item">
-                            <div className="flex items-center space-x-3">
-                                <span className="text-gray hover:underline font-bold">
-                                    {videoComment.customer.name}
-                                </span>
-                                <span className="text-gray hover:text-gray-700">
-                                    {formatPostedTime(videoComment.post_date.toString())}
-                                </span>
-                            </div>
-                            <div>
-                                <p className="pb-2 trending-dec w-100 mb-0">
-                                    {videoComment.iso_comment.comment}
-                                    <Link href="#" className="p-2 text-red" onClick={() => toggleReply(videoComment.iso_comment.id)}>
-                                        Reply
-                                    </Link>
-                                </p>
-                                {replyVisibleMap[videoComment.iso_comment.id] && (
-                                    <form onSubmit={handleSubmit}>
-                                        <textarea
-                                            rows={3}
-                                            className="w-full p-2 rounded-md border border-gray placeholder-gray text-black"
-                                            placeholder="Write your reply..."
-                                            onChange={handleChange}
-                                        />
-                                        <button type="submit" className="p-2 text-red">
-                                            Submit
+                    <div key={videoComment.iso_comment.id} className="p-4">
+                        <ul className="list-inside space-y-4">
+                            <li className="list-inside-item" key={videoComment.iso_comment.id}>
+                                <div className="flex items-center space-x-3">
+                                    <span className="text-gray hover:underline font-bold">
+                                        {videoComment.customer.name}
+                                    </span>
+                                    <span className="text-gray hover:text-gray-700">
+                                        {formatPostedTime(videoComment.post_date.toString())}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p className="pb-2 trending-dec w-100 mb-0">
+                                        {videoComment.iso_comment.comment}
+
+                                        <button className="p-2 text-red" onClick={() => {
+                                            toggleReply(videoComment.iso_comment.id);
+                                        }}>
+                                            Reply
                                         </button>
-                                    </form>
-                                )}
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            ))}
+                                    </p>
+
+                                    {replyVisibleMap[videoComment.iso_comment.id]  &&(
+                                        <form onSubmit={(e) => handleSubmit(e, videoComment.iso_comment.id)}>
+                                            <textarea
+                                                rows={1}
+                                                className="w-80 p-2 rounded-md border border-gray placeholder-gray text-black"
+                                                placeholder="Write your reply..."
+                                                onChange={(e) => handleReplyTextareaChange(e)}
+                                            />
+                                            <button type="button" onClick={() => toggleReply(videoComment.iso_comment.id)} className="p-2 text-gray">
+                                                Cancel
+                                            </button>
+                                            <button type="submit" className="p-2 text-red">
+                                                Submit
+                                            </button>
+                                        </form>
+                                    )}
+                                    <p className="pb-2 trending-dec w-100 mb-0">
+                                        <button className="p-2 text-red" onClick={() => {
+                                            setShowReplies(!showReplies);
+                                            toggleReplies(videoComment.iso_comment.id);
+                                        }}>
+                                            {videoComment && videoComment.reply && videoComment.reply.length > 0 ?
+                                                (showReplies ? `Hide Replies (${videoComment.reply.length})` : `View Replies (${videoComment.reply.length})`) :
+                                                ('')
+                                            }
+                                        </button>
+                                    </p>
+
+                                    {repliesVisibleMap[videoComment.iso_comment.id] && showReplies && videoComment.reply && videoComment.reply.map((reply, index) => (
+                                        <div key={index} className="ml-4">
+                        <ul className="list-inside space-y-4">
+                            <li className="list-inside-item" key={reply.id}>
+                                <div className="flex items-center space-x-3">
+                                    <span className="text-gray hover:underline font-bold">
+                                        {reply.customer.name}
+                                    </span>
+                                    <span className="text-gray hover:text-gray-700">
+                                        {formatPostedTime(reply.posted_date.toString())}
+                                    </span>
+                                </div>
+                                <p className="pb-2 trending-dec w-100 mb-0">
+                                        {reply.reply}
+                                    </p>
+                                <div>
+                                </div>
+                            </li>
+                        </ul>
+                
+                                        </div>
+                                    ))}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                ))}
             </div>
         </section>
     );

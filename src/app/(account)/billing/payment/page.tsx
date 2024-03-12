@@ -69,7 +69,7 @@ const PaymentPage = () => {
             <p className="font-bold">R199/month</p>
     <p className="font-bold">Premium</p>
             </div>
-            <Link href="/sign-up/pricing" className="btn btn-blue">
+            <Link href="/plan-selection/plans" className="btn btn-blue">
               Change
             </Link>
           </div>

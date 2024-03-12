@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     title: 'isolakwamuntu account  ',
     description: 'Browse all categories',
   }
-const SignUpAccount = () =>{
+const CreateAccount = () =>{
     return (
    
       <div className="p-6 bg-dark rounded-lg shadow-md max-w-md">
@@ -61,10 +61,10 @@ const SignUpAccount = () =>{
           
         </div>
         <div className='py-8'>
-        <Link href="/sign-up/pricing"
+        <Link href="/plan-selection"
             className="bg-red text-white items-center px-20 py-2 hover:bg-red-600 rounded-md"
           >
-            Next
+            Continue
           </Link>
         </div>
        
@@ -72,4 +72,4 @@ const SignUpAccount = () =>{
           );
         };
         
-export default SignUpAccount;
+export default CreateAccount;
