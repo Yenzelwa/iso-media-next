@@ -3,6 +3,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 import type { Metadata } from "next";
+import { BsGithub, BsTwitter } from "react-icons/bs";
 
 
 export const metadata: Metadata = {
@@ -18,9 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <div className="pt-12 flex items-center justify-center flex-shrink-0 text-white mr-6">    
-       <div className="flex items-center">
-       <svg
+      
+
+    <div className="flex-shrink-0 text-white "> 
+        <div className="border-b bg-slate-100">
+      <nav className="container flex justify-between items-center">
+        <div className="font-semibold">
+        <svg
             className="fill-current h-8 w-8 mr-2 text-red"
             width="54"
             height="54"
@@ -32,14 +37,23 @@ export default function RootLayout({
           <span className="font-semibold text-xl tracking-tight">
             IsolaKwaMUNTU
           </span>
-       </div>
-          
         </div>
+        <div className="flex items-center gap-4 text-lg">
+          <a href="https://github.com/Yazdun/react-fcc-forms" target="_blank">
+            <BsGithub />
+          </a>
+          <a href="https://twitter.com/Yazdun" target="_blank">
+            <BsTwitter />
+          </a>
+        </div>
+      </nav>
+      </div>
+      </div>
         <div className="w-60% p-12 flex items-center justify-center bg-black text-white">
 
-          {children}
+        {children}
 
-        </div>
+      </div>
       </body>
     </html>
   );
