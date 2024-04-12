@@ -3,23 +3,53 @@ import React from 'react';
 import Link from 'next/link';
 import {Input} from '../../../../components/Input'
 import {
-  firstName_validation,
-  desc_validation,
-  email_validation,
-  num_validation,
-  password_validation,
-  lastName_validation,
+  firstName_validation,  email_validation,  password_validation,  lastName_validation,
 } from '../../../../utils/inputValidations'
 import { FormProvider, useForm } from 'react-hook-form';
-import { data } from 'autoprefixer';
+import { useRouter } from "next/navigation";
+import { signIn } from 'next-auth/react';
+import axios from 'axios';
+import * as https from 'https';
 
 
 const CreateAccount = () =>{
+  const router = useRouter();
   const methods = useForm()
 
-  const onSubmit = methods.handleSubmit(data =>{
+  const onSubmit = methods.handleSubmit(async (data) => {
     console.log(data);
-  })
+    const response = await axios.post("https://localhost:7263/api/Account/register", {
+      firstName: data.first_name,
+      lastName: data.last_name,
+      email: data.email_address,
+      password: data.password,
+      status:'pending'
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+     httpsAgent: new https.Agent({ rejectUnauthorized: false })
+    });
+  debugger;
+    if (response.status == 200 && response.data) {
+      debugger;
+      const result = await signIn('credentials', {
+        redirect: false, // Do not redirect on the NextAuth side
+        email: data.email_address, // Or another unique identifier for your user
+        password: data.password // If your API provides a session token or similar
+      });
+debugger;
+      if (result?.ok) {
+        router.push('/plan-selection');
+      } else {
+     //  setError(null)
+      }
+    } else {
+      // Handle registration errors
+      console.error('Registration failed');
+    }
+
+  });
     return (
    <FormProvider {...methods}>
     <form
@@ -75,3 +105,5 @@ const CreateAccount = () =>{
         };
         
 export default CreateAccount;
+
+

@@ -1,11 +1,17 @@
 import Link from "next/link";
+import { authConfig, loginIsRequiredServer } from "../../api/auth/[...nextauth]/authOptions";
+import { getServerSession } from "next-auth";
 
+const wait = (ms: number) => new Promise((rs) => setTimeout(rs, ms));
+const PlanSelectionPage = async () =>{
+  await loginIsRequiredServer();
+  const session = await getServerSession(authConfig)
 
-const PlanSelectionPage = () =>{
-
+  await wait(1000);
     return (
         <>
         <h1>Choose your plan</h1>
+        <h1>{session?.user?.email}</h1>
         <p>
         Enjoy a 25-day trial with our monthly and annual plans
         </p>

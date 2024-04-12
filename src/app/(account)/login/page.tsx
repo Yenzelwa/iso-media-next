@@ -1,30 +1,35 @@
 'use client'
 import Link from "next/link";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { UseToken } from "../../auth/useToken";
+import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 function Login() {
   const { register, handleSubmit, setError, formState: { errors } } = useForm<FormData>();
+  const router = useRouter();
   type FormData = {
-    username: string,
+    email: string,
     password: string
   }
-  const onSubmit: SubmitHandler<FormData> = async (data: any) => {
-   const response = await fetch('api/login', {
-      method: 'POST',
-      body: JSON.stringify({ username: "khanyods3@gmail.com", password: "test" })
-    })
-    if(response.ok){
-    //  const {token} = UseToken()
-    }
-  }
+
   return (
 
     <div className="flex flex-col items-center justify-center">
       <div className="bg-dark p-12 rounded-lg shadow-md max-w-md">
         <h2 className="text-3xl font-bold mb-4">Login</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form   onSubmit={handleSubmit(async ({ email, password }) =>  {
+          debugger;
+        const result =   await signIn('credentials', {
+            redirect: false, // Do not redirect on the NextAuth side
+            email: email, // Or another unique identifier for your user
+            password: password // If your API provides a session token or similar
+          });
+          debugger;
+          if (result?.ok) {
+            router.push('/');
+          }
+        })}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray mb-2">
               Email Address
@@ -34,9 +39,9 @@ function Login() {
               id="email"
               className="w-full p-3 border border-gray rounded-lg"
               placeholder="Enter your email"
-              {...register('username', { required: 'Username is required', pattern: { value: /^\S+@\S+$/i, message: "This is not a valid email" } })}
+              {...register('email', { required: 'Username is required', pattern: { value: /^\S+@\S+$/i, message: "This is not a valid email" } })}
             />
-            <p className="text-red">{errors.username?.message}</p>
+            <p className="text-red">{errors.email?.message}</p>
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block text-gray-600 mb-2">
@@ -72,9 +77,9 @@ function Login() {
         <div className="mt-4">
           <p className="text-left text-sm">
             Don't have an account?{' '}
-            <Link href="/sign-up/account" className="text-red hover:underline" >
+            <button className="text-red hover:underline" >
               Sign Up
-            </Link>
+            </button>
           </p>
         </div>
       </div>

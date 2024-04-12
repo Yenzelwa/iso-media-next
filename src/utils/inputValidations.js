@@ -1,9 +1,9 @@
 export const firstName_validation = {
   name: 'first_name',
-  label: 'name',
+  label: 'first_name',
   type: 'text',
-  id: 'name',
-  placeholder: 'First name',
+  id: 'first_name',
+  placeholder: 'first name',
   validation: {
     required: {
       value: true,
@@ -13,10 +13,10 @@ export const firstName_validation = {
 }
 export const lastName_validation = {
   name: 'last_name',
-  label: 'name',
+  label: 'last_name',
   type: 'text',
-  id: 'name',
-  placeholder: 'Last name',
+  id: 'last_name',
+  placeholder: 'last name',
   validation: {
     required: {
       value: true,
@@ -47,7 +47,7 @@ export const password_validation = {
   label: 'password',
   type: 'password',
   id: 'password',
-  placeholder: 'type password ...',
+  placeholder: 'password',
   validation: {
     required: {
       value: true,
@@ -75,11 +75,11 @@ export const num_validation = {
 }
 
 export const email_validation = {
-  name: 'email',
+  name: 'email_address',
   label: 'email_address',
   type: 'email',
-  id: 'email',
-  placeholder: 'write a random email address',
+  id: 'email_address',
+  placeholder: 'email address',
   validation: {
     required: {
       value: true,

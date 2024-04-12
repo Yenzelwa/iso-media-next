@@ -13,7 +13,7 @@ const isInvalid = isFormInvalid(inputError)
   return (
   <div className="flex flex-col w-full gap-2">
     <div className="flex justify-between">
-      <label htmlFor={id} className="font-semibold capitalize">
+    <label htmlFor={label} className="text-left">
         {label}
       </label>
       <AnimatePresence mode="wait" initial={false}>

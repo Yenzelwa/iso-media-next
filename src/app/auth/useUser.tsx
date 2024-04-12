@@ -14,4 +14,8 @@ export const UseUser = () => {
       // setInternalUser(newUser);
        return [user, setInternalUser]
      }
+
+     useEffect(() => {
+        
+     })
 }
