@@ -35,6 +35,7 @@ export const authConfig: NextAuthOptions = {
               const user = { id: 1, name: response.data.profile.firstName + " " + response.data.profile.lastName, email: response.data.profile.email
                             , test:"et"
               };
+              console.log("user", user);
               return user;
             }
           } catch (error) {
@@ -56,19 +57,21 @@ export const authConfig: NextAuthOptions = {
     },
     async session({ session, user }) {
       if (user) {
-        debugger;
-        session.user.id = user.id;
+        console.log("session", session);
+        if (!session.user) {
+          session.user = {}; // Initialize user object if it doesn't exist
+        }
         session.user.name = user.name;
         session.user.email = user.email;
-        session.user.test = user.test;
       }
       return session;
-    }
+    }    
   }
 };
 
 
 export async function loginIsRequiredServer() {
+  debugger;
   const session = await getServerSession(authConfig);
   if (!session) return redirect("/login");
 }
