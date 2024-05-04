@@ -47,9 +47,6 @@ const WatchVideo = (id: number) => {
       }
     }
     SetCurrentVideo(currentVideoData);
-  }, [])
-
-  useEffect(() =>{
     const series : Series = {
       id : 1,
       title:'Family Unit',
@@ -389,8 +386,7 @@ const WatchVideo = (id: number) => {
       ]
     };
     setSeries(series);
-  })
-
+  }, [])
 
 
   const playNextVideo = async () => {

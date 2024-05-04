@@ -17,7 +17,6 @@ const CreateAccount = () =>{
   const methods = useForm()
 
   const onSubmit = methods.handleSubmit(async (data) => {
-    console.log(data);
     const response = await axios.post("https://localhost:7263/api/Account/register", {
       firstName: data.first_name,
       lastName: data.last_name,
@@ -34,18 +33,16 @@ const CreateAccount = () =>{
     if (response.status == 200 && response.data) {
       debugger;
       const result = await signIn('credentials', {
-        redirect: false, // Do not redirect on the NextAuth side
-        email: data.email_address, // Or another unique identifier for your user
-        password: data.password // If your API provides a session token or similar
+        redirect: false, 
+        email: data.email_address, 
+        password: data.password 
       });
-debugger;
       if (result?.ok) {
         router.push('/plan-selection');
       } else {
      //  setError(null)
       }
     } else {
-      // Handle registration errors
       console.error('Registration failed');
     }
 
@@ -79,15 +76,6 @@ debugger;
           <Link  className="text-red hover:underline" href="/terms-privacy" target="_blank"> Terms of Use and Privacy Policy
             </Link> by checking this box.</span>
         </label>
-        {/* <div className="flex space-x-4 mt-4">
-          <p className="text-left text-sm">
-            Already have an account?{' '}
-            <Link  className="text-red hover:underline" href="/login">
-              Log In
-            </Link>
-          </p>
-          
-        </div> */}
         <div className='py-8'>
         <button 
          onClick={onSubmit}

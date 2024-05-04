@@ -5,6 +5,8 @@ import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 import StarIcon from "./shared/StarIcon";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { setEmitFlags } from "typescript";
 interface BrowseSlideShowProps {
   videos: Video[];
 }
@@ -12,6 +14,7 @@ interface BrowseSlideShowProps {
 const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
+  const {data : session} = useSession()
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
@@ -34,6 +37,9 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
     [router, videos[currentIndex].id]
     
   );
+  const redirectToSignIn = () =>{
+    router.push('/account')
+  }
 
   return (
     <>
@@ -85,13 +91,22 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
               Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.
             </p>
             <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
-              <button
-              onClick={() => redirectToWatch()}
+              {
+                session && session.user ? <button
+                onClick={() => redirectToWatch()}
+        type="submit"
+        className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md "
+      >
+        Play Now
+      </button>:<button
+              onClick={() => redirectToSignIn()}
       type="submit"
       className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md "
     >
-      Play Now
+      Try 14 days trial
     </button>
+              }
+              
             </div>
           </div>
         </div>

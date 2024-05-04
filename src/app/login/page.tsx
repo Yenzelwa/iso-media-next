@@ -3,13 +3,18 @@ import "@/src/globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Input } from "@/src/components/Input";
+import { email_validation, password_validation } from "@/src/utils/inputValidations";
 
 
 function Login() {
+  const methods = useForm()
   const { register, handleSubmit, setError, formState: { errors } } = useForm<FormData>();
+  const [loginError, setLoginError] = useState(null);
   const router = useRouter();
   type FormData = {
     email: string,
@@ -21,57 +26,45 @@ function Login() {
     <div className="flex flex-col items-center justify-center">
       <div className="bg-dark p-12 rounded-lg shadow-md max-w-md">
         <h2 className="text-3xl font-bold mb-4">Login</h2>
-        <form   onSubmit={handleSubmit(async ({ email, password }) =>  {
-          debugger;
-        const result =   await signIn('credentials', {
-            redirect: false, // Do not redirect on the NextAuth side
-            email: email, // Or another unique identifier for your user
-            password: password // If your API provides a session token or similar
+        <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(async ({ email, password }) => {
+          const result = await signIn('credentials', {
+            redirect: false,
+            email: email,
+            password: password
           });
-          debugger;
-          if (result?.ok) {
+          if (result && result?.ok) {
             router.push('/');
           }
+          else{
+            debugger;
+           // setLoginError("error login")
+          }
         })}>
+          {loginError && <p className="text-red">{loginError}</p>}
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray mb-2">
               Email Address
             </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-3 border border-gray rounded-lg"
-              placeholder="Enter your email"
-              {...register('email', { required: 'Username is required', pattern: { value: /^\S+@\S+$/i, message: "This is not a valid email" } })}
-            />
+            <Input {...email_validation} />
+        
             <p className="text-red">{errors.email?.message}</p>
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block text-gray-600 mb-2">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full p-3 border border-gray-300 rounded-lg"
-              placeholder="Enter your password"
-              {...register('password', {
-                required: 'The password required',
-                minLength: {
-                  value: 6,
-                  message: "Password must be more tha 4 characters"
-                }
-              })}
-            />
+            <Input {...password_validation}    />
             <p className="text-red">{errors.password?.message}</p>
           </div>
-          <button 
+          <button
             type="submit"
             className="w-full bg-red text-white py-2 rounded-md hover:bg-red-600"
           >
             Login
           </button>
         </form>
+        </FormProvider>
         <div className="mt-4">
           <Link href="/forgot-password" className="text-blue-500 hover:underline">
             Forgot Password?
@@ -80,9 +73,9 @@ function Login() {
         <div className="mt-4">
           <p className="text-left text-sm">
             Don't have an account?{' '}
-            <button className="text-red hover:underline" >
+            <Link className="text-red hover:underline" href="/account" >
               Sign Up
-            </button>
+            </Link>
           </p>
         </div>
       </div>

@@ -52,11 +52,11 @@ const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
                                         }}
                                         className="favorites-slider list-inline  row p-0 m-0 iq-rtl-direction">
           
-              {data.map((video) => {
+              {data.map((video,key) => {
                 return (
                   <SwiperSlide className="slide-item">
                     {" "}
-                    <MovieCard  sub_title={video.type.name} data={video} />
+                    <MovieCard  sub_title={video.type.name} data={video} key={key} />
                   </SwiperSlide>
                 );       
               })}

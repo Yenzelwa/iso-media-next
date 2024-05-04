@@ -24,15 +24,22 @@ const  Player : React.FC<VideoPathProps> = ({video_path}) =>{
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
 
 
-useEffect(() =>{
-videoRef.current = document.createElement('video');
-if(video_path){
-//  videoRef.current.src = video_path;
-  setVideoUrl(video_path);
-}
-
-
-})
+  useEffect(() => {
+    // Create the video element
+    const videoElement = document.createElement('video');
+  
+    // Set the video URL only if it's provided and different from the current video URL
+    if (video_path && videoUrl !== video_path) {
+      videoElement.src = video_path;
+      setVideoUrl(video_path);
+    }
+  
+    // Cleanup function
+    return () => {
+      // Cleanup logic if needed
+    };
+  }, [video_path, videoUrl]); // Add video_path and videoUrl as dependencies
+  
 
 
  const handleContextMenu = (e: { preventDefault: () => void; }) => {

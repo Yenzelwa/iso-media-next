@@ -1,15 +1,23 @@
+'use client'
 import Link from "next/link";
-import React from "react";
+import { signOut, useSession } from "next-auth/react"; 
+import Image from "next/image"; 
 import logo from "../../public/logo.png";
 
 const NavBar = () => {
-  return (
+ const { data: session } = useSession(); 
+   const handleLogout = async () => {
+    debugger;
+    await signOut(); 
+  } 
+ return (
     <>
-      <nav className="w-full flex items-center justify-between flex-wrap bg-dark  p-4">
+        <nav className="w-full flex items-center justify-between flex-wrap bg-dark  p-4">
         <div className="flex items-center flex-shrink-0 text-white mr-6">
           <svg
             className="fill-current h-8 w-8 mr-2 text-red"
             width="54"
+
             height="54"
             viewBox="0 0 54 54"
             xmlns="http://www.w3.org/2000/svg"
@@ -41,20 +49,34 @@ const NavBar = () => {
               Documentary
             </Link>
           </div>
-          <div>
-            <Link
-              href="/account"
-              className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 lg:mt-0"
-            >
-              Register
-            </Link>
-            <Link
-              href="/login"
-              className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 ml-4 lg:mt-0"
-            >
-              Log In
-            </Link>
-          </div>
+          {session  && session.user && session.user.name?  ( 
+            <div className="flex items-center">
+              <span className="mr-2"> {session.user.name}</span> 
+              <img 
+               // src={session.user.image}
+                alt={session.user.name}
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <button onClick={ async ()=>{await handleLogout()}} >Log out</button>
+            </div>
+          ) : (
+            <div>
+              <Link
+                href="/account"
+                className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 lg:mt-0"
+              >
+                Register
+              </Link>
+              <Link
+                href="/login"
+                className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 ml-4 lg:mt-0"
+              >
+                Log In
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     </>

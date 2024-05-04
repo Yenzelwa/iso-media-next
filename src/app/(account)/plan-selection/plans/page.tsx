@@ -1,8 +1,10 @@
 'use client'
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const PricingPlan = () => {
   const [pricing, setPricing] = useState("Monthly"); // Default pricing plan
+  const router = useRouter();
 
   const pricingLists = [
     {
@@ -32,6 +34,11 @@ const PricingPlan = () => {
       ],
     },
   ];
+
+  function SelectPlan(){
+
+    router.push("/billing");
+  }
 
   return (
     <>
@@ -96,7 +103,7 @@ const PricingPlan = () => {
                 </div>
 
                 <div className="mt-8">
-                  <button
+                  <button onClick={() =>SelectPlan()}
                     type="button"
                     className={`${
                       pricing === item.type ? "bg-red-600" : "bg-gray-600"

@@ -49,9 +49,9 @@ export const authConfig: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id; // Store user's ID in JWT token
-        token.email = user.email; // Store email in JWT token
-        token.name = user.name; // Store name in JWT token
+        token.id = user.id; 
+        token.email = user.email; 
+        token.name = user.name; 
       }
       return token;
     },
@@ -59,7 +59,7 @@ export const authConfig: NextAuthOptions = {
       if (user) {
         console.log("session", session);
         if (!session.user) {
-          session.user = {}; // Initialize user object if it doesn't exist
+          session.user = {}; 
         }
         session.user.name = user.name;
         session.user.email = user.email;
@@ -71,7 +71,6 @@ export const authConfig: NextAuthOptions = {
 
 
 export async function loginIsRequiredServer() {
-  debugger;
   const session = await getServerSession(authConfig);
   if (!session) return redirect("/login");
 }
