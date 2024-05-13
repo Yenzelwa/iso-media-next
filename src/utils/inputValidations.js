@@ -44,7 +44,7 @@ export const desc_validation = {
 
 export const password_validation = {
   name: 'password',
-  label: 'password',
+  label: 'Password',
   type: 'password',
   id: 'password',
   placeholder: 'password',
@@ -76,9 +76,9 @@ export const num_validation = {
 
 export const email_validation = {
   name: 'email_address',
-  label: 'email_address',
+  label: 'Email Address',
   type: 'email',
-  id: 'email_address',
+  id: 'email',
   placeholder: 'email address',
   validation: {
     required: {
