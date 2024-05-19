@@ -2,9 +2,10 @@ import { findInputError, isFormInvalid } from '../utils'
 import { useFormContext } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MdError } from 'react-icons/md'
-export const Input = ({ label, type, id, placeholder, name }) => {
+export const Input = ({ label, type, id, placeholder, name, validation }) => {
   const {
     register,
+    trigger,
     formState: { errors },
   } = useFormContext();
 
@@ -16,23 +17,17 @@ export const Input = ({ label, type, id, placeholder, name }) => {
         <label htmlFor={id} className="text-left">
           {label}
         </label>
-        <AnimatePresence mode="wait" initial={false}>
-          {inputError && (
-            <InputError message={inputError.message} key={inputError.message} />
-          )}
-        </AnimatePresence>
       </div>
+      {inputError && (
+            <pre className='text-red'> {inputError.message}</pre>
+        )}
       <input
         id={id}
         type={type}
         className="w-full p-3 font-medium border text-black rounded-md border-slate-300 placeholder-opacity-60"
         placeholder={placeholder}
-        {...register(id, {
-          required: {
-            value: true,
-            message: "required",
-          },
-        })}
+        {...register(id, validation)}
+        onKeyUp={()=> trigger(id)}
       />
     </div>
   );

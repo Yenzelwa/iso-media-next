@@ -51,11 +51,25 @@ export const password_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: 'password is required.',
+    }
+  },
+}
+
+export const password_register_validation = {
+  name: 'password',
+  label: 'Password',
+  type: 'password',
+  id: 'password',
+  placeholder: 'password',
+  validation: {
+    required: {
+      value: true,
+      message: 'password is required.',
     },
     minLength: {
       value: 6,
-      message: 'min 6 characters',
+      message: 'minimun of 6 characters is required.',
     },
   },
 }
@@ -75,7 +89,7 @@ export const num_validation = {
 }
 
 export const email_validation = {
-  name: 'email_address',
+  name: 'email',
   label: 'Email Address',
   type: 'email',
   id: 'email',
@@ -83,12 +97,12 @@ export const email_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: 'email is required.',
     },
     pattern: {
       value:
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      message: 'not valid',
+      message: 'email address is not valid',
     },
   },
 }
