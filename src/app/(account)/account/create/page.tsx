@@ -48,6 +48,7 @@ const CreateAccount = () =>{
 
   });
     return (
+      <div className="flex flex-col items-center justify-center">
    <FormProvider {...methods}>
     <form
      onSubmit={e => e.preventDefault()}
@@ -88,7 +89,7 @@ const CreateAccount = () =>{
       </div>
     </form>
    </FormProvider>
- 
+ </div>
           );
         };
         

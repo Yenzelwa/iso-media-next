@@ -21,7 +21,11 @@ const config: Config = {
         dark: '#171717',
         red:'#7f1d1d',
         black:'rgb(17 17 17)',
-        gray:'#666'
+        gray:'#666',
+        lightred:'#e15b64',
+        orange:'#f47e60',
+        yellow:'#f8b26a',
+        green:'#abbd81'
       }
   },
   plugins: [],

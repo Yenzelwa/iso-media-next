@@ -77,15 +77,15 @@ function Login() {
               <p className="text-red">{errors.password?.message}</p>
             </div>
        
-            <button
+            {isLoading ? <Loader /> :  <button
               type="submit"
               className={`w-full py-2 rounded-md text-white  ${isLoading ? 'bg-gray cursor-not-allowed' : 'bg-red hover:bg-red'}`}
               style={{ backgroundColor: LoginBtnEnable ? '#E5E7EB' : '#EF4444', cursor: LoginBtnEnable ? 'not-allowed' : 'pointer' }}
               disabled={isLoading}
             >
-              {isLoading ? <Loader /> : null} {/* Render loader when isLoading is true */}
-              {!isLoading && <span className="items-center justify-center">Login</span>} {/* Render text when not loading */}
-            </button>
+              <span className="items-center justify-center">Login</span>
+            </button>}
+       
           </form>
         </FormProvider>
         <div className="mt-4">
