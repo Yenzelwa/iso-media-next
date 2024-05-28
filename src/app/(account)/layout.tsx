@@ -25,7 +25,7 @@ const AccountRootLayout: React.FC <Props> = ({ children, session } ) => {
   return (
     <html lang="en">
            <SessionProvider session={session}>
-      <body>
+      <body className="bg-black">
       
 
     <div className="flex-shrink-0 text-white "> 
@@ -33,7 +33,7 @@ const AccountRootLayout: React.FC <Props> = ({ children, session } ) => {
     <AccountNav/>
       </div>
       </div>
-        <div className="w-60% p-12 flex items-center justify-center bg-black text-white">
+        <div className="p-12 flex items-center justify-center text-white">
 
         {children}
 

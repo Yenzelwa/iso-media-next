@@ -21,14 +21,14 @@ export const Input = ({ label, type, id, placeholder, name, validation }) => {
       {inputError && (
             <pre className='text-red'> {inputError.message}</pre>
         )}
-      <input
-        id={id}
-        type={type}
-        className="w-full p-3 font-medium border text-black rounded-md border-slate-300 placeholder-opacity-60"
-        placeholder={placeholder}
-        {...register(id, validation)}
-        onKeyUp={()=> trigger(id)}
-      />
+ <input
+    id={id}
+    type={type}
+    className={`${type === 'checkbox' ? 'mr-2' : 'w-full p-3 font-medium border text-black rounded-md border-slate-300 placeholder-opacity-60'}`}
+    placeholder={placeholder}
+    {...register(id, validation)}
+    onKeyUp={() => trigger(id)}
+/>
     </div>
   );
 };

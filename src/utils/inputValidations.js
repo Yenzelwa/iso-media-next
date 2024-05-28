@@ -7,7 +7,7 @@ export const firstName_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: 'name is required',
     }
   },
 }
@@ -20,7 +20,7 @@ export const lastName_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: 'last name is required',
     }
   },
 }
@@ -104,5 +104,18 @@ export const email_validation = {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       message: 'email address is not valid',
     },
+  },
+}
+export const termsAndConditions_validation = {
+  name: '',
+  label: '',
+  type: 'checkbox',
+  placeholder:'',
+  id: 't&cs',
+  validation: {
+    required: {
+      value: true,
+      message: 'check is required.',
+    }
   },
 }

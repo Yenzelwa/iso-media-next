@@ -7,7 +7,6 @@ import logo from "../../public/logo.png";
 const NavBar = () => {
  const { data: session } = useSession(); 
    const handleLogout = async () => {
-    debugger;
     await signOut(); 
   } 
  return (
