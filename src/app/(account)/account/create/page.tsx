@@ -18,9 +18,26 @@ import Loader from '@/src/components/Loader';
 const CreateAccount = () =>{
   const router = useRouter();
   const methods = useForm()
+  const { formState: { errors } } = useForm<FormData>();
   const [isLoading, setIsLoading] = useState(false);
   const [LoginBtnEnable, setLoginBtnEnable] = useState(true);
   const {data: session} = useSession();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [registerError, setRegisterError] = useState('');
+
+  type FormData = {
+    email: string,
+    password: string
+  }
+  useEffect(() => {
+  if (registerError) {
+    setErrorMessage(registerError);
+    const timer = setTimeout(() => {
+      setErrorMessage('');
+    }, 2000);
+    return () => clearTimeout(timer);
+  }
+}, [registerError]);
 
   useEffect(() => {
     const isFormValid = methods.formState.isValid;
@@ -28,6 +45,7 @@ const CreateAccount = () =>{
   }, [methods.formState.isValid]);
 
   const onSubmit = methods.handleSubmit(async (data) => {
+    setIsLoading(true);
     const response = await axios.post("https://localhost:7263/api/Account/register", {
       firstName: data.first_name,
       lastName: data.last_name,
@@ -40,19 +58,21 @@ const CreateAccount = () =>{
       },
      httpsAgent: new https.Agent({ rejectUnauthorized: false })
     });
+    debugger;
     if (response.status == 200 && response.data) {
       const result = await signIn('credentials', {
         redirect: false, 
         email: data.email, 
         password: data.password 
       });
+      setIsLoading(false);
       if (result?.ok) {
         router.push('/plan-selection');
       } else {
-     //  setError(null)
+        setRegisterError("Error has occurred")
       }
     } else {
-      console.error('Registration failed');
+      setRegisterError(response && response?.data)
     }
 
   });
@@ -93,7 +113,11 @@ const CreateAccount = () =>{
          <p className="text-gray-500">STEP 1 OF 3</p>
              <h1 className="text-2xl font-bold mb-4">Confirm your account details</h1>
              <h3 className="text-lg text-gray mb-6">IsolakwaMUNTU is committed to give you all you need to awaken your inner child.</h3>
+             <p className={`text-red ${errorMessage ? 'opacity-100' : 'opacity-0'}`}>
+              {errorMessage}
+            </p>
              <div className="grid grid-cols-2 text-black  gap-4 mt-4">
+          
                  <Input {...firstName_validation} />         
                  <Input {...email_validation} />
                </div>

@@ -19,7 +19,7 @@ export const Input = ({ label, type, id, placeholder, name, validation }) => {
         </label>
       </div>
       {inputError && (
-            <pre className='text-red'> {inputError.message}</pre>
+            <pre className='text-red' style={{marginTop:'-27px'}}> {inputError.message}</pre>
         )}
  <input
     id={id}
