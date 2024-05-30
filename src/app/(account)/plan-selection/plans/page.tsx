@@ -1,10 +1,15 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import Cookies from "js-cookie";
 
 const PricingPlan = () => {
   const [pricing, setPricing] = useState("Monthly"); // Default pricing plan
   const router = useRouter();
+  const [selectedPlan, setSelectedPlan] = useState(1);
+  const {data:session} = useSession();
+  const [userCookie, setUserCookie] = useState();
 
   const pricingLists = [
     {
@@ -39,31 +44,58 @@ const PricingPlan = () => {
     },
   ];
 
-  function SelectPlan(){
-
-    router.push("/billing");
+  const SetPricePlan = () =>{
+  if(session && session.user && session.user.email){
+     
   }
+
+  }
+
+  useEffect(() => {
+    debugger;
+    const userCookie = Cookies.get("userProfile");
+    if (userCookie) {
+      const userProfile = JSON.parse(userCookie);
+      setUserCookie(userProfile);
+      debugger;
+      setSelectedPlan(userProfile.plan.id);
+    }
+  }, []);
+
+  useEffect(() =>{
+    debugger;
+    const userCookie = Cookies.get("userProfile");
+    if (userCookie) {
+      const userProfile = JSON.parse(userCookie);
+     userProfile.plan.id = selectedPlan
+    Cookies.set("userProfile", JSON.stringify(userProfile))
+   }
+  }, [selectedPlan])
 
   return (
     <>
       <div className=" py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
-          <p className="text-gray-500">STEP 2 OF 3</p>
-             <h1 className="text-2xl font-bold mb-4">Choose your plan</h1>
-             <h3 className="text-lg text-gray mb-6">IsolakwaMUNTU is committed to give you all you need to awaken your inner child.</h3>
+            <p className="text-gray-500">STEP 2 OF 3</p>
+            <h1 className="text-2xl font-bold mb-4">Choose your plan</h1>
+            <h3 className="text-lg text-gray mb-6">IsolakwaMUNTU is committed to give you all you need to awaken your inner child.</h3>
           </div>
-
 
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
             {pricingLists.map((item) => (
               <div
                 key={item.id}
-                className="rounded-lg bg-dark p-8 shadow-md"
+                className={`rounded-lg bg-dark p-8 shadow-md ${selectedPlan === item.id ? 'border-2 border-red' : ''
+                  }`}
+                onClick={() => {
+                  setSelectedPlan(item.id);
+                }
+                }
               >
                 <div className="text-center">
-                  <h3 className=" font-medium text-white">{item.title}</h3>
+                  <h3 className="font-medium text-white">{item.title}</h3>
                   <div className="mt-4 flex items-center justify-center">
                     <span className="text-5xl font-extrabold tracking-tight text-red">
                       {item.price}
@@ -93,22 +125,21 @@ const PricingPlan = () => {
                     ))}
                   </ul>
                 </div>
-
-         
               </div>
             ))}
           </div>
-          <div className="mt-8">
-                  <button onClick={() =>SelectPlan()}
-                    type="button"
-                    className={` w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md text-base font-medium text-white hover:bg-red focus:outline-none focus:border-red focus:shadow-outline-red transition duration-150 ease-in-out`}
-                  >
-                    Select Plan
-                  </button>
-                </div>
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              className={`w-1/2 flex justify-center items-center px-6 py-3 border border-transparent rounded-md text-base font-medium text-white bg-red hover:bg-red focus:outline-none focus:border-red focus:shadow-outline-red transition duration-150 ease-in-out`}
+            onClick={() => router.push("/billing")}
+            >
+              Continue
+            </button>
+          </div>
         </div>
       </div>
-    
+
     </>
   );
 };

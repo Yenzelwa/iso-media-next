@@ -13,6 +13,7 @@ import { signIn, useSession } from 'next-auth/react';
 import axios from 'axios';
 import * as https from 'https';
 import Loader from '@/src/components/Loader';
+import Cookies from 'js-cookie';
 
 
 const CreateAccount = () =>{
@@ -51,6 +52,10 @@ const CreateAccount = () =>{
       lastName: data.last_name,
       email: data.email_address,
       password: data.password,
+      plan:{
+        id:1,
+        name:'test'
+      },
       status:'pending'
     }, {
       headers: {
@@ -60,6 +65,7 @@ const CreateAccount = () =>{
     });
     debugger;
     if (response.status == 200 && response.data) {
+      Cookies.set('userProfile', JSON.stringify(response.data), { expires: 7 });
       const result = await signIn('credentials', {
         redirect: false, 
         email: data.email, 

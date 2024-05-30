@@ -5,7 +5,19 @@ import { redirect, useRouter } from "next/navigation";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 import * as https from 'https';
+import Cookies from 'js-cookie';
 
+interface User{
+  id:number,
+  name:string,
+  email:string,
+  password:string,
+  subscriptionPlan: {
+    id:number,
+    name:string
+  },
+  status:string
+}
 
 
 export const authConfig: NextAuthOptions = {
@@ -32,10 +44,14 @@ export const authConfig: NextAuthOptions = {
 
             if (response.status === 200 && response.data) {
               console.log("data from api", response.data)
-              const user = { id: 1, name: response.data.profile.firstName + " " + response.data.profile.lastName, email: response.data.profile.email
-                            , test:"et"
+              const user :User = { id: 1, name: response.data.profile.firstName + " " + response.data.profile.lastName, email: response.data.profile.email
+                            , password:"et", subscriptionPlan : {
+                               id:1,
+                               name:"Monthly"
+                            },
+                            status:"Pending"
               };
-              console.log("user", user);
+              Cookies.set('userProfile', JSON.stringify(user), { expires: 7 });
               return user;
             }
           } catch (error) {
