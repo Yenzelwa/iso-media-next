@@ -63,9 +63,10 @@ const CreateAccount = () =>{
       },
      httpsAgent: new https.Agent({ rejectUnauthorized: false })
     });
-    debugger;
     if (response.status == 200 && response.data) {
-      Cookies.set('userProfile', JSON.stringify(response.data), { expires: 7 });
+      const userProfile =  response.data;
+      const profile = JSON.stringify(userProfile.profile);
+      Cookies.set('userProfile', profile, { expires: 7 });
       const result = await signIn('credentials', {
         redirect: false, 
         email: data.email, 
