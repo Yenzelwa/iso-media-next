@@ -5,7 +5,7 @@ const AccountPage = () =>{
 
     return(
         <>
-        <div className="max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <div className="p-6 bg-dark rounded-lg  shadow-md max-w-md">
         <img  src="registration_image.png" alt="Registration Image" className="mx-auto mb-6"></img>
         <p className="text-gray-500">STEP 1 OF 3</p>
         <h1 className="text-2xl font-bold mb-4">Confirm your account details</h1>

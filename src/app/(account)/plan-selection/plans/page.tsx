@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Cookies from "js-cookie";
+import { authConfig, loginIsRequiredServer } from "@/src/app/api/auth/[...nextauth]/authOptions";
+import { getServerSession } from "next-auth";
 
 const PricingPlan = () => {
   const [pricing, setPricing] = useState("Monthly"); // Default pricing plan
@@ -10,6 +12,7 @@ const PricingPlan = () => {
   const [selectedPlan, setSelectedPlan] = useState(1);
   const {data:session} = useSession();
   const [userCookie, setUserCookie] = useState();
+  const wait = (ms: number | undefined) => new Promise((rs) => setTimeout(rs, ms));
 
   const pricingLists = [
     {
@@ -44,12 +47,15 @@ const PricingPlan = () => {
     },
   ];
 
-  const SetPricePlan = () =>{
-  if(session && session.user && session.user.email){
-     
-  }
+  useEffect(() => {
+    const loadSession = async () => {
+      await loginIsRequiredServer();
+      const session = await getServerSession(authConfig);
+      await wait(1000); // Delay for 1 second
+    };
 
-  }
+    loadSession();
+  }, []);
 
   useEffect(() => {
     debugger;
@@ -145,3 +151,7 @@ const PricingPlan = () => {
 };
 
 export default PricingPlan;
+function wait(arg0: number) {
+  throw new Error("Function not implemented.");
+}
+
