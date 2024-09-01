@@ -15,9 +15,9 @@ const Seasons: React.FC<SeasonsProps> = ({ seasons }) => {
     <>
       <DropdownSeasons seasons={seasons} onSelectSeason={handleSelectSeason} />
       <section className="show-movie w-full flex space-x-4">
-        {selectedSeason && selectedSeason.episodes.map((episode: Episode) => (
-          <div className="w-60 p-4">
-            <div className="block-image relative">
+        {selectedSeason && selectedSeason.episodes.map((episode: Episode, key) => (
+          <div className="w-60 p-4" key={key}>
+            <div className="block-image relative" >
               <a href="show-details.html">
                 <img
                   src={episode.image_path}

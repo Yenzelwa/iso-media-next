@@ -1,5 +1,4 @@
 'use client'
-import Player from "@/src/components/Player";
 import StarIcon from "@/src/components/shared/StarIcon";
 import { Episode, Series, Video } from "@/typings";
 import { Metadata } from "next";
@@ -9,8 +8,9 @@ import axios from 'axios';
 import DropdownSeasons from "@/src/components/DropDownSeasons";
 import Seasons from "@/src/components/WatchSeries";
 import CommentSection from "@/src/components/CommentsSection";
-
-const WatchVideo = (id: number) => {
+import dynamic from "next/dynamic";
+const Player = dynamic(() => import('@/src/components/Player'), { ssr: false });
+const WatchVideo = () => {
   const [currentVideo, SetCurrentVideo] = useState<Episode>();
   const [series, setSeries] = useState<Series>();
 

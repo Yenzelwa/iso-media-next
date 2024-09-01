@@ -169,7 +169,7 @@ const CreateAccount = () => {
               </label>
               <label className="text-left mt-4 flex items-center">
                 <input type="checkbox" className="mr-2" />
-                Yes, sign me up for emails about IsolaKwaMUNTU's latest
+                Yes, sign me up for emails about IsolaKwaMUNTUs latest
                 releases and news.
               </label>
               <div className="py-8">

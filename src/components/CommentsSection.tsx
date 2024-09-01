@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { IsoComment, VideoComment } from "@/typings";
 import Link from "next/link";
@@ -187,7 +187,7 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
         }));
     };
 
-    const handleSubmit = (e: Event, commentId: number) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>, commentId: number) => {
         debugger;
         const newReply = {
             id: comments.length + 1,
@@ -198,7 +198,7 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
                 name: "John Doe"
             }
         };
-        e.preventDefault();
+        event.preventDefault();
 
         const commentIndexToUpdate = 2;
 

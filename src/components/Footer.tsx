@@ -33,7 +33,7 @@ const Footer = () =>{
                           <Link href="/contact-us" className="hover:underline">Contact Us</Link>
                       </li>
                       <li className="mb-4">
-                          <Link href="/faqs" className="hover:underline">FAQ's</Link>
+                          <Link href="/faqs" className="hover:underline">FAQs</Link>
                       </li>
                   </ul>
               </div>

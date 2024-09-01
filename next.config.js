@@ -1,4 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+  /** @type {import('next').NextConfig} */
+const nextConfig = {
+  basePath: "/iso-media-next",
+  output: "export",
+  reactStrictMode: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

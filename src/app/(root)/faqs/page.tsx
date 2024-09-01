@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const FaqsPage = () =>{
     return (
         <>
-        <h3>FAQ's page!</h3>
+        <h3>FAQs page!</h3>
         </>
     )
 }

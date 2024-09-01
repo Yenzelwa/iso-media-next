@@ -19,9 +19,9 @@ const Videos: React.FC<VideosProps> = ({ data, title, page }) => {
           </p>
             <div className="grid grid-cols-4 gap-2 h-42">
               {
-              data.map((video) => {
+              data.map((video, key) => {
                 return (
-             <VideoCard sub_title={`${page === 'browse' ? video.type.category.name + ' - ' + video.type.name : video.type.category.name}`} data={video} />   
+             <VideoCard key={key} sub_title={`${page === 'browse' ? video.type.category.name + ' - ' + video.type.name : video.type.category.name}`} data={video} />   
                 )
               })} 
 

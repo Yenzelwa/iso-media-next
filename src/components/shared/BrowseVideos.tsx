@@ -54,7 +54,7 @@ const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
           
               {data.map((video,key) => {
                 return (
-                  <SwiperSlide className="slide-item">
+                  <SwiperSlide className="slide-item" key={key}>
                     {" "}
                     <MovieCard  sub_title={video.type.name} data={video} key={key} />
                   </SwiperSlide>

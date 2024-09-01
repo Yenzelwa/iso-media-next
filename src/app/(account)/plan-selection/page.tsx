@@ -1,16 +1,23 @@
-import Link from "next/link";
-import { authConfig, loginIsRequiredServer } from "../../api/auth/[...nextauth]/authOptions";
-import { getServerSession } from "next-auth";
+'use client'
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
-const wait = (ms: number) => new Promise((rs) => setTimeout(rs, ms));
+
 const PlanSelectionPage = async () => {
-  debugger;
-  await loginIsRequiredServer();
-  const session = await getServerSession(authConfig)
-  console.log("plan selection session", session)
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   //await wait(1000);
+  useEffect(() => {
+    if (status === 'loading') return; // Do nothing while loading
+
+    if (!session) {
+      router.push('/login'); // Redirect if not authenticated
+    }
+  }, [session, status, router]);
+
+  if (status === 'loading') return <div>Loading...</div>;
   return (
     <>
       <div className="max-w-md bg-white p-8 rounded-lg shadow-lg">

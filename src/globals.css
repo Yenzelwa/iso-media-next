@@ -3,6 +3,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Example in styles/globals.css */
+@import url('/iso-media-next/path/to/font-awesome.css');
 
 
 :root {
