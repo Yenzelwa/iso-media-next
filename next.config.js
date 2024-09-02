@@ -2,7 +2,7 @@
 const nextConfig = {
   basePath: "/iso-media-next",
   output: "export",
-  reactStrictMode: true,
+ // reactStrictMode: true,
   trailingSlash: true,
 };
 
