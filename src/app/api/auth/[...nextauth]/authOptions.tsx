@@ -28,7 +28,7 @@ export const authConfig: NextAuthOptions = {
         console.log('Received credentials:', credentials);
         if (credentials && credentials.email && credentials.password) {
           try {
-            const response = await axios.post("https://yenzelwa.github.io/IsolakwamuNTU.WebAPI/api/account/login", {
+            const response = await axios.post("https://localhost:7263/api/account/login", {
               email: credentials.email,
               password: credentials.password
             }, {
