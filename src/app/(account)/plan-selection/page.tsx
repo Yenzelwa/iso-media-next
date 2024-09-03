@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 
 const PlanSelectionPage = async () => {
@@ -47,7 +48,7 @@ const PlanSelectionPage = async () => {
         </ul>
         </div>
         <div className="flex justify-center">
-          <a href="/plan-selection/plans" className="bg-red text-white w-2/full py-2 px-16 mt-8  rounded-md inline-block hover:bg-red-600 transition duration-300"> See Plans</a>
+          <Link href="/plan-selection/plans" className="bg-red text-white w-2/full py-2 px-16 mt-8  rounded-md inline-block hover:bg-red-600 transition duration-300"> See Plans</Link>
         </div>
       </div>
 

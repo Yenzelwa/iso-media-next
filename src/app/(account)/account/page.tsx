@@ -11,7 +11,7 @@ const AccountPage = () =>{
         <h1 className="text-2xl font-bold mb-4">Confirm your account details</h1>
         <h3 className="text-lg text-gray mb-6">IsolakwaMUNTU is committed to give you all you need to awaken your inner child.</h3>
         <div className="flex justify-center">
-            <a href="/account/create" className="bg-red text-white px-16 py-3 rounded-md inline-block hover:bg-red-600 transition duration-300">Continue</a>
+            <Link href="/account/create" className="bg-red text-white px-16 py-3 rounded-md inline-block hover:bg-red-600 transition duration-300">Continue</Link>
         </div>
     </div>
         </>
