@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import {Input} from '../../../../components/Input'
 import {
   firstName_validation,  email_validation,  password_validation,  lastName_validation,
@@ -110,13 +109,13 @@ const CreateAccount = () => {
                 {session && session.user && session.user.email}
               </div>
               <div className="py-8">
-                <Link
+                <a
                   href="/plan-selection"
                   className="w-full py-2 rounded-md text-white bg-red hover:bg-red"
                   style={{ backgroundColor: '#EF4444', cursor: 'pointer' }}
                 >
                   <span className="items-center justify-center">Continue</span>
-                </Link>
+                </a>
               </div>
             </div>
           </form>
@@ -156,14 +155,14 @@ const CreateAccount = () => {
                 <Input {...termsAndConditions_validation} />
                 <span className="text-left text-sm">
                   To create an account, you must agree to the
-                  <Link
+                  <a
                     className="text-red hover:underline"
                     href="/terms-privacy"
                     target="_blank"
                   >
                     {' '}
                     Terms of Use and Privacy Policy
-                  </Link>{' '}
+                  </a>{' '}
                   by checking this box.
                 </span>
               </label>
