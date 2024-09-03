@@ -71,12 +71,12 @@ const NavBar = () => {
               >
                 Register
               </Link>
-              <Link
+              <a
                 href="/login"
                 className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 ml-4 lg:mt-0"
               >
                 Log In
-              </Link>
+              </a>
             </div>
           )}
         </div>
