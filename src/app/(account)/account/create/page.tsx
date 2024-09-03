@@ -55,7 +55,7 @@ const CreateAccount = () => {
   const onSubmit = methods.handleSubmit(async (data) => {
     setIsLoading(true);
     const response = await axios.post(
-      'https://localhost:7263/api/Account/register',
+      'https://yenzelwa.github.io/IsolakwamuNTU.WebAPI/api/Account/register',
       {
         firstName: data.first_name,
         lastName: data.last_name,
