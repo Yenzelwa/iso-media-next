@@ -7,18 +7,18 @@ import Link from "next/link";
 
 const PlanSelectionPage = async () => {
   const { data: session, status } = useSession();
-  const router = useRouter();
+  // const router = useRouter();
 
-  //await wait(1000);
-  useEffect(() => {
-    if (status === 'loading') return; // Do nothing while loading
+  // //await wait(1000);
+  // useEffect(() => {
+  //   if (status === 'loading') return; // Do nothing while loading
 
-    if (!session) {
-      router.push('/login'); // Redirect if not authenticated
-    }
-  }, [session, status, router]);
+  //   if (!session) {
+  //     router.push('/login'); // Redirect if not authenticated
+  //   }
+  // }, [session, status, router]);
 
-  if (status === 'loading') return <div>Loading...</div>;
+  // if (status === 'loading') return <div>Loading...</div>;
   return (
     <>
       <div className="max-w-md bg-white p-8 rounded-lg shadow-lg">

@@ -13,6 +13,7 @@ import axios from 'axios';
 import * as https from 'https';
 import Loader from '@/src/components/Loader';
 import Cookies from 'js-cookie';
+import { User as NextAuthUser } from "next-auth";
 
 const CreateAccount = () => {
   const router = useRouter();
@@ -29,6 +30,15 @@ const CreateAccount = () => {
     email: string;
     password: string;
   };
+  
+  interface CustomUser extends NextAuthUser {
+  id: string; // Ensure ID is a string to match next-auth's expected type
+  subscriptionPlan: {
+    id: number;
+    name: string;
+  };
+  status: string;
+};
 
   useEffect(() => {
     if (registerError) {
@@ -70,6 +80,17 @@ const CreateAccount = () => {
     };
     debugger;
     const profile = JSON.stringify(userProfile.profile);
+    const user: CustomUser = {
+      id: '1', // Ensure ID is a string
+      name: data.first_name,
+      email: data.email,
+      subscriptionPlan: {
+        id: 1,
+        name: "Monthly"
+      },
+      status: "Pending"
+    };
+  //  Cookies.set('userProfile', JSON.stringify(user), { expires: 7 });
     Cookies.set('userProfile', profile, { expires: 7 });
     setIsLoading(false);
     router.push('/plan-selection');
