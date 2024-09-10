@@ -54,44 +54,63 @@ const CreateAccount = () => {
 
   const onSubmit = methods.handleSubmit(async (data) => {
     setIsLoading(true);
-    const response = await axios.post(
-      'https://yenzelwa.github.io/IsolakwamuNTU.WebAPI/api/Account/register',
-      {
-        firstName: data.first_name,
-        lastName: data.last_name,
-        email: data.email_address,
-        password: data.password,
-        plan: {
-          id: 1,
-          name: 'test',
+    debugger;
+    const userProfile = {
+      token:"dsjdhsds63842fn3586436%77434",
+      profile:{
+        firstname:data.first_name,
+        lastname:data.lastname,
+        email:data.email,
+        plan : {
+          id:1,
+          name:"Monthly"
         },
-        status: 'pending',
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+        status:"Pending"
       }
-    );
-    if (response.status === 200 && response.data) {
-      debugger;
-      const userProfile = response.data;
-      const profile = JSON.stringify(userProfile.profile);
-      Cookies.set('userProfile', profile, { expires: 7 });
-      setIsLoading(false);
-     await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-      });
-        router.push('/plan-selection');
+    };
+    debugger;
+    const profile = JSON.stringify(userProfile.profile);
+    Cookies.set('userProfile', profile, { expires: 7 });
+    setIsLoading(false);
+    router.push('/plan-selection');
+    // const response = await axios.post(
+    //   'https://yenzelwa.github.io/IsolakwamuNTU.WebAPI/api/Account/register',
+    //   {
+    //     firstName: data.first_name,
+    //     lastName: data.last_name,
+    //     email: data.email_address,
+    //     password: data.password,
+    //     plan: {
+    //       id: 1,
+    //       name: 'test',
+    //     },
+    //     status: 'pending',
+    //   },
+    //   {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+    //   }
+    // );
+    // if (response.status === 200 && response.data) {
+    //   debugger;
+    //   const userProfile = response.data;
+    //   const profile = JSON.stringify(userProfile.profile);
+    //   Cookies.set('userProfile', profile, { expires: 7 });
+    //   setIsLoading(false);
+    //  await signIn("credentials", {
+    //     redirect: false,
+    //     email: data.email,
+    //     password: data.password,
+    //   });
+    //     router.push('/plan-selection');
     
 
       
-    } else {
-      setRegisterError(response && response?.data);
-    }
+    // } else {
+    //   setRegisterError(response && response?.data);
+    // }
   });
 
   return (
