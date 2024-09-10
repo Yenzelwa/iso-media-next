@@ -40,12 +40,12 @@ const CreateAccount = () => {
     }
   }, [registerError]);
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-        setShowSessionOpt(true);
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //       setShowSessionOpt(true);
       
-    }
-  }, [status]);
+  //   }
+  // }, [status]);
 
   useEffect(() => {
     const isFormValid = methods.formState.isValid;
