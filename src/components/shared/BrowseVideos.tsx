@@ -67,5 +67,5 @@ const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
     </>
   );
 };
-
+export const dynamic = "force-dynamic"; 
 export default MovieList;

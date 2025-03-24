@@ -3,10 +3,11 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useAuth } from "../../context/authContext";
 
 
 const PlanSelectionPage = async () => {
-  const { data: session, status } = useSession();
+  const { user } = useAuth();
   // const router = useRouter();
 
   // //await wait(1000);

@@ -1,18 +1,23 @@
+// Ensure the page is always statically generated
 'use client'
+
+
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";  // Import useSession from next-auth
 import Cookies from "js-cookie";
-import { authConfig, loginIsRequiredServer } from "@/src/app/api/auth/[...nextauth]/authOptions";
-import { getServerSession } from "next-auth";
+import { useAuth } from "@/src/app/context/authContext";
+
+// Type for the component props
+interface PricingPlanProps {
+  session: any;  // Session type is simplified here for client-side
+}
 
 const PricingPlan = () => {
-  const [pricing, setPricing] = useState("Monthly"); // Default pricing plan
-  const router = useRouter();
+  const { user} = useAuth();  // Get session and its status
   const [selectedPlan, setSelectedPlan] = useState(1);
-  const {data:session} = useSession();
-  const [userCookie, setUserCookie] = useState();
-  const wait = (ms: number | undefined) => new Promise((rs) => setTimeout(rs, ms));
+  const [userCookie, setUserCookie] = useState<any>(null);
+  const router = useRouter();
 
   const pricingLists = [
     {
@@ -48,110 +53,100 @@ const PricingPlan = () => {
   ];
 
   useEffect(() => {
-    const loadSession = async () => {
-      await loginIsRequiredServer();
-      const session = await getServerSession(authConfig);
-      await wait(1000); // Delay for 1 second
-    };
-
-    loadSession();
-  }, []);
-
-  useEffect(() => {
-    debugger;
     const userCookie = Cookies.get("userProfile");
     if (userCookie) {
       const userProfile = JSON.parse(userCookie);
       setUserCookie(userProfile);
-      debugger;
-      setSelectedPlan(userProfile.plan.id);
+      setSelectedPlan(userProfile.plan.id); // Set the selected plan from user profile
     }
   }, []);
 
-  useEffect(() =>{
-    debugger;
-    const userCookie = Cookies.get("userProfile");
+  useEffect(() => {
     if (userCookie) {
-      const userProfile = JSON.parse(userCookie);
-     userProfile.plan.id = selectedPlan
-    Cookies.set("userProfile", JSON.stringify(userProfile))
-   }
-  }, [selectedPlan])
+      const updatedUserProfile = { ...userCookie, plan: { ...userCookie.plan, id: selectedPlan } };
+      Cookies.set("userProfile", JSON.stringify(updatedUserProfile)); // Update the user profile in the cookie
+    }
+  }, [selectedPlan, userCookie]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;  // Show loading message while session is being fetched
+  }
+
+  if (!user) {
+    // If no session is found, redirect to login
+    return (
+      <div className="text-center">
+        <h2>You need to be logged in to access this page.</h2>
+        <button onClick={() => signIn()} className="px-6 py-3 bg-blue-500 text-white rounded-md">
+          Log in
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div className=" py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <p className="text-gray-500">STEP 2 OF 3</p>
-            <h1 className="text-2xl font-bold mb-4">Choose your plan</h1>
-            <h3 className="text-lg text-gray mb-6">IsolakwaMUNTU is committed to give you all you need to awaken your inner child.</h3>
-          </div>
+    <div className="py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:text-center">
+          <p className="text-gray-500">STEP 2 OF 3</p>
+          <h1 className="text-2xl font-bold mb-4">Choose your plan</h1>
+          <h3 className="text-lg text-gray mb-6">
+            IsolakwaMUNTU is committed to giving you all you need to awaken your inner child.
+          </h3>
+        </div>
 
-
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-            {pricingLists.map((item) => (
-              <div
-                key={item.id}
-                className={`rounded-lg bg-dark p-8 shadow-md ${selectedPlan === item.id ? 'border-2 border-red' : ''
-                  }`}
-                onClick={() => {
-                  setSelectedPlan(item.id);
-                }
-                }
-              >
-                <div className="text-center">
-                  <h3 className="font-medium text-white">{item.title}</h3>
-                  <div className="mt-4 flex items-center justify-center">
-                    <span className="text-5xl font-extrabold tracking-tight text-red">
-                      {item.price}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <ul>
-                    {item.features.map((feature, index) => (
-                      <li key={index} className="flex items-start mt-2">
-                        <svg
-                          className="flex-shrink-0 h-6 w-6 text-green"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        <span className="ml-3 text-base text-gray">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
+          {pricingLists.map((item) => (
+            <div
+              key={item.id}
+              className={`rounded-lg bg-dark p-8 shadow-md ${selectedPlan === item.id ? "border-2 border-red" : ""}`}
+              onClick={() => setSelectedPlan(item.id)}
+            >
+              <div className="text-center">
+                <h3 className="font-medium text-white">{item.title}</h3>
+                <div className="mt-4 flex items-center justify-center">
+                  <span className="text-5xl font-extrabold tracking-tight text-red">{item.price}</span>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <button
-              type="button"
-              className={`w-1/2 flex justify-center items-center px-6 py-3 border border-transparent rounded-md text-base font-medium text-white bg-red hover:bg-red focus:outline-none focus:border-red focus:shadow-outline-red transition duration-150 ease-in-out`}
+
+              <div className="mt-8">
+                <ul>
+                  {item.features.map((feature, index) => (
+                    <li key={index} className="flex items-start mt-2">
+                      <svg
+                        className="flex-shrink-0 h-6 w-6 text-green"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <span className="ml-3 text-base text-gray">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            className="w-1/2 flex justify-center items-center px-6 py-3 border border-transparent rounded-md text-base font-medium text-white bg-red hover:bg-red focus:outline-none focus:border-red focus:shadow-outline-red transition duration-150 ease-in-out"
             onClick={() => router.push("/billing")}
-            >
-              Continue
-            </button>
-          </div>
+          >
+            Continue
+          </button>
         </div>
       </div>
-
-    </>
+    </div>
   );
 };
 
 export default PricingPlan;
-function wait(arg0: number) {
-  throw new Error("Function not implemented.");
-}
-

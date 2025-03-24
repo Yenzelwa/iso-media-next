@@ -14,6 +14,8 @@ import * as https from 'https';
 import Loader from '@/src/components/Loader';
 import Cookies from 'js-cookie';
 import { User as NextAuthUser } from "next-auth";
+import { useAuth } from '@/src/app/context/authContext';
+import { method } from 'lodash';
 
 const CreateAccount = () => {
   const router = useRouter();
@@ -21,7 +23,7 @@ const CreateAccount = () => {
   const { formState: { errors } } = useForm<FormData>();
   const [isLoading, setIsLoading] = useState(false);
   const [LoginBtnEnable, setLoginBtnEnable] = useState(true);
-  const { data: session, status } = useSession();
+  const { login, user } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
   const [showSessionOpt, setShowSessionOpt] = useState(false);
@@ -50,13 +52,6 @@ const CreateAccount = () => {
     }
   }, [registerError]);
 
-  // useEffect(() => {
-  //   if (status === 'authenticated') {
-  //       setShowSessionOpt(true);
-      
-  //   }
-  // }, [status]);
-
   useEffect(() => {
     const isFormValid = methods.formState.isValid;
     setLoginBtnEnable(!isFormValid);
@@ -64,80 +59,54 @@ const CreateAccount = () => {
 
   const onSubmit = methods.handleSubmit(async (data) => {
     setIsLoading(true);
-    debugger;
-    const userProfile = {
-      token:"dsjdhsds63842fn3586436%77434",
-      profile:{
-        firstname:data.first_name,
-        lastname:data.lastname,
-        email:data.email,
-        plan : {
-          id:1,
-          name:"Monthly"
-        },
-        status:"Pending"
-      }
-    };
-    debugger;
-    const profile = JSON.stringify(userProfile.profile);
-    const user: CustomUser = {
-      id: '1', // Ensure ID is a string
-      name: data.first_name,
-      email: data.email,
-      subscriptionPlan: {
-        id: 1,
-        name: "Monthly"
-      },
-      status: "Pending"
-    };
-  //  Cookies.set('userProfile', JSON.stringify(user), { expires: 7 });
-    Cookies.set('userProfile', profile, { expires: 7 });
-    setIsLoading(false);
-    router.push('/plan-selection');
-    // const response = await axios.post(
-    //   'https://yenzelwa.github.io/IsolakwamuNTU.WebAPI/api/Account/register',
-    //   {
-    //     firstName: data.first_name,
-    //     lastName: data.last_name,
-    //     email: data.email_address,
-    //     password: data.password,
-    //     plan: {
-    //       id: 1,
-    //       name: 'test',
-    //     },
-    //     status: 'pending',
-    //   },
-    //   {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-    //   }
-    // );
-    // if (response.status === 200 && response.data) {
-    //   debugger;
-    //   const userProfile = response.data;
-    //   const profile = JSON.stringify(userProfile.profile);
-    //   Cookies.set('userProfile', profile, { expires: 7 });
-    //   setIsLoading(false);
-    //  await signIn("credentials", {
-    //     redirect: false,
-    //     email: data.email,
-    //     password: data.password,
-    //   });
-    //     router.push('/plan-selection');
+    try {
+      const response = await fetch(
+        'http://172.24.74.185:4000/profile',
+        {
+          method: 'POST',  // Ensure the method is POST (uppercase)
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: null,
+            name: data.first_name,
+            email: data.email,
+            plan_id: 1,
+            status: 'pending',
+            stripe_customer_id: null,
+            currency: "USD",
+            phone: null,
+            payment_method_id: null
+          }),
+          credentials: 'include',  // Equivalent to 'withCredentials: true'
+        }
+      );
     
-
-      
-    // } else {
-    //   setRegisterError(response && response?.data);
-    // }
+      const user = await response.json();
+      const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"; // Replace this with your actual token logic
+    
+      if (response.ok) {
+        login(token, user);
+        // Navigate to the next page
+        router.push('/plan-selection');
+      } else {
+        // Handle unsuccessful response
+        setRegisterError('Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error during account creation:', error);
+      // setRegisterError(error?.message);
+    } finally {
+      setIsLoading(false);
+    }
+    
   });
+  
 
   return (
     <div className="flex flex-col items-center justify-center">
       {showSessionOpt ? (
-        session && session?.user && session.user.name ? (
+        user && user?.email (
           <form className="container">
             <div className="p-6 bg-dark rounded-lg shadow-md max-w-md">
               <p className="text-gray-500">STEP 1 OF 3</p>
@@ -146,7 +115,7 @@ const CreateAccount = () => {
                 use below email to log in
               </h3>
               <div className="grid grid-cols-2 text-black gap-4 mt-4">
-                {session && session.user && session.user.email}
+                {user && user.email}
               </div>
               <div className="py-8">
                 <a
@@ -159,7 +128,7 @@ const CreateAccount = () => {
               </div>
             </div>
           </form>
-        ) : null
+        )
       ) : (
         <FormProvider {...methods}>
           <form

@@ -1,6 +1,7 @@
 'use client'
 import StarIcon from "@/src/components/shared/StarIcon";
 import { Episode, Series, Video } from "@/typings";
+
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import axios from 'axios';

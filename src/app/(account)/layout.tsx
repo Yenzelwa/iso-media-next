@@ -3,23 +3,21 @@ import "@/src/globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
-import { SessionProvider, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { BsGithub, BsTwitter } from "react-icons/bs";
 import AccountNav from "./components/NavBar";
-import { Session } from "next-auth";
+import { AuthProvider } from "../context/authContext";
 
 
 
 interface Props {
-  session: Session | null
   children: React.ReactNode
 }
 
-const AccountRootLayout: React.FC <Props> = ({ children, session } ) => {
+const AccountRootLayout: React.FC <Props> = ({ children } ) => {
   return (
+    <AuthProvider>
     <html lang="en">
-           <SessionProvider session={session}>
       <body className="bg-black">
       
 
@@ -34,8 +32,8 @@ const AccountRootLayout: React.FC <Props> = ({ children, session } ) => {
 
       </div>
       </body>
-      </SessionProvider>
     </html>
+    </AuthProvider>
   );
 }
 export default AccountRootLayout;

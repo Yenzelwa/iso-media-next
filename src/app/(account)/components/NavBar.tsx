@@ -1,12 +1,11 @@
 import exp from "constants";
-import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
+import { useAuth } from "../../context/authContext";
 
 const AccountNav = () =>{
-    const {data: session} = useSession();
-
+ const { user, logout } = useAuth();
     const handleLogout = async () =>{
-        await signOut();
+       // await signOut();
     }
 
     return (
@@ -29,12 +28,12 @@ const AccountNav = () =>{
           </Link>
         </div>
         <div className="flex items-center gap-4 text-lg">
-        {session  && session.user && session.user.name?  ( 
+        {user && user.email?  ( 
             <div className="flex items-center">
-              <span className="mr-2"> {session.user.name}</span> 
+              <span className="mr-2"> {user.email}</span> 
               <img 
                // src={session.user.image}
-                alt={session.user.name}
+                alt={user.email}
                 width={40}
                 height={40}
                 className="rounded-full"

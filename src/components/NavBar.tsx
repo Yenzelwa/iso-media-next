@@ -1,33 +1,28 @@
 'use client'
-import Link from "next/link";
-import { signOut, useSession } from "next-auth/react"; 
-import Image from "next/image"; 
-import logo from "../../public/logo.png";
+
+import Link from 'next/link';// Import the custom auth context
+import logo from '../../public/logo.png'; // Assuming you still want to keep the logo
+import { useAuth } from '../app/context/authContext';
 
 const NavBar = () => {
- const { data: session } = useSession(); 
-   const handleLogout = async () => {
-    await signOut(); 
-  } 
- return (
-    <>
-        <nav className="w-full flex items-center justify-between flex-wrap bg-dark  p-4">
-        <div className="flex items-center flex-shrink-0 text-white mr-6">
-         
-          <svg
-            className="fill-current h-8 w-8 mr-2 text-red"
-            width="54"
+  const { user, logout } = useAuth(); // Use the custom auth context
+  const handleLogout = async () => {
+    await logout(); // Logout using the custom logout function from the context
+  };
 
-            height="54"
-            viewBox="0 0 54 54"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
-          </svg>
-          <Link href="/" >
-          <span className="font-semibold text-xl tracking-tight">
-            IsolaKwaMUNTU
-          </span>
+  return (
+    <>
+      <nav className="w-full flex items-center justify-between flex-wrap bg-dark p-4">
+        <div className="flex items-center flex-shrink-0 text-white mr-6">
+          {/* <Image
+            src={logo}
+            alt="Logo"
+            width={40} // Adjust width and height as per your logo's size
+            height={40}
+            className="mr-2"
+          /> */}
+          <Link href="/">
+            <span className="font-semibold text-xl tracking-tight">IsolaKwaMUNTU</span>
           </Link>
         </div>
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
@@ -51,17 +46,22 @@ const NavBar = () => {
               Documentary
             </Link>
           </div>
-          {session  && session.user && session.user.name?  ( 
+          {user ? (
             <div className="flex items-center">
-              <span className="mr-2"> {session.user.name}</span> 
-              <img 
-               // src={session.user.image}
-                alt={session.user.name}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <button onClick={ async ()=>{await handleLogout()}} >Log out</button>
+              <span className="mr-2">{user.email}</span> {/* You can use user.email or user.name */}
+              {/* Optionally, if user has a profile image */}
+              {/* {user.image && (
+                <img
+                  src={user.image}
+                  alt={user.email}
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+              )} */}
+              <button onClick={handleLogout} className="ml-4 text-red-500">
+                Log out
+              </button>
             </div>
           ) : (
             <div>
@@ -84,4 +84,6 @@ const NavBar = () => {
     </>
   );
 };
+
+export const dynamic = "force-dynamic"; // This ensures the Navbar re-renders dynamically
 export default NavBar;
