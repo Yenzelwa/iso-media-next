@@ -31,22 +31,21 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
-
+    const email= (e.target as HTMLFormElement).elements.namedItem('email') as HTMLInputElement;
+    const password = (e.target as HTMLFormElement).elements.namedItem('password') as HTMLInputElement;
+  
     try {
-      // Simulate login request (replace with actual API call)
       const response = await fetch('http://172.24.74.185:4000/profile/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.value, password: password.value }),
       });
 
       const user = await response.json();
       const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"
-debugger;
       if (response.ok) {
-        // Call the login method from context with the received token and user data
         login(token, user);
         router.push('/');
       } else {

@@ -1,17 +1,25 @@
 "use client";
-import Link from "next/link";
 import React, { useState } from "react";
-import {  Elements } from "@stripe/react-stripe-js";
-import StripeCheckOutForm from "@/src/components/StripeCheckOutForm"
-import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe("pk_test_51QDJ79ADdfkz5weORdIser8G3UP1ier1YHnbOsVrdyLJ5MVCvuFfWmoHKWmK2jYytjYXRfN80xakBPevmNqzxkBB00aMw7Iqjs");
+import Checkout from "@/src/components/checkout";
+
+
+const lineItems = [
+  {
+    price: 'price_1QWXBTADdfkz5weOBz0VcbeW', // Stripe Price ID
+    quantity: 1,
+  },
+  // Add more line items as needed
+];
+
+const mode = 'subscription'; // Or 'subscription' depending on your needs
+
 
 const PaymentPage = () => {
   return (
-    <Elements stripe={stripePromise}>
-      <StripeCheckOutForm />
-    </Elements>
+    <div id="checkout-page">
+    <Checkout line_items={lineItems} mode={mode} />
+  </div>
   );
 };
 
