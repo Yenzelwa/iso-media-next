@@ -1,50 +1,110 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import Link from "next/link";
-import { useState } from "react";
-import router from "next/router";
+import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
 
 const StripeCheckOutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [billingInfo, setBillingInfo] = useState({
-    cardHolder: "",
+    cardHolder: '',
   });
+  const [isProcessing, setIsProcessing] = useState(false); // For loading state
+  const [error, setError] = useState<string>('');
+  const router = useRouter();
 
-  const isPaymentValid = true; // Payment validation logic can be added
-  const error = ""; // Handle error message from Stripe API
+  const isPaymentValid = billingInfo.cardHolder.trim() !== ''; // Simple validation
 
   const updateMemberPlan = async () => {
     if (!stripe || !elements) return;
-
-    const cardElement = elements.getElement(CardElement);
-
-    if (!cardElement) {
-      console.error("CardElement not found");
+  
+    const cardNumberElement = elements.getElement(CardNumberElement);
+    const cardExpiryElement = elements.getElement(CardExpiryElement);
+    const cardCvcElement = elements.getElement(CardCvcElement);
+  
+    if (!cardNumberElement || !cardExpiryElement || !cardCvcElement) {
+      console.error('Card elements not found');
       return;
     }
-
+  
+    setIsProcessing(true);
+    setError(''); // Reset any previous errors
+  
     try {
+      // Create a PaymentMethod with the individual elements
       const { paymentMethod, error } = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
+        type: 'card',
+        card: cardNumberElement, // Using the CardNumberElement
         billing_details: {
           name: billingInfo.cardHolder,
         },
       });
-
-      console.log(paymentMethod, "Payment Method");
-
+  
       if (error) {
-        console.error("Payment Method Error:", error.message);
-      } else {
-        console.log("Payment Method Created:", paymentMethod);
-        router.push("/"); // Redirect after payment method creation
-        // Implement your logic for updating the plan here
+        console.error('Payment Method Error:', error.message);
+        setError(error.message || 'An error occurred while processing the payment.');
+        setIsProcessing(false); // Reset loading state in case of error
+        return;
       }
+  
+      // Send request to create customer on the backend
+      const customerResponse = await fetch('http://172.24.74.185:4000/customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: billingInfo.cardHolder,
+          email: "emailt55@test.com",
+          payment_method_id: paymentMethod.id,
+        }),
+      });
+  
+      if (!customerResponse.ok) {
+        throw new Error('Failed to create customer');
+      }
+  debugger;
+  const customerData = await customerResponse.json();
+
+  if (customerData) {
+    // Extract the customer ID
+    
+  debugger;
+    const customerObject = JSON.parse(customerData.customer);
+
+    // Extract the customer ID from the parsed object
+    const customerId = customerObject.customer; // This will give you the value "cus_S6FTECPO0iJTpB"
+  
+  debugger;
+    // Send request to process payment on the backend
+    const paymentResponse = await fetch('http://172.24.74.185:4000/subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        customer_id: customerId,  // Use the extracted customer ID here
+        plan_id: "price_1QWXBTADdfkz5weOBz0VcbeW",
+      }),
+      credentials: 'include', // Equivalent to 'withCredentials: true'
+    });
+  
+    if (!paymentResponse.ok) {
+      throw new Error('Payment processing failed');
+    }
+  }
+  
+      console.log('Payment Method Created:', paymentMethod);
+      // Redirect after payment method creation (replace with success page)
+      router.push('/');
     } catch (err) {
-      console.error("Error processing payment:", err);
+      console.error('Error processing payment:', err);
+      setError('An error occurred while processing the payment.');
+    } finally {
+      setIsProcessing(false); // Reset loading state
     }
   };
+  
 
   return (
     <div className="p-6 bg-dark rounded-lg shadow-md max-w-md mx-auto">
@@ -60,26 +120,72 @@ const StripeCheckOutForm = () => {
           onChange={(e) =>
             setBillingInfo({ ...billingInfo, cardHolder: e.target.value })
           }
-          className="bg-gray-100 text-black placeholder-gray-400 p-3 rounded-lg w-full"
+          className="text-black placeholder-gray-400 p-3 rounded-lg w-full"
           required
         />
 
-        {/* Card Element */}
-        <div className="bg-gray-100 p-3 rounded-lg mb-4">
-          <CardElement
+        {/* Card Number Element */}
+        <div className="p-3 rounded-lg mb-4">
+          <CardNumberElement
             options={{
               style: {
                 base: {
-                  fontSize: "16px",
-                  color: "#000",
-                  backgroundColor: "#f3f4f6",
+                  fontSize: '16px',
+                  color: '#000',
+                  backgroundColor: '#f3f4f6',
                   fontFamily: "'Inter', sans-serif",
-                  "::placeholder": {
-                    color: "#888",
+                  '::placeholder': {
+                    color: '#888',
                   },
                 },
                 invalid: {
-                  color: "#e5424d",
+                  color: '#e5424d',
+                },
+              },
+            }}
+            className="text-black placeholder-gray-400 p-3 rounded-lg"
+          />
+        </div>
+
+        {/* Card Expiry Element */}
+        <div className="bg-gray-100 p-3 rounded-lg mb-4">
+          <CardExpiryElement
+            options={{
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#000',
+                  backgroundColor: '#f3f4f6',
+                  fontFamily: "'Inter', sans-serif",
+                  '::placeholder': {
+                    color: '#888',
+                  },
+                },
+                invalid: {
+                  color: '#e5424d',
+                },
+              },
+            }}
+            className="bg-gray-100 text-black placeholder-gray-400 p-3 rounded-lg"
+          />
+        </div>
+
+        {/* Card CVC Element */}
+        <div className="bg-gray-100 p-3 rounded-lg mb-4">
+          <CardCvcElement
+            options={{
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#000',
+                  backgroundColor: '#f3f4f6',
+                  fontFamily: "'Inter', sans-serif",
+                  '::placeholder': {
+                    color: '#888',
+                  },
+                },
+                invalid: {
+                  color: '#e5424d',
                 },
               },
             }}
@@ -93,21 +199,18 @@ const StripeCheckOutForm = () => {
             <p className="font-bold">R199/month</p>
             <p className="font-bold">Premium</p>
           </div>
-          <Link href="/plan-selection/plans" className="btn btn-blue text-blue-600 hover:text-blue-800">
-            Change
-          </Link>
         </div>
 
         {/* Submit Button */}
         <div className="mt-6">
           <button
             type="submit"
-            disabled={!isPaymentValid || !stripe}
+            disabled={!isPaymentValid || isProcessing || !stripe}
             className={`w-full bg-red-500 text-white px-4 py-2 hover:bg-red-600 rounded-md ${
-              !isPaymentValid || !stripe ? "opacity-50 cursor-not-allowed" : ""
+              !isPaymentValid || isProcessing || !stripe ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            Confirm Payment
+            {isProcessing ? 'Processing...' : 'Confirm Payment'}
           </button>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>

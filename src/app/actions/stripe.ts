@@ -1,7 +1,7 @@
 'use server'
-
-import { headers } from 'next/headers';
+import { headers } from "next/headers";
 import { stripe } from '../lib/stripe';
+
 
 interface LineItem {
   price: string;
@@ -11,15 +11,15 @@ interface LineItem {
 export async function fetchClientSecret(
   line_items: LineItem[],
   mode: 'payment' | 'subscription'
-): Promise<string> {
+): Promise<any> {
   const origin = (await headers()).get('origin');
-
+debugger;
   // TypeScript narrowing: if origin is null, we throw an error
   if (origin === null) {
     throw new Error('Unable to retrieve origin');
   }
-
-  // TypeScript now knows origin is a string, so we can use it
+debugger
+  // Create the Stripe checkout session
   const session = await stripe.checkout.sessions.create({
     line_items,
     mode,
@@ -27,5 +27,13 @@ export async function fetchClientSecret(
     cancel_url: `${origin}/cancel`,
   });
 
-  return session.client_secret;
+  // Log the session object to inspect its structure
+  console.log('Session object:', session);
+debugger;
+  // Ensure the client_secret is a string before returning it
+  if (typeof session.client_secret === 'string') {
+    return session.client_secret;
+  } else {
+    throw new Error('Client secret is not a string');
+  }
 }

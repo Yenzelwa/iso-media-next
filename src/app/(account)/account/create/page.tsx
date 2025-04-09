@@ -61,7 +61,7 @@ const CreateAccount = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        'http://172.24.74.185:4000/profile',
+        'http://172.24.74.185:4002/profile',
         {
           method: 'POST',  // Ensure the method is POST (uppercase)
           headers: {

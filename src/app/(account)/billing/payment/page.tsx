@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 
 import Checkout from "@/src/components/checkout";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import StripeCheckOutForm from "@/src/components/StripeCheckOutForm";
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 
 const lineItems = [
@@ -17,9 +21,10 @@ const mode = 'subscription'; // Or 'subscription' depending on your needs
 
 const PaymentPage = () => {
   return (
-    <div id="checkout-page">
-    <Checkout line_items={lineItems} mode={mode} />
-  </div>
+    <Elements stripe={stripePromise}>
+    <StripeCheckOutForm />
+  </Elements>
+  // <StripeCheckOutForm/>
   );
 };
 

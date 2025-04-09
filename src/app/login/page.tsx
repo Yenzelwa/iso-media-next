@@ -35,7 +35,7 @@ const LoginPage = () => {
     const password = (e.target as HTMLFormElement).elements.namedItem('password') as HTMLInputElement;
   
     try {
-      const response = await fetch('http://172.24.74.185:4000/profile/login', {
+      const response = await fetch('http://172.24.74.185:4002/profile/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
