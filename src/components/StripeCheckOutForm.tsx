@@ -1,6 +1,9 @@
+'use client'
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import { useAuth } from '../app/context/authContext';
+import Cookies from 'js-cookie';
 
 
 const StripeCheckOutForm = () => {
@@ -12,6 +15,20 @@ const StripeCheckOutForm = () => {
   const [isProcessing, setIsProcessing] = useState(false); // For loading state
   const [error, setError] = useState<string>('');
   const router = useRouter();
+  const { user} = useAuth(); 
+      const [userCookie, setUserCookie] = useState<any>(null);
+      useEffect(() => {
+        const userCookie = Cookies.get("userProfile");
+        if (userCookie) {
+          setUserCookie(userCookie)
+        }
+      }, [userCookie]);
+    
+    
+      if (!user) {
+        // If no session is found, redirect to login
+        router.push('/login');
+      }
 
   const isPaymentValid = billingInfo.cardHolder.trim() !== ''; // Simple validation
 
@@ -46,7 +63,8 @@ const StripeCheckOutForm = () => {
         setIsProcessing(false); // Reset loading state in case of error
         return;
       }
-  
+      debugger;
+    const email = user;
       // Send request to create customer on the backend
       const customerResponse = await fetch('http://172.24.74.185:4000/customer', {
         method: 'POST',
@@ -55,8 +73,9 @@ const StripeCheckOutForm = () => {
         },
         body: JSON.stringify({
           name: billingInfo.cardHolder,
-          email: "emailt55@test.com",
+          email: user.email,
           payment_method_id: paymentMethod.id,
+          profile_id: user.id
         }),
       });
   

@@ -139,7 +139,7 @@ const PricingPlan = () => {
           <button
             type="button"
             className="w-1/2 flex justify-center items-center px-6 py-3 border border-transparent rounded-md text-base font-medium text-white bg-red hover:bg-red focus:outline-none focus:border-red focus:shadow-outline-red transition duration-150 ease-in-out"
-            onClick={() => router.push("/billing")}
+            onClick={() => router.push("/billing/payment")}
           >
             Continue
           </button>

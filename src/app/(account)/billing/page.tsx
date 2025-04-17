@@ -1,6 +1,9 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../context/authContext";
+import Cookies from "js-cookie";
 
 
 declare global {
@@ -10,6 +13,21 @@ declare global {
 }
 const BillingPage = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+     const router = useRouter();
+    const { user} = useAuth(); 
+        const [userCookie, setUserCookie] = useState<any>(null);
+        useEffect(() => {
+          const userCookie = Cookies.get("userProfile");
+          if (userCookie) {
+            setUserCookie(userCookie)
+          }
+        }, [userCookie]);
+      
+      
+        if (!user) {
+          // If no session is found, redirect to login
+          router.push('/login');
+        }
 
   interface PayPalCheckoutInstanceActions {
     subscription: {
