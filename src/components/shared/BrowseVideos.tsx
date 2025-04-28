@@ -1,18 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { isEmpty } from "lodash";
-import { Video, VideoCardModel } from "@/typings";
-import MovieCard from "./VideoCard";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
+import { Swiper, SwiperSlide } from "swiper/react"; // Correct
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules"; // Correct
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import Link from "next/link";
+import MovieCard from "./VideoCard"; // Ensure this import is correct
+import { Video } from "@/typings";
+
 
 interface MovieListProps {
   data: Video[];

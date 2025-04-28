@@ -69,7 +69,7 @@ export const password_register_validation = {
     },
     minLength: {
       value: 6,
-      message: 'minimun of 6 characters is required.',
+      message: 'Password must be at least 6 characters.',
     },
   },
 }

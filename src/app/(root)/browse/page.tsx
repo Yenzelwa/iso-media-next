@@ -1,14 +1,16 @@
-import { Metadata } from 'next';
-import React, { useState } from 'react';
+// @flow
+import React, { useEffect, useState } from 'react';
 import BrowseSlideShow from '../../../components/BrowseSlideShow';
 import { Video } from '@/typings';
 import BrowseVideos from '../../../components/shared/BrowseVideos';
 
 
-export const metadata: Metadata = {
-    title: 'isolakwamuntu content ',
-    description: 'Browse all categories',
-  }
+
+
+// export const metadata: Metadata = {
+//     title: 'isolakwamuntu content ',
+//     description: 'Browse all categories',
+//   }
 
 
 
@@ -125,6 +127,7 @@ export const metadata: Metadata = {
 }
     
   ];
+
 
 
 const BrowsePage = () => {

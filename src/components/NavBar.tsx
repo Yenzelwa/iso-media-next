@@ -3,6 +3,7 @@
 import Link from 'next/link';// Import the custom auth context
 import logo from '../../public/logo.png'; // Assuming you still want to keep the logo
 import { useAuth } from '../app/context/authContext';
+import React from 'react';
 
 const NavBar = () => {
   const { user, logout } = useAuth(); // Use the custom auth context

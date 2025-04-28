@@ -1,4 +1,4 @@
-
+// @flow
 'use client'
 import StarIcon from "@/src/components/shared/StarIcon";
 import { Episode, Series, Video } from "@/typings";

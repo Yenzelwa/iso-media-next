@@ -28,7 +28,8 @@
       ]
     },
     "types": [
-      "next-auth/react"
+      "next-auth/react",
+      "jest"
     ],
     "forceConsistentCasingInFileNames": true
   },
@@ -36,8 +37,12 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/app/actions/stripe.js", "src/app/lib/stripe.js"  ],
+    ".next/types/**/*.ts",
+    "src/app/actions/stripe.js",
+    "src/app/lib/stripe.js",
+    "jest.setup.js",
+    "src/components/Input.jsx"
+  ],
   "exclude": [
     "node_modules"
   ]

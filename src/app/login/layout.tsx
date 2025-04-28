@@ -2,6 +2,8 @@
  // Adjust the import path as needed
 
 import { AuthProvider } from "../context/authContext";
+import React from 'react';
+
 
 export const metadata = {
   title: 'Next.js',
