@@ -1,4 +1,5 @@
 'use client'
+import React from "react";
 import "@/src/globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'

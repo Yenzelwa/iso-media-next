@@ -1,8 +1,18 @@
-import { useAuth } from '@/src/app/context/authContext';
+
+
 import LoginPage from '@/src/app/login/page';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
+import { setCookie } from 'cookies-next';
+import { AuthProvider, useAuth } from '@/src/app/context/authContext';
 
+
+
+jest.mock('cookies-next', () => ({
+  setCookie: jest.fn(),
+  getCookie: jest.fn(),
+  deleteCookie: jest.fn(),
+}));
 // Mocking necessary hooks and global functions
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -11,6 +21,7 @@ jest.mock('next/navigation', () => ({
 jest.mock('@/src/app/context/authContext', () => ({
   useAuth: jest.fn(),
 }));
+
 
 describe('LoginPage', () => {
   let mockLogin: jest.Mock;
@@ -131,7 +142,7 @@ describe('LoginPage', () => {
     });
   });
   
-xit('should show error message for invalid email format', async () => {
+  xit('should show error message for invalid email format', async () => {
 
     render(<LoginPage />);
    
@@ -170,6 +181,6 @@ xit('should show error message for invalid email format', async () => {
       expect(inputPassword).toHaveAttribute('type', 'password')
     });
   });
-
 });
+
 

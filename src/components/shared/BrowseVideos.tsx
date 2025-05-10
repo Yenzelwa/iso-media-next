@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // Correct
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules"; // Correct
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -21,7 +20,7 @@ const url = (category: string) => {
 
 const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  console.log(MovieCard);
   return (
     <>
       <div className="relative px-10  pb-5 md:px-2 mt-4 space-y-8">
@@ -63,5 +62,5 @@ const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
     </>
   );
 };
-export const dynamic = "force-dynamic"; 
+//export const dynamic = "force-dynamic"; 
 export default MovieList;

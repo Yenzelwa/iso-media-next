@@ -42,6 +42,17 @@ const CreateAccount = () => {
   status: string;
 };
 
+if(user){
+  return (
+    <>
+  <label>Account created</label>
+  <p><a href="/login">use below email to log in</a></p>
+  <p>{user && user.email}</p>
+</>
+
+  );
+}
+
   useEffect(() => {
     if (registerError) {
       setErrorMessage(registerError);
@@ -153,8 +164,10 @@ const CreateAccount = () => {
               >
                 {errorMessage}
               </p>
-              <div className="grid grid-cols-2 text-black gap-4 mt-4">
+              <div className="text-black">
                 <Input {...firstName_validation} />
+              </div>
+              <div className="text-black">
                 <Input {...email_validation} />
               </div>
               <div className="text-black">

@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (token: string, user: any) => {
+    console.log('Login function called with:', token, user); // Debug log
     setUser(user);
     setToken(token);
 
