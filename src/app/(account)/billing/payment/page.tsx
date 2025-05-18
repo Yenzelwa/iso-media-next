@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 
-import Checkout from "@/src/components/checkout";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import StripeCheckOutForm from "@/src/components/StripeCheckOutForm";
@@ -24,7 +23,6 @@ const PaymentPage = () => {
     <Elements stripe={stripePromise}>
     <StripeCheckOutForm />
   </Elements>
-  // <StripeCheckOutForm/>
   );
 };
 
