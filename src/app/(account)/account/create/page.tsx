@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import { signIn, useSession } from 'next-auth/react';
 import axios from 'axios';
 import * as https from 'https';
-import Loader from '@/src/components/Loader';
 import Cookies from 'js-cookie';
 import { User as NextAuthUser } from "next-auth";
 import { useAuth } from '@/src/app/context/authContext';
@@ -195,7 +194,7 @@ if(user){
               </label>
               <div className="py-8">
                 {isLoading ? (
-                  <Loader />
+                  <p>loading</p>
                 ) : (
                   <button
                     type="submit"

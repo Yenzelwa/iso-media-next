@@ -1,14 +1,11 @@
 'use client';
 
 import "@/src/globals.css";
-import { config } from '@fortawesome/fontawesome-svg-core';
-import '@fortawesome/fontawesome-svg-core/styles.css';
 import { useAuth } from '../context/authContext';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Input } from '@/src/components/Input';
 import { email_validation, password_register_validation } from '@/src/utils/inputValidations';
-import Loader from '@/src/components/Loader';
 import Link from 'next/link';
 import React, { useState } from 'react';
 const LoginPage = () => {
@@ -46,7 +43,7 @@ debugger;
         },
         body: JSON.stringify({ email, password }),
       });
-
+debugger;
       const user = await response.json();
       const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"; // Simulate token
 
@@ -101,7 +98,7 @@ debugger;
               </div>
 
               {isLoading ? (
-                <Loader />
+                <p>Laoding</p>
               ) : (
                 <button
                   type="submit"

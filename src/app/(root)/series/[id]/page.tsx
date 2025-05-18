@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 
 const SeriesByIdPage = () => {
-  console.log("series");
 
   const series: Series = 
     {

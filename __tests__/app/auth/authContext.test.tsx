@@ -62,7 +62,6 @@ describe('AuthProvider', () => {
   
       await waitFor(() => {
         const users = screen.getAllByTestId('user');
-        console.log('Number of user elements:', users.length);
         expect(users.length).toBe(1);
         expect(users[0]).toHaveTextContent('John Doe');
   
@@ -78,7 +77,6 @@ describe('AuthProvider', () => {
   
       await waitFor(() => {
         const users = screen.getAllByTestId('user');
-        console.log('Number of user elements after reload:', users.length);
         expect(users.length).toBe(1); 
         expect(users[0]).toHaveTextContent('John Doe');
   

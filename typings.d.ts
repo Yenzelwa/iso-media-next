@@ -121,3 +121,45 @@ declare module "next-auth" {
     image?: string | null;
   }
 }
+export interface Membership {
+  plan: string;
+  nextBilling: string;
+  price: number;
+  email: string;
+  cardType: string;
+  cardNumber: string;
+  phone: string;
+}
+
+export interface BillingRecord {
+  date: string;
+  amount: number;
+  description: string;
+}
+
+export interface PlanOption {
+  name: string;
+  price: number;
+  quality: string;
+  devices: number;
+  resolution: string;
+}
+
+export interface PlanDetails {
+  current: PlanOption;
+  options: PlanOption[];
+}
+
+export interface SecuritySettings {
+  twoFactor: boolean;
+  lastAccess: string;
+  location: string;
+  device: string;
+}
+
+export type TabType = 'membership' | 'plan' | 'security';
+interface PlanCardProps {
+  plan: PlanOption;
+}
+
+

@@ -25,7 +25,6 @@ export const authConfig: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        console.log('Received credentials:', credentials);
         if (credentials && credentials.email && credentials.password) {
           try {
             const response = await axios.post("https://yenzelwa.github.io/IsolakwamuNTU.WebAPI/api/account/login", {
@@ -39,7 +38,6 @@ export const authConfig: NextAuthOptions = {
             });
 
             if (response.status === 200 && response.data) {
-              console.log("Data from API:", response.data);
               const user: CustomUser = {
                 id: response.data.profile.id.toString(), // Ensure ID is a string
                 name: response.data.profile.firstName + " " + response.data.profile.lastName,
@@ -50,7 +48,7 @@ export const authConfig: NextAuthOptions = {
                 },
                 status: "Pending"
               };
-              Cookies.set('userProfile', JSON.stringify(user), { expires: 7 });
+              Cookies.set('auth_user', JSON.stringify(user), { expires: 7 });
               return user;
             }
           } catch (error) {

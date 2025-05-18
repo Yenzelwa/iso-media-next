@@ -9,6 +9,7 @@ interface AuthContextType {
   token: string | null;
   login: (token: string, user: any) => void;
   logout: () => void;
+  loading: boolean; 
 }
 
 // Create the context
@@ -18,9 +19,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Check if there's a token and user stored in cookies
   useEffect(() => {
+    debugger;
     const storedToken = getCookie('auth_token') as string | null;
     const storedUser = getCookie('auth_user') as string | null;
 
@@ -28,10 +31,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
+     setLoading(false);
   }, []);
 
   const login = (token: string, user: any) => {
-    console.log('Login function called with:', token, user); // Debug log
+    debugger;
     setUser(user);
     setToken(token);
 
@@ -50,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

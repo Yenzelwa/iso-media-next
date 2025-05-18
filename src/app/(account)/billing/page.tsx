@@ -17,7 +17,7 @@ const BillingPage = () => {
     const { user} = useAuth(); 
         const [userCookie, setUserCookie] = useState<any>(null);
         useEffect(() => {
-          const userCookie = Cookies.get("userProfile");
+          const userCookie = Cookies.get("auth_user");
           if (userCookie) {
             setUserCookie(userCookie)
           }

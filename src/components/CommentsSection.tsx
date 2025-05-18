@@ -1,3 +1,4 @@
+import React from "react";
 import { FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { IsoComment, VideoComment } from "@/typings";
@@ -213,8 +214,6 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
         else {
             updatedComments[commentIndexToUpdate].reply = [newReply];
         }
-
-        console.log('Reply submitted:', replyText);
         setReplyText('');
         setReplyVisible(false);
       updateComments(updatedComments);

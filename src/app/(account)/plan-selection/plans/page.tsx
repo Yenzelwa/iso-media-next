@@ -14,7 +14,7 @@ interface PricingPlanProps {
 }
 
 const PricingPlan = () => {
-  const { user} = useAuth();  // Get session and its status
+  const {loading, user} = useAuth();  // Get session and its status
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [userCookie, setUserCookie] = useState<any>(null);
   const router = useRouter();
@@ -53,7 +53,7 @@ const PricingPlan = () => {
   ];
 
   useEffect(() => {
-    const userCookie = Cookies.get("userProfile");
+    const userCookie = Cookies.get("auth_user");
     if (userCookie) {
       const userProfile = JSON.parse(userCookie);
       setUserCookie(userProfile);
@@ -64,11 +64,11 @@ const PricingPlan = () => {
   useEffect(() => {
     if (userCookie) {
       const updatedUserProfile = { ...userCookie, plan: { ...userCookie.plan, id: selectedPlan } };
-      Cookies.set("userProfile", JSON.stringify(updatedUserProfile)); // Update the user profile in the cookie
+      Cookies.set("auth_user", JSON.stringify(updatedUserProfile)); // Update the user profile in the cookie
     }
   }, [selectedPlan, userCookie]);
 
-  if (status === "loading") {
+  if (loading) {
     return <div>Loading...</div>;  // Show loading message while session is being fetched
   }
 

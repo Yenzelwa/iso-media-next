@@ -32,12 +32,12 @@ export default async function handler(
           withCredentials: true 
         }
       );
-  
+  debugger
       // Ensure the response is received correctly
       if (response.status === 200 && response.data) {
         const userProfile = response.data;
         const profile = JSON.stringify(userProfile);
-        Cookies.set('userProfile', profile, { expires: 7 });
+        Cookies.set('auth_user', profile, { expires: 7 });
   
         // Redirect after successful registration
         // await signIn("credentials", {

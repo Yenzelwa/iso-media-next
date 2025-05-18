@@ -1,7 +1,7 @@
 'use client'
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from '../app/context/authContext';
 import Cookies from 'js-cookie';
 
@@ -18,7 +18,7 @@ const StripeCheckOutForm = () => {
   const { user} = useAuth(); 
       const [userCookie, setUserCookie] = useState<any>(null);
       useEffect(() => {
-        const userCookie = Cookies.get("userProfile");
+        const userCookie = Cookies.get("auth_user");
         if (userCookie) {
           setUserCookie(userCookie)
         }
@@ -113,7 +113,6 @@ const StripeCheckOutForm = () => {
     }
   }
   
-      console.log('Payment Method Created:', paymentMethod);
       // Redirect after payment method creation (replace with success page)
       router.push('/');
     } catch (err) {

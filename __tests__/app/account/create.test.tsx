@@ -116,18 +116,12 @@ describe('CreateAccount Component', () => {
     
         // Get the arguments of the first call
         const callArgs = (fetch as jest.Mock).mock.calls[0]; 
-    
-        // Parse the body (since it's a string, we need to JSON.parse it)
+
         const requestBody = JSON.parse(callArgs[1].body);
-        console.log("body", JSON.stringify(callArgs, null, 2) )
-  //  console.log("body " + requestBody)
-    console.log("requestBody:", JSON.stringify(requestBody, null, 2)); 
         // Assert the correct URL and body structure
         expect(callArgs[0]).toBe("http://172.24.74.185:4002/profile");
         expect(requestBody).toEqual(expect.objectContaining({
           id: null,
-         // email: "email.email@com",
-          //name: "John Doe",
           plan_id: 1,
           status: "pending",
           stripe_customer_id: null,

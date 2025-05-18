@@ -20,7 +20,6 @@ const url = (category: string) => {
 
 const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(MovieCard);
   return (
     <>
       <div className="relative px-10  pb-5 md:px-2 mt-4 space-y-8">

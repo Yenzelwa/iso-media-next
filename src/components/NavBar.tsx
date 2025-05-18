@@ -6,7 +6,7 @@ import { useAuth } from '../app/context/authContext';
 import React from 'react';
 
 const NavBar = () => {
-  const { user, logout } = useAuth(); // Use the custom auth context
+  const { loading, user, logout } = useAuth(); // Use the custom auth context
   const handleLogout = async () => {
     await logout(); // Logout using the custom logout function from the context
   };
@@ -47,39 +47,45 @@ const NavBar = () => {
               Documentary
             </Link>
           </div>
-          {user ? (
-            <div className="flex items-center">
-              <span className="mr-2">{user.email}</span> {/* You can use user.email or user.name */}
-              {/* Optionally, if user has a profile image */}
-              {/* {user.image && (
-                <img
-                  src={user.image}
-                  alt={user.email}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              )} */}
-              <button onClick={handleLogout} className="ml-4 text-red-500">
-                Log out
-              </button>
-            </div>
-          ) : (
-            <div>
-              <Link
-                href="/account"
-                className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 lg:mt-0"
-              >
-                Register
-              </Link>
-              <Link
-                href="/login"
-                className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 ml-4 lg:mt-0"
-              >
-                Log In
-              </Link>
-            </div>
-          )}
+         {loading ? (
+  <p>Loading</p>
+) : user ? (
+  <div className="flex items-center">
+    <span className="mr-2">{user.email}</span>
+    {/* Optional user image */}
+    {/* {user.image && (
+      <img
+        src={user.image}
+        alt={user.email}
+        width={40}
+        height={40}
+        className="rounded-full"
+      />
+    )} */}
+    <button onClick={handleLogout} className="ml-4 text-red-500">
+      Log out
+    </button>
+    <Link href="/profile" className="ml-4 text-teal-200 hover:text-white">
+      Profile
+    </Link>
+  </div>
+) : (
+  <div>
+    <Link
+      href="/account"
+      className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 lg:mt-0"
+    >
+      Register
+    </Link>
+    <Link
+      href="/login"
+      className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 ml-4 lg:mt-0"
+    >
+      Log In
+    </Link>
+  </div>
+)}
+
         </div>
       </nav>
     </>

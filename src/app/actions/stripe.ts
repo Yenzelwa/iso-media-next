@@ -27,9 +27,6 @@ debugger
     cancel_url: `${origin}/cancel`,
   });
 
-  // Log the session object to inspect its structure
-  console.log('Session object:', session);
-debugger;
   // Ensure the client_secret is a string before returning it
   if (typeof session.client_secret === 'string') {
     return session.client_secret;

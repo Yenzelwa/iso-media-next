@@ -1,3 +1,4 @@
+import React from 'react';
 import { Episode, Season, Series } from "@/typings";
 import DropdownSeasons from "./DropDownSeasons";
 import { useEffect, useState } from "react";
