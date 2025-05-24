@@ -6,7 +6,7 @@ const AccountPage = () =>{
     return(
         <>
         <div className="p-6 bg-dark rounded-lg  shadow-md max-w-md">
-        <img  src="registration_image.png" alt="Registration Image" className="mx-auto mb-6"></img>
+        <img  src="registration_image.png" alt="Registration Image" className="mx-auto mb-6" loading="lazy"></img>
         <p className="text-gray-500">STEP 1 OF 3</p>
         <h1 className="text-2xl font-bold mb-4">Confirm your account details</h1>
         <h3 className="text-lg text-gray mb-6">IsolakwaMUNTU is committed to give you all you need to awaken your inner child.</h3>

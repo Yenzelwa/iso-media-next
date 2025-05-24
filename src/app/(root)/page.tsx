@@ -9,11 +9,12 @@ export default function Home() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
+   
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [loading, user]);
+     if (typeof window !== "undefined" && !loading && !user) {
+       router.push("/login");
+     }
+   }, [loading, user, router]);
 
   if (loading) {
     return <div>Loading...</div>; // Or a spinner

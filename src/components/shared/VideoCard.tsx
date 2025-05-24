@@ -19,7 +19,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data, sub_title}) => {
   return (
     <Link href={url(sub_title)} className="block-images1 block-images relative">
         <div className="img-box">
-            <img src={data.image_path} className="img-fluid" alt="" />
+            <img src={data.image_path} className="img-fluid" alt="" loading="lazy" />
         </div>
         <div className="flex flex-col items-start gap-1 mt-2 text-[8px] lg:text-sm">
     <p className="text-white text-[10px] lg:text-sm font-bold">

@@ -51,6 +51,7 @@ const PricingPlan = () => {
               src="/your-logo.png" // Add your logo image path
               alt="Your Logo"
               className="h-10 w-10 mr-2"
+              loading="lazy"
             />
             <h1 className="text-3xl font-bold">Choose a Plan</h1>
           </div>

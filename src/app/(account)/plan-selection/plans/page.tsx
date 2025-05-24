@@ -57,7 +57,7 @@ const PricingPlan = () => {
     if (userCookie) {
       const userProfile = JSON.parse(userCookie);
       setUserCookie(userProfile);
-      setSelectedPlan(userProfile.plan.id); // Set the selected plan from user profile
+      setSelectedPlan(userProfile.plan_id); // Set the selected plan from user profile
     }
   }, []);
 

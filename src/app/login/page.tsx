@@ -31,7 +31,6 @@ const LoginPage = () => {
   // Handle form submission and authentication
   const handleLogin = async (data: FormData) => {
     const { email, password } = data;
-debugger;
     setIsLoading(true);
     setErrorMessage(''); // Reset error message before each attempt
 
@@ -43,7 +42,6 @@ debugger;
         },
         body: JSON.stringify({ email, password }),
       });
-debugger;
       const user = await response.json();
       const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"; // Simulate token
 

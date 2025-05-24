@@ -9,7 +9,6 @@ const DropdownSeasons:React.FC<DropdownSeasonsProps> =({seasons, onSelectSeason}
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons[0]);
 
   const handleSeasonSelect = (season: Season) => {
-    debugger;
     setSelectedSeason(season);
     onSelectSeason(season);
   };

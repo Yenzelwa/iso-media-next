@@ -25,10 +25,11 @@ const StripeCheckOutForm = () => {
       }, [userCookie]);
     
     
-      if (!user) {
-        // If no session is found, redirect to login
-        router.push('/login');
-      }
+              useEffect(() => {
+          if (typeof window !== "undefined" && !user) {
+            router.push("/login");
+          }
+        }, [user, router]);
 
   const isPaymentValid = billingInfo.cardHolder.trim() !== ''; // Simple validation
 
@@ -63,7 +64,6 @@ const StripeCheckOutForm = () => {
         setIsProcessing(false); // Reset loading state in case of error
         return;
       }
-      debugger;
     const email = user;
       // Send request to create customer on the backend
       const customerResponse = await fetch('http://172.24.74.185:4000/customer', {
@@ -82,19 +82,16 @@ const StripeCheckOutForm = () => {
       if (!customerResponse.ok) {
         throw new Error('Failed to create customer');
       }
-  debugger;
+
   const customerData = await customerResponse.json();
 
   if (customerData) {
     // Extract the customer ID
-    
-  debugger;
     const customerObject = JSON.parse(customerData.customer);
 
     // Extract the customer ID from the parsed object
     const customerId = customerObject.customer; // This will give you the value "cus_S6FTECPO0iJTpB"
   
-  debugger;
     // Send request to process payment on the backend
     const paymentResponse = await fetch('http://172.24.74.185:4000/subscription', {
       method: 'POST',

@@ -135,8 +135,8 @@ const BrowsePage = () => {
         <>
         <BrowseSlideShow videos={videos}/>
         <BrowseVideos title="Trending Now" data={videos} />
-        {/* <BrowseVideos title="Top Rated" data={videos} />
-        <BrowseVideos title="Resent Release" data={videos} /> */}
+        <BrowseVideos title="Top Rated" data={videos} />
+        <BrowseVideos title="Resent Release" data={videos} />
       
         </>
     )

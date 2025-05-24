@@ -32,26 +32,6 @@ const CreateAccount = () => {
     password: string;
   };
   
-  interface CustomUser extends NextAuthUser {
-  id: string; // Ensure ID is a string to match next-auth's expected type
-  subscriptionPlan: {
-    id: number;
-    name: string;
-  };
-  status: string;
-};
-
-if(user){
-  return (
-    <>
-  <label>Account created</label>
-  <p><a href="/login">use below email to log in</a></p>
-  <p>{user && user.email}</p>
-</>
-
-  );
-}
-
   useEffect(() => {
     if (registerError) {
       setErrorMessage(registerError);
@@ -115,8 +95,8 @@ if(user){
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {showSessionOpt ? (
-        user && user?.email (
+      {user ? (
+         (
           <form className="container">
             <div className="p-6 bg-dark rounded-lg shadow-md max-w-md">
               <p className="text-gray-500">STEP 1 OF 3</p>

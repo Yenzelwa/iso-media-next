@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Check if there's a token and user stored in cookies
   useEffect(() => {
-    debugger;
     const storedToken = getCookie('auth_token') as string | null;
     const storedUser = getCookie('auth_user') as string | null;
 
@@ -35,7 +34,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (token: string, user: any) => {
-    debugger;
     setUser(user);
     setToken(token);
 

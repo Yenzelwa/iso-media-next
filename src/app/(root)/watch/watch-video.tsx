@@ -16,7 +16,7 @@ const WatchVideo = ({ params }: { params: { id: string } }) => {
   const [series, setSeries] = useState<Series>();
   const [error, setError] = useState<string>('');
    const router = useRouter();
-  const { user} = useAuth(); 
+  const { user, loading} = useAuth(); 
       const [userCookie, setUserCookie] = useState<any>(null);
       useEffect(() => {
         const userCookie = Cookies.get("auth_user");
@@ -26,10 +26,13 @@ const WatchVideo = ({ params }: { params: { id: string } }) => {
       }, [userCookie]);
     
     
-      if (!user) {
-        // If no session is found, redirect to login
-        router.push('/login');
-      }
+        useEffect(() => {
+    // Ensure this is only called on the client side
+    if (typeof window !== "undefined" && !user && !loading) {
+      // If no session is found, redirect to login page
+      router.push("/login");
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     const currentVideoData: Episode =
@@ -454,7 +457,6 @@ const WatchVideo = ({ params }: { params: { id: string } }) => {
         video_id: currentVideo?.video_id,
         like: like
       }
-      debugger;
       const response = await axios.post("likes", payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -498,7 +500,6 @@ const WatchVideo = ({ params }: { params: { id: string } }) => {
         video_id: currentVideo?.video_id,
         dislike: dislike
       }
-      debugger;
       const response = await axios.post("dislikes", payload, {
         headers: {
           'Authorization': `Bearer ${token}`,

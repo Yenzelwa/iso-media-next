@@ -111,7 +111,6 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
                     }
 
                 ];
-                debugger;
                 setComments(comments);
                 //  setComments(response.data);
             } catch (error) {
@@ -174,7 +173,6 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
     }
 
     const toggleReply = (commentId: number) => {
-        debugger;
         setReplyVisibleMap(prevState => ({
             ...prevState,
             [commentId]: !prevState[commentId]
@@ -189,7 +187,6 @@ const CommentSection: React.FC<CommentProps> = ({ video_id }) => {
     };
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>, commentId: number) => {
-        debugger;
         const newReply = {
             id: comments.length + 1,
             reply: replyText,

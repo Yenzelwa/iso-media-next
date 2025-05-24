@@ -2,6 +2,7 @@
 
 import { Video } from "@/typings";
 import React, { useCallback, useState } from "react";
+import Image from "next/image";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 import StarIcon from "./shared/StarIcon";
@@ -45,10 +46,19 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
   return (
     <>
       <div className="shadow-md h-[780px] w-full m-auto relative group">
-        <div
-          style={{ backgroundImage: `url(${videos[currentIndex].image_path})` }}
-          className="h-[480px] w-full bg-center bg-cover duration-500"
-        >
+         <div
+      style={{ position: "relative", height: "480px", width: "100%" }} // Contain the content with position relative
+      className="bg-center bg-cover duration-500"
+    >
+      {/* Use Image for optimized background */}
+        <Image
+          src={videos[currentIndex]?.video_path || "/images/2.jpg"} // Fallback image in case dynamic image fails
+          alt={videos[currentIndex]?.title || "Video thumbnail"} // Alt text for accessibility
+          fill
+          style={{ objectFit: "cover" }}
+          priority // Make this image load sooner for critical LCP element
+          quality={75} // Adjust for balance between quality and performance
+        />
           <div className="absolute top-[20%] md:top-[20%] ml-4 md:ml-16 via-transparent to-transparent">
             <div className="show-movie w-full flex pb-4">
               <div className="d-flex align-items-center justify-content-between mb-3">

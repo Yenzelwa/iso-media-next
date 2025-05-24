@@ -1,5 +1,5 @@
 "use client";
-import React, {useState } from "react";
+import React, {useEffect, useState } from "react";
 
 
 import { NavigationTabs } from "./navigationTabs";
@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState<TabType>("membership");
-  const {user} = useAuth();
+  const {user, loading} = useAuth();
   const router = useRouter()
 
   const [membership] = useState<Membership>(() => ({
@@ -25,9 +25,13 @@ export default function AccountSettings() {
     phone: "+1 (555) 123-4567",
   }));
 
-  if (!user) {
-    router.push('/login');
-  }
+    useEffect(() => {
+    // Ensure this is only called on the client side
+    if (typeof window !== "undefined" && !loading && !user) {
+      // If no session is found, redirect to login page
+      router.push("/login");
+    }
+  }, [user, loading, router]);
 
 
   const [billingHistory] = useState<BillingRecord[]>(() => [
@@ -119,7 +123,7 @@ export default function AccountSettings() {
         <div
           dangerouslySetInnerHTML={{
             __html:
-              '<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">',
+              '<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">',
           }}
         />
       </div>

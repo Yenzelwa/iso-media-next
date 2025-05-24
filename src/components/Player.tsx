@@ -184,7 +184,7 @@ const Player: React.FC<VideoPathProps> = ({ video_path }) => {
             </div>
           </div>
         )}
-        <video data-testid="video-element" ref={videoRef} src={videoUrl} autoPlay />
+        <video data-testid="video-element" ref={videoRef} src={videoUrl} autoPlay preload="none" />
       </div>
       {!isHovered && (
         <div className="progress-line-outside-controls" style={{ width: `${progressTime}%` }} />

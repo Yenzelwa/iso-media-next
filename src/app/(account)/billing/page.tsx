@@ -24,10 +24,13 @@ const BillingPage = () => {
         }, [userCookie]);
       
       
-        if (!user) {
-          // If no session is found, redirect to login
-          router.push('/login');
-        }
+         useEffect(() => {
+    // Ensure this is only called on the client side
+    if (typeof window !== "undefined" && !user) {
+      // If no session is found, redirect to login page
+      router.push("/login");
+    }
+  }, [user, router]);
 
   interface PayPalCheckoutInstanceActions {
     subscription: {
@@ -79,9 +82,11 @@ const BillingPage = () => {
 
   const handleContinue = () => {
     if (selectedPaymentMethod === "creditCard") {
-      // Navigate to /billing/payment
-      window.location.href = "/billing/payment";
+      if (typeof window !== "undefined") {
+  window.location.href = "/billing/payment";
+
     }
+  }
   };
 
   return (
@@ -113,11 +118,12 @@ const BillingPage = () => {
                     className="flex items-center cursor-pointer"
                   >
                     <span className="w-10 h-10 flex justify-center items-center bg-gray rounded-lg">
-                      <img
+                      {/* <img
                         src="https://checkoutshopper-live.adyen.com/checkoutshopper/images/logos/paypal.svg"
                         alt="PayPal"
                         className="w-6 h-6"
-                      />
+                        loading="lazy"
+                      /> */}
                     </span>
                     <span className="text-base font-medium text-gray ml-2">
                       PayPal
@@ -138,11 +144,11 @@ const BillingPage = () => {
                     className="flex items-center cursor-pointer"
                   >
                     <span className="w-10 h-10 flex justify-center items-center bg-gray rounded-lg">
-                      <img
+                      {/* <img
                         src="https://checkoutshopper-live.adyen.com/checkoutshopper/images/logos/card.svg"
                         alt="Credit Card"
                         className="w-6 h-6"
-                      />
+                      /> */}
                     </span>
                     <span className="text-base font-medium text-gray ml-2">
                       Credit or Debit Card

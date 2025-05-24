@@ -638,3 +638,6 @@ section.show-movie-section {
   transform-origin: 0 0; /* see note above */
 }
 .ldio-yzaezf3dcmj div { box-sizing: content-box; }
+h1 {
+  font-display: swap; 
+}

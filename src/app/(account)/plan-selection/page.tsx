@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAuth } from "../../context/authContext";
 
 
-const PlanSelectionPage = async () => {
+const PlanSelectionPage =  () => {
   const { user } = useAuth();
   // const router = useRouter();
 
@@ -21,7 +21,7 @@ const PlanSelectionPage = async () => {
   return (
     <>
       <div className="max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <img src="registration_image.png" alt="Registration Image" className="mx-auto mb-6"></img>
+        <img src="registration_image.png" alt="Registration Image" className="mx-auto mb-6" loading="lazy"></img>
         <p className="text-gray-500">STEP 2 OF 3</p>
         <h1 className="text-2xl font-bold mb-4">Choose your plan</h1>
         <div className="mt-8">
