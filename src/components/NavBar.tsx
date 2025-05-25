@@ -1,95 +1,134 @@
-'use client'
-
-import Link from 'next/link';// Import the custom auth context
+"use client";
+import { useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '../app/context/authContext';
-import React from 'react';
+import { Logo } from './Logo';
 
-const NavBar = () => {
-  const { loading, user, logout } = useAuth(); // Use the custom auth context
+export const Navigation = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { loading, user, logout } = useAuth();
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleMobileMenu();
+    }
+  };
+
   const handleLogout = async () => {
-    await logout(); // Logout using the custom logout function from the context
+    await logout();
   };
 
   return (
-    <>
-      <nav className="w-full flex items-center justify-between flex-wrap bg-dark p-4">
-        <div className="flex items-center flex-shrink-0 text-white mr-6">
-          {/* <Image
-            src={logo}
-            alt="Logo"
-            width={40} // Adjust width and height as per your logo's size
-            height={40}
-            className="mr-2"
-          /> */}
-          <Link href="/">
-            <span className="font-semibold text-xl tracking-tight">IsolaKwaMUNTU</span>
+    <nav className="flex relative flex-wrap justify-between items-center p-4 -mt-0.5 w-full border-b border-solid bg-neutral-900 border-b-white border-b-opacity-10 max-md:p-3 max-sm:flex-col max-sm:gap-3 max-sm:items-start">
+      <div className="flex shrink-0 items-center mr-8 text-base tracking-normal leading-6">
+        <Link href="/" className="flex items-center">
+          <Logo />
+          <span className="text-xl font-semibold tracking-tight leading-7">
+            IsolaKwaMUNTU
+          </span>
+        </Link>
+      </div>
+
+      <button
+        className="hidden p-2 text-white bg-transparent transition-opacity cursor-pointer border-none duration-200 ease-in-out max-sm:block max-sm:absolute max-sm:top-4 max-sm:right-4"
+        aria-label="Toggle mobile menu"
+        aria-controls="mobile-menu"
+        aria-expanded={mobileMenuOpen}
+        onClick={toggleMobileMenu}
+        onKeyDown={handleKeyPress}
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 6H20M4 12H20M4 18H20"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </button>
+
+      <div
+        id="mobile-menu"
+        role="navigation"
+        className={`flex grow items-center transition-all duration-300 ease-in-out
+          max-sm:flex-col max-sm:items-start max-sm:w-full
+          ${mobileMenuOpen
+            ? 'max-sm:max-h-[500px] max-sm:opacity-100 max-sm:visible max-sm:mt-12'
+            : 'max-sm:max-h-0 max-sm:opacity-0 max-sm:invisible max-sm:mt-0'
+          } max-sm:overflow-hidden`}
+        aria-hidden={!mobileMenuOpen}
+      >
+        <div className="grow text-sm font-semibold leading-5 uppercase">
+          <Link
+            href="/browse"
+            className="mr-6 text-white opacity-90 transition-opacity cursor-pointer duration-200 ease-in-out hover:opacity-100"
+          >
+            Browse
+          </Link>
+          <Link
+            href="/series"
+            className="mr-4 text-white opacity-90 hover:opacity-100"
+          >
+            Series
+          </Link>
+          <Link
+            href="/documentary"
+            className="text-white opacity-90 hover:opacity-100"
+          >
+            Documentary
           </Link>
         </div>
-        <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-          <div className="lg:flex-grow text-sm font-semibold text-gray-900 uppercase dark:text-white">
-            <Link
-              href="/browse"
-              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-            >
-              Browse
-            </Link>
-            <Link
-              href="/series"
-              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-            >
-              Series
-            </Link>
-            <Link
-              href="/documentary"
-              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
-            >
-              Documentary
-            </Link>
-          </div>
-         {loading ? (
-  <p>Loading</p>
-) : user ? (
-  <div className="flex items-center">
-    <span className="mr-2">{user.email}</span>
-    {/* Optional user image */}
-    {/* {user.image && (
-      <img
-        src={user.image}
-        alt={user.email}
-        width={40}
-        height={40}
-        className="rounded-full"
-      />
-    )} */}
-    <button onClick={handleLogout} className="ml-4 text-red-500">
-      Log out
-    </button>
-    <Link href="/profile" className="ml-4 text-teal-200 hover:text-white">
-      Profile
-    </Link>
-  </div>
-) : (
-  <div>
-    <Link
-      href="/account"
-      className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 lg:mt-0"
-    >
-      Register
-    </Link>
-    <Link
-      href="/login"
-      className="inline-block font-semibold text-sm px-4 py-2 leading-none border rounded text-white border-red hover:border-transparent hover:text-teal-500 mt-4 ml-4 lg:mt-0"
-    >
-      Log In
-    </Link>
-  </div>
-)}
 
+        <div className="flex items-center max-sm:mt-4">
+          {loading ? (
+            <span className="text-white">Loading...</span>
+          ) : user ? (
+            <div className="flex items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
+              <span className="text-white mr-4 max-sm:mr-0">{user.email}</span>
+              <Link
+                href="/profile"
+                className="px-4 py-2 text-sm font-semibold leading-4 text-white hover:text-red-500 transition-colors duration-200"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 ml-4 max-sm:ml-0 text-sm font-semibold leading-4 text-white hover:text-red-500 transition-colors duration-200"
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
+              <Link
+                href="/account"
+                className="px-5 py-2 text-base font-medium leading-6 text-white bg-red rounded-md cursor-pointer duration-200 ease-in-out transition-colors hover:bg-red-800"
+              >
+                Register
+              </Link>
+              <Link
+                href="/login"
+                className="px-4 py-2 ml-4 max-sm:ml-0 text-sm font-semibold leading-4 rounded border border-red text-white hover:bg-red-900 transition-colors duration-200"
+              >
+                Log In
+              </Link>
+            </div>
+          )}
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 
-export const dynamic = "force-dynamic"; // This ensures the Navbar re-renders dynamically
-export default NavBar;
+export const dynamic = "force-dynamic";

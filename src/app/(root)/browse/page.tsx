@@ -1,20 +1,9 @@
-// @flow
-import React, { useEffect, useState } from 'react';
-import BrowseSlideShow from '../../../components/BrowseSlideShow';
+"use client";
+import { Hero } from '@/src/components/Hero';
+import { MovieCarousel } from '@/src/components/MovieCarousel';
 import { Video } from '@/typings';
-import BrowseVideos from '../../../components/shared/BrowseVideos';
-
-
-
-
-// export const metadata: Metadata = {
-//     title: 'isolakwamuntu content ',
-//     description: 'Browse all categories',
-//   }
-
-
-
-  const videos: Video[] = [
+import React from 'react';
+ const videos: Video[] = [
     {
       id: 1,
     title: 'Family Unit',
@@ -131,14 +120,16 @@ import BrowseVideos from '../../../components/shared/BrowseVideos';
 
 
 const BrowsePage = () => {
-    return (
-        <>
-        <BrowseSlideShow videos={videos}/>
-        <BrowseVideos title="Trending Now" data={videos} />
-        <BrowseVideos title="Top Rated" data={videos} />
-        <BrowseVideos title="Resent Release" data={videos} />
-      
-        </>
-    )
-}
+  return (
+    <div className="text-white">
+      <Hero videos={videos} />
+      <div className="mt-8">
+      <MovieCarousel title="Trending Now" movies={videos} />
+      <MovieCarousel title="Top Rated" movies={videos} />
+      <MovieCarousel title="Recent Release" movies={videos} />
+      </div>
+    </div>
+  );
+};
+
 export default BrowsePage;

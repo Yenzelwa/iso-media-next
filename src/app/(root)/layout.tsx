@@ -1,9 +1,9 @@
 'use client'
 import "../../globals.css";
-import NavBar from "../../components/NavBar";
-import Footer from "../../components/Footer";
 import { AuthProvider } from "../context/authContext";
 import React from 'react';
+import { Navigation } from "@/src/components/NavBar";
+import { Footer } from "@/src/components/Footer";
 interface Props {
   children: React.ReactNode
 }
@@ -13,7 +13,7 @@ const RootLayout: React.FC<Props> = ({ children }) => {
       <body>
         <AuthProvider > {/* Wrap your app in AuthProvider */}
           <div className="flex flex-col h-screen justify-between">
-            <NavBar />
+            <Navigation />
             {children}
             <Footer />
           </div>

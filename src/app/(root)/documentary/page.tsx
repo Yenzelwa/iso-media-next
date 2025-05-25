@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import React from "react";
 import BrowseSlideShow from "@/src/components/BrowseSlideShow";
 import Videos from "@/src/components/shared/Videos";
+import { MovieCarousel } from "@/src/components/MovieCarousel";
 
 export const metadata: Metadata = {
     title: 'isolakwamuntu documentary  ',
@@ -131,7 +132,7 @@ const DocumentaryPage = () =>{
         return (
         <>
          <BrowseSlideShow videos={movies}/>
-          <Videos page="documentary" title="" data={movies} />
+         <MovieCarousel title="Documentary" movies={movies} />
         </>
         )
     }
