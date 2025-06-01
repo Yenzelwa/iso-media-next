@@ -1,6 +1,8 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+const isAnalyze = process.env.ANALYZE === 'true';
+
+const withBundleAnalyzer = isAnalyze
+  ? require('@next/bundle-analyzer')({ enabled: true })
+  : (config) => config;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
