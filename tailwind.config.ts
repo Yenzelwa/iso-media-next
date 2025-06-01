@@ -10,28 +10,23 @@ const config: Config = {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       inset: {
         '-135': '-135px',
       },
-    },
       colors: {
-        dark: '#171717',
-        red:'#7f1d1d',
-        black:'rgb(29 29 29 / 90%)',
-        gray:'#666',
-        lightred:'#e15b64',
-        orange:'#f47e60',
-        yellow:'#f8b26a',
-        green:'#abbd81'
-      }
+        gray: {   // gray as default (e.g., `text-gray`)
+          800: 'rgb(20, 21, 21)',
+          900: 'rgb(5, 5, 5)'  // Tailwind gray-800
+        },
+      },
+    },
   },
   plugins: [],
   corePlugins: {
-    // ...other core plugins
-    gradientColorStops: false, 
+    gradientColorStops: false,
   },
 }
+
 export default config

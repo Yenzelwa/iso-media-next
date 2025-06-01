@@ -113,13 +113,13 @@ export const Navigation = () => {
             <div className="flex items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
               <Link
                 href="/account"
-                className="px-5 py-2 text-base font-medium leading-6 text-white bg-red rounded-md cursor-pointer duration-200 ease-in-out transition-colors hover:bg-red-800"
+                className="px-5 py-2 text-base font-medium leading-6 text-white bg-red-800 rounded-md cursor-pointer duration-200 ease-in-out transition-colors hover:bg-red-500"
               >
                 Register
               </Link>
               <Link
                 href="/login"
-                className="px-4 py-2 ml-4 max-sm:ml-0 text-sm font-semibold leading-4 rounded border border-red text-white hover:bg-red-900 transition-colors duration-200"
+                className="px-4 py-2 ml-4 max-sm:ml-0 text-sm font-semibold leading-4 rounded border border-red-900 text-white hover:bg-red-900 transition-colors duration-200"
               >
                 Log In
               </Link>

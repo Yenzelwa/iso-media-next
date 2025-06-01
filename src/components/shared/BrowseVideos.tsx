@@ -5,8 +5,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import MovieCard from "./VideoCard"; // Ensure this import is correct
 import { Video } from "@/typings";
+import { MovieCard } from "./VideoCard";
 
 
 interface MovieListProps {
@@ -50,7 +50,7 @@ const MovieList: React.FC<MovieListProps> = ({ data, title }) => {
                 return (
                   <SwiperSlide className="slide-item" key={key}>
                     {" "}
-                    <MovieCard  sub_title={video.type.name} data={video} key={key} />
+                    <MovieCard  sub_title={video.type.name} movie={video} key={key} />
                   </SwiperSlide>
                 );       
               })}

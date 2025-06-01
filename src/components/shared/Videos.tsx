@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Video, VideoCardModel } from "@/typings";
-import VideoCard from "./VideoCard";
-
+import { Video } from "@/typings";
+import { MovieCard } from "./VideoCard";
 interface VideosProps {
   data: Video[];
   title: string;
@@ -21,7 +20,7 @@ const Videos: React.FC<VideosProps> = ({ data, title, page }) => {
               {
               data.map((video, key) => {
                 return (
-             <VideoCard key={key} sub_title={`${page === 'browse' ? video.type.category.name + ' - ' + video.type.name : video.type.category.name}`} data={video} />   
+             <MovieCard key={key} sub_title={`${page === 'browse' ? video.type.category.name + ' - ' + video.type.name : video.type.category.name}`} movie={video} />   
                 )
               })} 
 

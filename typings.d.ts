@@ -34,45 +34,45 @@ export interface VideoCardModel {
   url: string;
 }
 
-export interface Series {
-  id: number;
-  title: string;
-  description: string;
-  realese_date: Date;
-  image_path: string;
-  seasons: Season[];
-}
-export interface Season {
-  id: number;
-  seasonNumber: number;
-  episodes: Episode[];
-}
-export interface Episode {
-  id: number,
-  episode_number: number,
-  series_id: number,
-  season_id: number,
-  episode_detail: string,
-  episode_short_detail: string,
-  title: string,
-  description: string,
-  release_date: Date,
-  image_path: string,
-  video_id: number,
-  video_path: string,
-  likes: number,
-  dislikes: number,
-  ratings: number,
-  next_episode_id: number,
-  user: User
-}
+// export interface Series {
+//   id: number;
+//   title: string;
+//   description: string;
+//   realese_date: Date;
+//   image_path: string;
+//   seasons: Season[];
+// }
+// export interface Season {
+//   id: number;
+//   seasonNumber: number;
+//   episodes: Episode[];
+// }
+// export interface Episode {
+//   id: number,
+//   episode_number: number,
+//   series_id: number,
+//   season_id: number,
+//   episode_detail: string,
+//   episode_short_detail: string,
+//   title: string,
+//   description: string,
+//   release_date: Date,
+//   image_path: string,
+//   video_id: number,
+//   video_path: string,
+//   likes: number,
+//   dislikes: number,
+//   ratings: number,
+//   next_episode_id: number,
+//   user: User
+// }
 
-export interface User {
-  id: number,
-  like: boolean,
-  dislike: boolean,
-  rating: number
-}
+// export interface User {
+//   id: number,
+//   like: boolean,
+//   dislike: boolean,
+//   rating: number
+// }
 export interface IsoComment{
   id: number,
   comment: string,
@@ -163,3 +163,44 @@ interface PlanCardProps {
 }
 
 
+export interface User {
+  id: number;
+  like: boolean;
+  dislike: boolean;
+  rating: number;
+}
+
+export interface Episode {
+  id: number;
+  video_id: number;
+  series_id: number;
+  season_id: number;
+  episode_number: number;
+  episode_short_detail: string;
+  episode_detail: string;
+  next_episode_id: number;
+  title: string;
+  description: string;
+  image_path: string;
+  video_path: string;
+  likes: number;
+  dislikes: number;
+  ratings: number;
+  release_date: Date;
+  user: User;
+}
+
+export interface Season {
+  id: number;
+  seasonNumber: number;
+  episodes: Episode[];
+}
+
+export interface Series {
+  id: number;
+  title: string;
+  description: string;
+  realese_date: Date;
+  image_path: string;
+  seasons: Season[];
+}
