@@ -126,7 +126,7 @@ const LoginPage = () => {
                   cursor: isButtonEnabled ? 'pointer' : 'not-allowed',
                 }}
               >
-                <span className="items-center justify-center">Sign Up</span>
+                <span className="items-center justify-center">Log In</span>
               </button>
             )}
           </form>
@@ -144,12 +144,12 @@ const LoginPage = () => {
 
           <div className="text-center">
             <p className="text-sm text-gray-400">
-              Already have an account?{' '}
+              Don't have an account?{' '}
               <Link
                 className="text-red-500 hover:text-red-400 font-semibold transition-colors duration-300"
-                href="/login"
+                href="/account/create"
               >
-                Login
+                Sign Up
               </Link>
             </p>
           </div>

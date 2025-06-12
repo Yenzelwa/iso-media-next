@@ -1,237 +1,193 @@
-'use client'
+"use client";
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
 import { useAuth } from '../app/context/authContext';
 import Cookies from 'js-cookie';
 
-
-const StripeCheckOutForm = () => {
+export const PaymentForm: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const [billingInfo, setBillingInfo] = useState({
+  const router = useRouter();
+  const { user } = useAuth();
+
+  const [formData, setFormData] = useState({
     cardHolder: '',
   });
-  const [isProcessing, setIsProcessing] = useState(false); // For loading state
-  const [error, setError] = useState<string>('');
-  const router = useRouter();
-  const { user} = useAuth(); 
-      const [userCookie, setUserCookie] = useState<any>(null);
-      useEffect(() => {
-        const userCookie = Cookies.get("auth_user");
-        if (userCookie) {
-          setUserCookie(userCookie)
-        }
-      }, [userCookie]);
-    
-    
-              useEffect(() => {
-          if (typeof window !== "undefined" && !user) {
-            router.push("/login");
-          }
-        }, [user, router]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState('');
+  const [userCookie, setUserCookie] = useState<any>(null);
 
-  const isPaymentValid = billingInfo.cardHolder.trim() !== ''; // Simple validation
+  useEffect(() => {
+    const userCookie = Cookies.get("auth_user");
+    if (userCookie) {
+      setUserCookie(userCookie);
+    }
+  }, [userCookie]);
 
-  const updateMemberPlan = async () => {
+  const isPaymentValid = formData.cardHolder.trim() !== '';
+
+  const handlePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!stripe || !elements) return;
-  
+
     const cardNumberElement = elements.getElement(CardNumberElement);
     const cardExpiryElement = elements.getElement(CardExpiryElement);
     const cardCvcElement = elements.getElement(CardCvcElement);
-  
+
     if (!cardNumberElement || !cardExpiryElement || !cardCvcElement) {
       console.error('Card elements not found');
       return;
     }
-  
+
     setIsProcessing(true);
-    setError(''); // Reset any previous errors
-  
+    setError('');
+
     try {
-      // Create a PaymentMethod with the individual elements
-      const { paymentMethod, error } = await stripe.createPaymentMethod({
+      const { paymentMethod, error: stripeError } = await stripe.createPaymentMethod({
         type: 'card',
-        card: cardNumberElement, // Using the CardNumberElement
+        card: cardNumberElement,
         billing_details: {
-          name: billingInfo.cardHolder,
+          name: formData.cardHolder,
         },
       });
-  
-      if (error) {
-        console.error('Payment Method Error:', error.message);
-        setError(error.message || 'An error occurred while processing the payment.');
-        setIsProcessing(false); // Reset loading state in case of error
-        return;
+
+      if (stripeError) {
+        throw new Error(stripeError.message);
       }
-    const email = user;
-      // Send request to create customer on the backend
+
+      // Create customer
       const customerResponse = await fetch('http://172.24.74.185:4000/customer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: billingInfo.cardHolder,
+          name: formData.cardHolder,
           email: user.email,
           payment_method_id: paymentMethod.id,
           profile_id: user.id
         }),
       });
-  
+
       if (!customerResponse.ok) {
         throw new Error('Failed to create customer');
       }
 
-  const customerData = await customerResponse.json();
+      const customerData = await customerResponse.json();
 
-  if (customerData) {
-    // Extract the customer ID
-    const customerObject = JSON.parse(customerData.customer);
+      if (customerData) {
+        const customerObject = JSON.parse(customerData.customer);
+        const customerId = customerObject.customer;
 
-    // Extract the customer ID from the parsed object
-    const customerId = customerObject.customer; // This will give you the value "cus_S6FTECPO0iJTpB"
-  
-    // Send request to process payment on the backend
-    const paymentResponse = await fetch('http://172.24.74.185:4000/subscription', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        customer_id: customerId,  // Use the extracted customer ID here
-        plan_id: "price_1QWXBTADdfkz5weOBz0VcbeW",
-      }),
-      credentials: 'include', // Equivalent to 'withCredentials: true'
-    });
-  
-    if (!paymentResponse.ok) {
-      throw new Error('Payment processing failed');
-    }
-  }
-  
-      // Redirect after payment method creation (replace with success page)
+        // Process subscription
+        const paymentResponse = await fetch('http://172.24.74.185:4000/subscription', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            customer_id: customerId,
+            plan_id: "price_1QWXBTADdfkz5weOBz0VcbeW",
+          }),
+          credentials: 'include',
+        });
+
+        if (!paymentResponse.ok) {
+          throw new Error('Payment processing failed');
+        }
+      }
+
       router.push('/');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error processing payment:', err);
-      setError('An error occurred while processing the payment.');
+      setError(err.message || 'An error occurred while processing the payment.');
     } finally {
-      setIsProcessing(false); // Reset loading state
+      setIsProcessing(false);
     }
   };
-  
+
+  const cardElementStyle = {
+    style: {
+      base: {
+        fontSize: '16px',
+        color: '#000',
+        backgroundColor: '#f3f4f6',
+        fontFamily: "'Inter', sans-serif",
+        '::placeholder': {
+          color: '#888',
+        },
+      },
+      invalid: {
+        color: '#e5424d',
+      },
+    },
+  };
 
   return (
-    <div className="p-6 bg-dark rounded-lg shadow-md max-w-md mx-auto">
-      <h1 className="font-bold text-2xl mb-4 text-white">Step 3 of 3</h1>
-      <h2 className="font-bold text-3xl mb-4 text-white">Choose a Plan</h2>
+       <main className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 bg-dark-900">
+      <div className="p-6 bg-dark rounded-lg shadow-md max-w-md mx-auto w-full">
+        <header className="text-center mb-8">
+          <h1 className="font-bold text-2xl mb-4 text-white">Step 3 of 3</h1>
+          <h2 className="font-bold text-3xl mb-4 text-white">Choose a Plan</h2>
+        </header>
 
-      <form onSubmit={(e) => { e.preventDefault(); updateMemberPlan(); }} className="space-y-4">
-        {/* Cardholder Name Field */}
-        <input
-          type="text"
-          placeholder="Card Holder Name"
-          value={billingInfo.cardHolder}
-          onChange={(e) =>
-            setBillingInfo({ ...billingInfo, cardHolder: e.target.value })
-          }
-          className="text-black placeholder-gray-400 p-3 rounded-lg w-full"
-          required
-        />
-
-        {/* Card Number Element */}
-        <div className="p-3 rounded-lg mb-4">
-          <CardNumberElement
-            options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#000',
-                  backgroundColor: '#f3f4f6',
-                  fontFamily: "'Inter', sans-serif",
-                  '::placeholder': {
-                    color: '#888',
-                  },
-                },
-                invalid: {
-                  color: '#e5424d',
-                },
-              },
-            }}
-            className="text-black placeholder-gray-400 p-3 rounded-lg"
-          />
-        </div>
-
-        {/* Card Expiry Element */}
-        <div className="bg-gray-100 p-3 rounded-lg mb-4">
-          <CardExpiryElement
-            options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#000',
-                  backgroundColor: '#f3f4f6',
-                  fontFamily: "'Inter', sans-serif",
-                  '::placeholder': {
-                    color: '#888',
-                  },
-                },
-                invalid: {
-                  color: '#e5424d',
-                },
-              },
-            }}
-            className="bg-gray-100 text-black placeholder-gray-400 p-3 rounded-lg"
-          />
-        </div>
-
-        {/* Card CVC Element */}
-        <div className="bg-gray-100 p-3 rounded-lg mb-4">
-          <CardCvcElement
-            options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#000',
-                  backgroundColor: '#f3f4f6',
-                  fontFamily: "'Inter', sans-serif",
-                  '::placeholder': {
-                    color: '#888',
-                  },
-                },
-                invalid: {
-                  color: '#e5424d',
-                },
-              },
-            }}
-            className="bg-gray-100 text-black placeholder-gray-400 p-3 rounded-lg"
-          />
-        </div>
-
-        {/* Plan Info */}
-        <div className="mt-6 flex items-center justify-between">
-          <div className="text-gray-600 text-left">
-            <p className="font-bold">R199/month</p>
-            <p className="font-bold">Premium</p>
+        <form onSubmit={handlePayment} className="space-y-4">
+          <div>
+            <input
+              type="text"
+              placeholder="Card Holder Name"
+              value={formData.cardHolder}
+              onChange={(e) => setFormData({ ...formData, cardHolder: e.target.value })}
+              className="text-black bg-gray-100 rounded-lg"
+              required
+            />
           </div>
-        </div>
 
-        {/* Submit Button */}
-        <div className="mt-6">
-          <button
-            type="submit"
-            disabled={!isPaymentValid || isProcessing || !stripe}
-            className={`w-full bg-red-500 text-white px-4 py-2 hover:bg-red-600 rounded-md ${
-              !isPaymentValid || isProcessing || !stripe ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            {isProcessing ? 'Processing...' : 'Confirm Payment'}
-          </button>
-          {error && <p className="text-red-500 mt-2">{error}</p>}
-        </div>
-      </form>
-    </div>
+          <div className="p-3 bg-gray-100 rounded-lg">
+            <CardNumberElement
+              options={cardElementStyle}
+              className="text-black placeholder-gray-400 bg-gray-100 rounded-lg"
+            />
+          </div> 
+
+          <div className="bg-gray-100 p-3 rounded-lg mb-4">
+            <CardExpiryElement
+              options={cardElementStyle}
+              className="text-black placeholder-gray-400 bg-gray-100 rounded-lg"
+            />
+          </div>
+
+          <div className=" bg-gray-100 rounded-lg">
+            <CardCvcElement
+              options={cardElementStyle}
+              className="bg-gray-100 text-black bg-gray-100 rounded-lg"
+            />
+          </div> 
+
+          <div className="mt-6 flex items-center justify-between">
+            <div className="text-gray-300 text-left">
+              <p className="font-bold">R199/month</p>
+              <p className="font-bold">Premium</p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <button
+              type="submit"
+              disabled={!isPaymentValid || isProcessing || !stripe}
+              className={`w-full bg-red-500 text-white px-4 py-2 hover:bg-red-600 rounded-md ${
+                !isPaymentValid || isProcessing || !stripe ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {isProcessing ? 'Processing...' : 'Confirm Payment'}
+            </button>
+            {error && <p className="text-red-500 mt-2" role="alert">{error}</p>}
+          </div>
+        </form>
+      </div>
+    </main>
   );
 };
 
-export default StripeCheckOutForm;
+export default PaymentForm;

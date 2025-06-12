@@ -25,13 +25,13 @@ export default function AccountSettings() {
     phone: "+1 (555) 123-4567",
   }));
 
-    useEffect(() => {
-    // Ensure this is only called on the client side
-    if (typeof window !== "undefined" && !loading && !user) {
-      // If no session is found, redirect to login page
-      router.push("/login");
-    }
-  }, [user, loading, router]);
+  //   useEffect(() => {
+  //   // Ensure this is only called on the client side
+  //   if (typeof window !== "undefined" && !loading && !user) {
+  //     // If no session is found, redirect to login page
+  //     router.push("/login");
+  //   }
+  // }, [user, loading, router]);
 
 
   const [billingHistory] = useState<BillingRecord[]>(() => [
@@ -93,7 +93,7 @@ export default function AccountSettings() {
   }));
 
   return (
-    <main className="w-screen text-white bg-neutral-900 min-h-[screen]">
+    <main className="w-screen text-white bg-neutral-900">
       <div className="px-6 py-16 mx-auto max-w-[1200px]">
         <h1 className="mb-12 text-5xl font-bold max-sm:text-3xl">
           Account Settings

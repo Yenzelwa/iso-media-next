@@ -73,6 +73,14 @@ export interface VideoCardModel {
 //   dislike: boolean,
 //   rating: number
 // }
+
+export interface PricingPlan {
+  id: number;
+  title: string;
+  price: string;
+  type: string;
+  features: string[];
+}
 export interface IsoComment{
   id: number,
   comment: string,

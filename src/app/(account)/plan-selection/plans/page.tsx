@@ -1,152 +1,82 @@
-// Ensure the page is always statically generated
-'use client'
+"use client";
+import { PricingCard } from '@/src/components/PriceCard';
+import { PricingPlan } from '@/typings';
+import exp from 'constants';
+import React, { useState } from 'react';
 
-
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession, signIn } from "next-auth/react";  // Import useSession from next-auth
-import Cookies from "js-cookie";
-import { useAuth } from "@/src/app/context/authContext";
-
-// Type for the component props
-interface PricingPlanProps {
-  session: any;  // Session type is simplified here for client-side
-}
-
-const PricingPlan = () => {
-  const {loading, user} = useAuth();  // Get session and its status
-  const [selectedPlan, setSelectedPlan] = useState(1);
-  const [userCookie, setUserCookie] = useState<any>(null);
-  const router = useRouter();
-
-  const pricingLists = [
-    {
-      id: 1,
-      title: "Billed Monthly",
-      price: "$7.99",
-      type: "Monthly",
-      features: [
-        "Stream on 1 device",
-        "Instant access to over 1500 unique videos",
-        "Access 30+ years of David Icke's Content",
-        "Watch on your phone and TV",
-        "£1.99 for your first month",
-        "Renews at £7.99",
-      ],
-    },
-    {
-      id: 2,
-      title: "Billed Yearly",
-      price: "$99.99",
-      type: "Yearly",
-      features: [
-        "Stream on 4 devices",
-        "All premium features included",
-        "Save 17% with annual billing",
-        "24/7 customer support",
-        "£1.99 for your first month",
-        "Renews at £7.99",
-        "Instant access to over 1500 unique videos",
-        "Access 30+ years of David Icke's Content",
-      ],
-    },
-  ];
-
-  useEffect(() => {
-    const userCookie = Cookies.get("auth_user");
-    if (userCookie) {
-      const userProfile = JSON.parse(userCookie);
-      setUserCookie(userProfile);
-      setSelectedPlan(userProfile.plan_id); // Set the selected plan from user profile
-    }
-  }, []);
-
-  useEffect(() => {
-    if (userCookie) {
-      const updatedUserProfile = { ...userCookie, plan: { ...userCookie.plan, id: selectedPlan } };
-      Cookies.set("auth_user", JSON.stringify(updatedUserProfile)); // Update the user profile in the cookie
-    }
-  }, [selectedPlan, userCookie]);
-
-  if (loading) {
-    return <div>Loading...</div>;  // Show loading message while session is being fetched
-  }
-
-  if (!user) {
-    // If no session is found, redirect to login
-    return (
-      <div className="text-center">
-        <h2>You need to be logged in to access this page.</h2>
-        <button onClick={() => signIn()} className="px-6 py-3 bg-blue-500 text-white rounded-md">
-          Log in
-        </button>
-      </div>
-    );
-  }
+const pricingLists: PricingPlan[] = [
+  {
+    id: 1,
+    title: "Billed Monthly",
+    price: "$7.99",
+    type: "Monthly",
+    features: [
+      "Stream on 1 device",
+      "Instant access to over 1500 unique videos",
+      "Access 30+ years of David Icke's Content",
+      "Watch on your phone and TV",
+      "£1.99 for your first month",
+      "Renews at £7.99",
+    ],
+  },
+  {
+    id: 2,
+    title: "Billed Yearly",
+    price: "$99.99",
+    type: "Yearly",
+    features: [
+      "Stream on 4 devices",
+      "All premium features included",
+      "Save 17% with annual billing",
+      "24/7 customer support",
+      "£1.99 for your first month",
+      "Renews at £7.99",
+      "Instant access to over 1500 unique videos",
+      "Access 30+ years of David Icke's Content",
+    ],
+  },
+];
+ const PricingPlans: React.FC = () => {
+  const [selectedPlan, setSelectedPlan] = useState<number>(1);
 
   return (
-    <div className="py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="lg:text-center">
-          <p className="text-gray-500">STEP 2 OF 3</p>
-          <h1 className="text-2xl font-bold mb-4">Choose your plan</h1>
-          <h3 className="text-lg text-gray mb-6">
-            IsolakwaMUNTU is committed to giving you all you need to awaken your inner child.
-          </h3>
-        </div>
-
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-          {pricingLists.map((item) => (
-            <div
-              key={item.id}
-              className={`rounded-lg bg-dark p-8 shadow-md ${selectedPlan === item.id ? "border-2 border-red" : ""}`}
-              onClick={() => setSelectedPlan(item.id)}
-            >
-              <div className="text-center">
-                <h3 className="font-medium text-white">{item.title}</h3>
-                <div className="mt-4 flex items-center justify-center">
-                  <span className="text-5xl font-extrabold tracking-tight text-red">{item.price}</span>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <ul>
-                  {item.features.map((feature, index) => (
-                    <li key={index} className="flex items-start mt-2">
-                      <svg
-                        className="flex-shrink-0 h-6 w-6 text-green"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="ml-3 text-base text-gray">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <button
-            type="button"
-            className="w-1/2 flex justify-center items-center px-6 py-3 border border-transparent rounded-md text-base font-medium text-white bg-red hover:bg-red focus:outline-none focus:border-red focus:shadow-outline-red transition duration-150 ease-in-out"
-            onClick={() => router.push("/billing/payment")}
-          >
-            Continue
-          </button>
-        </div>
+    <section className="relative w-full max-w-6xl mx-auto px-6 py-24 overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-72 h-72 bg-red-500/30 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px]"></div>
       </div>
-    </div>
+
+      <header className="text-center relative mb-16">
+        <h2 className="text-4xl font-bold text-white mb-4">
+          Choose Your Perfect Plan
+        </h2>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          Select the plan that works best for you and start streaming today
+        </p>
+
+        {/* Decorative line */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-24 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
+      </header>
+
+      <div className="relative grid md:grid-cols-2 gap-8 mt-8">
+        {pricingLists.map((plan) => (
+          <PricingCard
+            key={plan.id}
+            plan={plan}
+            isSelected={selectedPlan === plan.id}
+            onSelect={setSelectedPlan}
+            isPopular={plan.id === 2}
+          />
+        ))}
+
+        {/* Connecting line between cards */}
+        <div className="absolute top-1/2 left-1/2 w-32 h-[2px] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-red-500/50 to-transparent md:block hidden"></div>
+      </div>
+
+      {/* Bottom decorative pattern */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </section>
   );
 };
-
-export default PricingPlan;
+ export default PricingPlans;

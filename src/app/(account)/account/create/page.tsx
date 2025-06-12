@@ -141,7 +141,7 @@ const CreateAccount = () => {
               className="container"
             >
               
-              <h1 className="text-3xl text-gray-300 mb-4">
+              <h1 className="text-3xl text-gray-600 mb-4">
                 Sign Up
               </h1>
               {errorMessage && (
@@ -199,7 +199,7 @@ const CreateAccount = () => {
                     className={`w-full py-3 rounded-lg text-white font-semibold transition-all duration-300 transform hover:scale-105 ${
                       LoginBtnEnable
                         ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-red-500/50'
+                        : 'bg-red-900 bg-gradient-to-r from-gray-500 to-red-600 hover:from-gray-600 hover:to-gray-700 shadow-lg hover:shadow-red-500/50'
                     }`}
                     disabled={LoginBtnEnable || isLoading}
                   >
