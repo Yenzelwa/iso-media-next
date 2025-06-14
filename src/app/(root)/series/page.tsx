@@ -5,10 +5,10 @@ import { Video } from "@/typings";
 import Videos from "../../../components/shared/Videos";
 import { MovieCarousel } from "@/src/components/MovieCarousel";
 
-export const metadata: Metadata = {
-    title: 'isolakwamuntu series  ',
-    description: 'Browse all categories',
-  }
+// export const metadata: Metadata = {
+//     title: 'isolakwamuntu series  ',
+//     description: 'Browse all categories',
+//   }
   
 const SeriesPage = () =>{
   const movies: Video[] = [

@@ -3,12 +3,21 @@ import React from "react";
 import { Series, Video } from "@/typings";
 import Videos from "../../../../components/shared/Videos";
 
-export const metadata: Metadata = {
-  title: "isolakwamuntu series  ",
-  description: "Browse all categories",
-};
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-const SeriesByIdPage = () => {
+// Optional: Generate metadata dynamically
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  return {
+    title: `Series  ${(await params).id}`,
+  };
+}
+
+export default async function SeriesByIdPage({ params }: PageProps) {
+  const { id } = await params;
 
   const series: Series = 
     {
@@ -243,4 +252,11 @@ const SeriesByIdPage = () => {
     </>
   );
 };
-export default SeriesByIdPage;
+
+export async function generateStaticParams() {
+ // const series: Array<{ id: number }> = await fetch('https://your-api.com/series').then(res => res.json());
+  const seriesIds =  ['1', '2', '3', '4'];
+  return seriesIds.map((item) => ({
+    id: item.toString(),
+  }));
+}
