@@ -41,7 +41,7 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
   );
 
   const redirectToSignIn = () => {
-    router.push("/account");
+    router.push("/account/create");
   };
 
   return (
@@ -89,7 +89,7 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
               <button
                 onClick={redirectToSignIn}
                 type="button"
-                className="bg-red text-white px-4 py-2 hover:bg-red rounded-md transition-colors duration-200"
+                className="bg-red-900 text-white px-4 py-2 hover:bg-red rounded-md transition-colors duration-200"
               >
                 Try 14 days trial
               </button>

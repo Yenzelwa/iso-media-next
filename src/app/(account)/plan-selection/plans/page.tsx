@@ -2,6 +2,7 @@
 import { PricingCard } from '@/src/components/PriceCard';
 import { PricingPlan } from '@/typings';
 import exp from 'constants';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 const pricingLists: PricingPlan[] = [
@@ -76,6 +77,9 @@ const pricingLists: PricingPlan[] = [
 
       {/* Bottom decorative pattern */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+          <div className="flex justify-center">
+            <Link href="/billing/payment" className="bg-red-900 text-white px-16 py-3 rounded-md inline-block hover:bg-red-600 transition duration-300">Continue to Payment </Link>
+        </div>
     </section>
   );
 };

@@ -112,7 +112,7 @@ export const Navigation = () => {
           ) : (
             <div className="flex items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
               <Link
-                href="/account"
+                href="/account/create"
                 className="px-5 py-2 text-base font-medium leading-6 text-white bg-red-800 rounded-md cursor-pointer duration-200 ease-in-out transition-colors hover:bg-red-500"
               >
                 Register

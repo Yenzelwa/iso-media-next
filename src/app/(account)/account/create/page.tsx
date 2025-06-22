@@ -78,7 +78,7 @@ const CreateAccount = () => {
       if (response.ok) {
         login(token, user);
         // Navigate to the next page
-        router.push('/plan-selection');
+        router.push('/plan-selection/plans');
       } else {
         // Handle unsuccessful response
         setRegisterError('Something went wrong');
