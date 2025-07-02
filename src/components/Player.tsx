@@ -148,7 +148,7 @@ const Player: React.FC<VideoPathProps> = ({ video_path }) => {
   };
 
   return (
-    <div className="video-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div aria-label="video" className="video-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className={`video-container ${btnPlay ? '' : 'paused'}`} data-volume-level="high" onClick={handleVideoClick}  data-testid="video-container">
         {isHovered && (
           <div className="video-controls-container">
@@ -162,8 +162,8 @@ const Player: React.FC<VideoPathProps> = ({ video_path }) => {
                 {btnPlay ? 'Pause' : 'Play'}
               </button>
               <div className="volume-container">
-                <button onClick={() => setBtnMute(!btnMute)} className="mute-btn">{btnMute ? 'Unmute' : 'Mute'}</button>
-                <input className="volume-slider" type="range" min="0" max="1" step="any" onChange={changeVolume} />
+                <button data-testid="mute-toggle" onClick={() => setBtnMute(!btnMute)} className="mute-btn">{btnMute ? 'Unmute' : 'Mute'}</button> 
+               <input className="volume-slider" type="range" min="0" max="1" step="any" aria-label="volume slider"  onChange={changeVolume} />
               </div>
               <div className="duration-container">
                 <span>{formatDuration(currentTime)} / {duration}</span>

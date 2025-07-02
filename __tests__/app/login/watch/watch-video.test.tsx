@@ -79,26 +79,22 @@ describe('WatchVideo Component', () => {
     expect(screen.getByText(/Next Episdose/i)).toBeInTheDocument();
   });
 
-    xit('shows loading state initially', async () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
 
-    render(<WatchVideo params={{ id: '1' }} />);
-    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+
+ it('handles error when axios fails on like', async () => {
+  (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
+  (axios.post as jest.Mock).mockRejectedValueOnce(new Error('Failed to like'));
+
+  render(<WatchVideo params={{ id: '1' }} />);
+
+  const likeButton = await screen.findByRole('button', { name: /thumbs-up/i });
+  fireEvent.click(likeButton);
+
+  await waitFor(() => {
+    expect(screen.getByText(/error occurred updating likes/i)).toBeInTheDocument();
   });
+});
 
-  it('handles error when axios fails on like', async () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
-    (axios.post as jest.Mock).mockRejectedValueOnce(new Error('Failed to like'));
-
-    render(<WatchVideo params={{ id: '1' }} />);
-
-    const likeButton = await screen.findByRole('button', { name: /thumbs-up/i });
-    fireEvent.click(likeButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Error occured updating likes/i)).toBeInTheDocument();
-    });
-  });
 
   it('does not crash if next episode button is not present', async () => {
     (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });

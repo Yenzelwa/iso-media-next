@@ -55,19 +55,19 @@ describe('BrowsePage', () => {
 
     // Check if the redirection to the login page happens
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/login');
+      expect(mockPush).toHaveBeenCalledWith('/log in');
     });
   });
 
-  xit('should render video content if user is authenticated', async () => {
+  it('should render video content if user is authenticated', async () => {
 
     render(<BrowsePage />);
 
     // Check if the video elements are rendered
     await waitFor(() => {
-      expect(screen.getByText(/Series/i)).toBeInTheDocument();
-      // expect(screen.getByText(/Top Rated/i)).toBeInTheDocument();
-      // expect(screen.getByText(/Recent Release/i)).toBeInTheDocument();
+      expect(screen.getByText(/Trending Now/i)).toBeInTheDocument();
+       expect(screen.getByText(/Top Rated/i)).toBeInTheDocument();
+      expect(screen.getByText(/Recent Release/i)).toBeInTheDocument();
     });
   });
 });

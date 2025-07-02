@@ -25,6 +25,13 @@ export const PaymentForm: React.FC = () => {
     }
   }, [userCookie]);
 
+  useEffect(() =>{
+   
+    if(!user){
+      router.push('/login');
+    }
+  })
+
   const isPaymentValid = formData.cardHolder.trim() !== '';
 
   const handlePayment = async (e: React.FormEvent) => {

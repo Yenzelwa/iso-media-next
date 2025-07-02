@@ -16,21 +16,22 @@ import { User as NextAuthUser } from "next-auth";
 import { useAuth } from '@/src/app/context/authContext';
 import { method } from 'lodash';
 
+type FormData = {
+  first_name: string;
+  email: string;
+  password: string;
+};
+
 const CreateAccount = () => {
   const router = useRouter();
-  const methods = useForm();
-  const { formState: { errors } } = useForm<FormData>();
+  const methods = useForm<FormData>();
+  const { formState: { errors } } = methods;
   const [isLoading, setIsLoading] = useState(false);
   const [LoginBtnEnable, setLoginBtnEnable] = useState(true);
   const { login, user } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
   const [showSessionOpt, setShowSessionOpt] = useState(false);
-
-  type FormData = {
-    email: string;
-    password: string;
-  };
   
   useEffect(() => {
     if (registerError) {
@@ -47,7 +48,7 @@ const CreateAccount = () => {
     setLoginBtnEnable(!isFormValid);
   }, [methods.formState.isValid]);
 
-  const onSubmit = methods.handleSubmit(async (data) => {
+  const onSubmit = methods.handleSubmit(async (data: FormData) => {
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -135,7 +136,7 @@ const CreateAccount = () => {
         ) : (
           <FormProvider {...methods}>
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={onSubmit}
               noValidate
               autoComplete="off"
               className="container"
@@ -190,12 +191,11 @@ const CreateAccount = () => {
               <div className="mt-8">
                 {isLoading ? (
                   <div className="flex justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+                    <div aria-label="status"  className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
                   </div>
                 ) : (
                   <button
                     type="submit"
-                    onClick={onSubmit}
                     className={`w-full py-3 rounded-lg text-white font-semibold transition-all duration-300 transform hover:scale-105 ${
                       LoginBtnEnable
                         ? 'bg-gray-400 cursor-not-allowed'

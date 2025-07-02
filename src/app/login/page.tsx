@@ -90,7 +90,7 @@ const LoginPage = () => {
         <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Create Account</h2>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(handleLogin)}>
-            <p className={`text-red ${errorMessage ? 'opacity-100' : 'opacity-0'}`}>
+            <p aria-label="error-msg" className={`text-red ${errorMessage ? 'opacity-100' : 'opacity-0'}`}>
               {errorMessage}
             </p>
 

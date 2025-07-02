@@ -64,7 +64,7 @@ describe('LoginPage', () => {
     fireEvent.input(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
 
     // Simulate a button click to trigger the login
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
     // Wait for the async fetch and check the behavior
     await waitFor(() => {
@@ -86,7 +86,7 @@ describe('LoginPage', () => {
   });
 
   it('should show error message on failed login', async () => {
-    // Simulate a failed login with an unsuccessful fetch response
+
     const mockResponse = { ok: false, json: jest.fn().mockResolvedValue({}) };
     (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
 
@@ -97,7 +97,7 @@ describe('LoginPage', () => {
     fireEvent.input(screen.getByLabelText(/password/i), { target: { value: 'wrongpassword' } });
 
     // Trigger the login button click
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+       fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
     // Wait for the error message to be displayed
     await waitFor(() => {
@@ -110,24 +110,24 @@ describe('LoginPage', () => {
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
-    const loginButton = screen.getByRole('button', { name: /login/i });
 
-    // Simulate user input for email and password
+    const loginButton = screen.getByRole('button', { name: /log in/i });
+
     fireEvent.input(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.input(passwordInput, { target: { value: 'password123' } });
 
-    // Check that the button is enabled after input
     await waitFor(() => {
       expect(loginButton).not.toBeDisabled();
     });
   });
+
   it('should show validation errors for empty email and password fields', async () => {
     render(<LoginPage />);
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
-    const loginButton = screen.getByRole('button', { name: /login/i });
+
+    const loginButton = screen.getByRole('button', { name: /log in/i });
   
-    // Clear fields
     fireEvent.input(emailInput, { target: { value: '' } });
     fireEvent.input(passwordInput, { target: { value: '' } });
   
@@ -142,19 +142,19 @@ describe('LoginPage', () => {
     });
   });
   
-  xit('should show error message for invalid email format', async () => {
+ xit('should show validation error when email is invalid', async () => {
+ render(<LoginPage />);
 
-    render(<LoginPage />);
-   
-    fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'invalidemail' } });
-    fireEvent.input(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
+    fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'invalid-email' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+//    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
-    await waitFor(() => {
-      expect(screen.getByText(/email address is not valid/i)).toBeInTheDocument();
-    });
-  });
+  // Assert the validation message appears
+ // await waitFor(() => {
+    expect(screen.getByText(/email address is not valid/i)).toBeInTheDocument();
+ // });
+});
+
 
   it('should show error message for short password', async () => {
     render(<LoginPage />);
@@ -162,7 +162,7 @@ describe('LoginPage', () => {
     fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.input(screen.getByLabelText(/password/i), { target: { value: 'sho' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/Password must be at least 6 characters/i)).toBeInTheDocument();

@@ -37,6 +37,15 @@ export function WatchPage({ params }: WatchPageProps) {
     }
   }, []);
 
+     useEffect(() => {
+    // Ensure this is only called on the client side
+    if (typeof window !== "undefined" && !loading && !user) {
+      // If no session is found, redirect to login page
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
+
   useEffect(() => {
     // Initialize with mock data (replace with API call)
     const currentVideoData: Episode = {

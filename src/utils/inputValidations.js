@@ -90,7 +90,7 @@ export const num_validation = {
 
 export const email_validation = {
   name: 'email',
-  label: 'Email Address',
+  label: 'email address',
   type: 'email',
   id: 'email',
   placeholder: 'email address',
@@ -108,7 +108,7 @@ export const email_validation = {
 }
 export const termsAndConditions_validation = {
   name: '',
-  label: '',
+  label: 't&cs',
   type: 'checkbox',
   placeholder:'',
   id: 't&cs',

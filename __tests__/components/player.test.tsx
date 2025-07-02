@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Player from '@/src/components/Player';
 
@@ -25,6 +25,26 @@ beforeAll(() => {
     writable: true,
     value: jest.fn(),
   });
+    // Mock fullscreen API on HTMLElement prototype
+  Object.defineProperty(HTMLElement.prototype, 'requestFullscreen', {
+    configurable: true,
+    value: jest.fn().mockImplementation(function (this: HTMLElement) {
+      Object.defineProperty(document, 'fullscreenElement', {
+        configurable: true,
+        get: () => this,
+      });
+    }),
+  });
+
+  Object.defineProperty(document, 'exitFullscreen', {
+    configurable: true,
+    value: jest.fn().mockImplementation(() => {
+      Object.defineProperty(document, 'fullscreenElement', {
+        configurable: true,
+        get: () => null,
+      });
+    }),
+  });
 });
 describe('Player Component', () => {
   const testVideoPath = 'https://www.w3schools.com/html/mov_bbb.mp4';
@@ -49,43 +69,73 @@ test('play/pause toggle works', () => {
   // Click to toggle play → pause → play state
   fireEvent.click(pauseButton);
 
-  // Now the play button should appear
+
   const playButton = screen.getByRole('button', { name: /play/i });
   expect(playButton).toBeInTheDocument();
 });
 
 
-  xtest('mute/unmute toggle works', () => {
-    render(<Player video_path={testVideoPath} />);
-    const muteButton = screen.getByRole('button', { name: /mute/i });
-    fireEvent.click(muteButton);
-    expect(screen.getByRole('button', { name: /unmute/i })).toBeInTheDocument();
-  });
 
-  test('volume slider changes volume', () => {
-    render(<Player video_path={testVideoPath} />);
-    const volumeSlider = screen.getByRole('slider');
+test('mute/unmute toggle works', async () => {
+  render(<Player video_path="https://www.w3schools.com/html/mov_bbb.mp4" />);
+
+  const videoContainer = screen.getByTestId('video-container');
+  fireEvent.mouseEnter(videoContainer);
+
+  const muteToggle = await screen.findByTestId('mute-toggle');
+
+  expect(muteToggle).toHaveTextContent(/mute/i);
+
+  fireEvent.click(muteToggle);
+
+  expect(muteToggle).toHaveTextContent(/unmute/i);
+});
+
+
+  test('volume slider changes volume', async () => {
+      render(<Player video_path="https://www.w3schools.com/html/mov_bbb.mp4" />);
+
+  const videoContainer = screen.getByTestId('video-container');
+  fireEvent.mouseEnter(videoContainer);
+    const volumeSlider = screen.getByLabelText('volume slider');
     fireEvent.change(volumeSlider, { target: { value: '0.5' } });
-    expect(volumeSlider).toHaveValue('0.5');
+    await act(async () => {
+    fireEvent.change(volumeSlider, { target: { value: '0.5' } });
+  });
+await waitFor(() => {
+  expect(volumeSlider).toHaveValue('0.5');
+});
   });
 
-  xtest('fullscreen button toggles state', () => {
-    render(<Player video_path={testVideoPath} />);
-    const fullScreenBtn = screen.getByRole('button', { name: /fullscreen/i });
-    expect(fullScreenBtn).toBeInTheDocument();
-    fireEvent.click(fullScreenBtn);
-    expect(screen.getByRole('button', { name: /exit fullscreen/i })).toBeInTheDocument();
-  });
+test('fullscreen button toggles state', () => {
+  render(<Player video_path="https://www.w3schools.com/html/mov_bbb.mp4" />);
+  
+  const videoContainer = document.querySelector('.video-container') as HTMLElement;
 
-  xtest('shows video controls on hover', () => {
-    render(<Player video_path={testVideoPath} />);
-    const container = screen.getByRole('video').parentElement;
-    if (!container) throw new Error('Video container not found');
+  fireEvent.mouseEnter(videoContainer);
 
-    act(() => {
-      fireEvent.mouseEnter(container);
-    });
+  const fullscreenBtn = screen.getByRole('button', { name: /fullscreen/i });
+  expect(fullscreenBtn).toBeInTheDocument();
 
-    expect(screen.getByText(/pause/i)).toBeInTheDocument();
-  });
+  
+  fireEvent.click(fullscreenBtn);
+  expect(document.fullscreenElement).toBe(videoContainer);
+  expect(screen.getByRole('button', { name: /exit fullscreen/i })).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: /exit fullscreen/i }));
+  expect(document.fullscreenElement).toBe(null);
+  expect(screen.getByRole('button', { name: /fullscreen/i })).toBeInTheDocument();
+});
+
+
+ test('shows video controls on hover', () => {
+  render(<Player video_path="https://www.w3schools.com/html/mov_bbb.mp4" />);
+
+
+  const videoContainer = screen.getByTestId('video-container');
+  fireEvent.mouseEnter(videoContainer);
+
+  const controls = screen.getByText(/mute/i).closest('.video-controls-container');
+  expect(controls).toBeInTheDocument();
+});
 });
