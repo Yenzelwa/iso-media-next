@@ -145,7 +145,7 @@ describe('LoginPage', () => {
  xit('should show validation error when email is invalid', async () => {
  render(<LoginPage />);
 
-    fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'invalid-email' } });
+    fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'invalidemail' } });
 
 //    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 

@@ -41,7 +41,7 @@ describe('BrowsePage', () => {
       afterEach(() => {
         jest.clearAllMocks();
       });
-  xit('should redirect to login if user is not authenticated', async () => {
+  it('should redirect to login if user is not authenticated', async () => {
 
           // Mock the useAuth hook
           (useAuth as jest.Mock).mockReturnValue({
@@ -55,7 +55,7 @@ describe('BrowsePage', () => {
 
     // Check if the redirection to the login page happens
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/log in');
+      expect(mockPush).toHaveBeenCalledWith('/login');
     });
   });
 

@@ -2,7 +2,9 @@
 import { Hero } from '@/src/components/Hero';
 import { MovieCarousel } from '@/src/components/MovieCarousel';
 import { Video } from '@/typings';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAuth } from '../../context/authContext';
+import { useRouter } from 'next/navigation';
  const videos: Video[] = [
     {
       id: 1,
@@ -120,6 +122,17 @@ import React from 'react';
 
 
 const BrowsePage = () => {
+  const {user, loading} = useAuth();
+  const router = useRouter();
+
+     useEffect(() => {
+    // Ensure this is only called on the client side
+    if (typeof window !== "undefined" && !loading && !user) {
+      // If no session is found, redirect to login page
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+  
   return (
     <div className="text-white">
       <Hero videos={videos} />

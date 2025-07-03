@@ -176,11 +176,8 @@ fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form
     }));
   });
 });
-
-    
+  
   it('should show loading indicator during form submission', async () => {
- // jest.useFakeTimers(); // use fake timers to fast-forward the delay
-
   const mockUser = {
     id: 1,
     name: 'John Doe',
@@ -202,23 +199,10 @@ fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form
   fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'Password123!' } });
   fireEvent.click(screen.getByLabelText(/t&cs/i));
 
-  // Submit form
   fireEvent.click(screen.getByRole('button', { name: /continue/i }));
-
-  // Spinner should appear immediately
- // expect(screen.getByLabelText('status')).toBeInTheDocument();
-
-  // Fast-forward time by 60 seconds
-  // act(() => {
-  //   jest.advanceTimersByTime(60_000);
-  // });
-
-  // Spinner should disappear
   await waitFor(() => {
     expect(screen.queryByLabelText('status')).not.toBeInTheDocument();
   });
-
-//  jest.useRealTimers();
 });
 
   
@@ -244,9 +228,6 @@ fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form
     });
  
 it('should show error message if account creation fails', async () => {
-  // Arrange: Mock useForm
- // jest.useFakeTimers();
-
   const mockUseFormReturn = {
     register: jest.fn(),
     handleSubmit: jest.fn(fn => fn),
@@ -285,28 +266,13 @@ it('should show error message if account creation fails', async () => {
     </AuthProvider>
   );
 
-
-  // Simulate timer-based behavior if any
-  // act(() => {
-  //   jest.advanceTimersByTime(60_000);
-  // });
-
-  // Act: Submit the form
   fireEvent.submit(screen.getByRole('button', { name: /continue/i }).closest('form')!);
-
-  // Assert: Error message was set
   await waitFor(() => {
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
 
   });
-
-//  jest.useRealTimers();
-});
-
-
-
-  
+});  
     it('should show session option if user is already authenticated', () => {
 
         (useAuth as jest.Mock).mockReturnValue({
