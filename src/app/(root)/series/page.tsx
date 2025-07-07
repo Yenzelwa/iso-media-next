@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import React from "react";
 import BrowseSlideShow from "../../../components/BrowseSlideShow";
 import { Video } from "@/typings";
-import Videos from "../../../components/shared/Videos";
 import { MovieCarousel } from "@/src/components/MovieCarousel";
 
 // export const metadata: Metadata = {
