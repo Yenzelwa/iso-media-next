@@ -3,45 +3,53 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {
-    title: 'isolakwamuntu forgot password  ',
-    description: 'Browse all categories',
-  }
-const ForgotPasswordPassword = () =>{
+  title: "Isolakwamuntu | Forgot Password",
+  description: "Reset your password securely via email.",
+};
 
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
-          <div className="p-12 bg-dark rounded-lg shadow-md max-w-md">
-            <h2 className="text-3xl font-bold mb-4">Forgot Password</h2>
-            <p className="text-gray-600 mb-6">
-              Enter your email address to reset your password.
-            </p>
-            <form>
-              <div className="mb-4">
-                <label htmlFor="email" className="block  mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div className="mt-6 flex items-center justify-between">
-              <button
-                type="submit"
-                className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md"
-              >
-                Reset Password
-              </button>
-              <Link href="/login" className="text-blue-500 hover:underline">
-               Log In
-              </Link>
+const ForgotPasswordPassword = () => {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <h2 className="text-3xl font-bold text-center text-red-700 mb-4">
+          Forgot Password
+        </h2>
+        <p className="text-gray-600 text-center mb-6">
+          Enter your email address to reset your password. We’ll send you a link.
+        </p>
+
+        <form>
+          <div className="mb-5">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder="you@example.com"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              required
+            />
           </div>
-            </form>
-           
+
+          <div className="flex items-center justify-between mt-6">
+            <button
+              type="submit"
+              className="bg-red-700 hover:bg-red-600 text-white px-5 py-2 rounded-md transition duration-300"
+            >
+              Reset Password
+            </button>
+            <Link href="/login" className="text-sm text-blue-600 hover:underline">
+              Back to Login
+            </Link>
           </div>
-        </div>
-      );
-}
+        </form>
+      </div>
+    </div>
+  );
+};
+
 export default ForgotPasswordPassword;

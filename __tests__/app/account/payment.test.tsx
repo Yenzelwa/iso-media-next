@@ -7,6 +7,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '@/src/app/context/authContext';
 import StripeCheckOutForm from '@/src/components/StripeCheckOutForm';
+import PaymentPage from '@/src/app/(account)/billing/payment/page';
 
 // Mocks
 jest.mock('next/navigation', () => ({
@@ -57,9 +58,7 @@ describe('StripeCheckOutForm Component', () => {
     mockUseAuth.mockReturnValue({ user: null });
 
     render(
-      <Elements stripe={stripePromise}>
-        <StripeCheckOutForm />
-      </Elements>
+      <PaymentPage/>
     );
 
     expect(mockPush).toHaveBeenCalledWith('/login');
@@ -69,9 +68,7 @@ describe('StripeCheckOutForm Component', () => {
     mockUseAuth.mockReturnValue({ user: { email: 'test@example.com', id: 'user123' } });
 
     render(
-      <Elements stripe={stripePromise}>
-        <StripeCheckOutForm />
-      </Elements>
+      <PaymentPage/>
     );
 
     expect(screen.getByPlaceholderText('Card Holder Name')).toBeInTheDocument();
@@ -84,9 +81,7 @@ describe('StripeCheckOutForm Component', () => {
     mockUseAuth.mockReturnValue({ user: { email: 'test@example.com', id: 'user123' } });
 
     render(
-      <Elements stripe={stripePromise}>
-        <StripeCheckOutForm />
-      </Elements>
+      <PaymentPage/>
     );
 
     const submitButton = screen.getByRole('button', { name: /confirm payment/i });
@@ -133,9 +128,7 @@ it('submits payment info when form is valid', async () => {
   });
 
   render(
-    <Elements stripe={stripePromise}>
-      <StripeCheckOutForm />
-    </Elements>
+   <PaymentPage/>
   );
 
   const input = screen.getByPlaceholderText('Card Holder Name');

@@ -2,7 +2,6 @@ import { Video } from "@/typings";
 import { Metadata } from "next";
 import React from "react";
 import BrowseSlideShow from "@/src/components/BrowseSlideShow";
-import Videos from "@/src/components/shared/Videos";
 import { MovieCarousel } from "@/src/components/MovieCarousel";
 
 export const metadata: Metadata = {

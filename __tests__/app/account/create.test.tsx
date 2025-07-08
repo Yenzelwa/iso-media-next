@@ -1,11 +1,10 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/src/app/context/authContext';
 import axios from 'axios';
 import CreateAccount from '@/src/app/(account)/account/create/page';
-import { FieldValues, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
-import React, { ReactNode } from 'react';
-import Email from 'next-auth/providers/email';
+import {useForm } from 'react-hook-form';
+import React from 'react';
 
 
 if (!HTMLFormElement.prototype.requestSubmit) {
@@ -204,8 +203,6 @@ fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form
     expect(screen.queryByLabelText('status')).not.toBeInTheDocument();
   });
 });
-
-  
     it('should redirect to plan selection page on successful account creation', async () => {
       render(<CreateAccount />);
          // Mock the response for the fetch call

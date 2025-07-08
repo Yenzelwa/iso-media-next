@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import React from "react";
 import { Series, Video } from "@/typings";
+import Videos from "../../../../components/shared/Videos";
 
 interface PageProps {
   params: Promise<{
@@ -240,12 +241,11 @@ export default async function SeriesByIdPage({ params }: PageProps) {
       {series.seasons?.map((season) => {
         {
             return (
-              // <Videos 
-              //   page="series"
-              //   title={`Season - ${season.seasonNumber}`}
-              //   data={season.episodes}
-              // />
-              <h1>video</h1>
+              <Videos 
+                page="series"
+                title={`Season - ${season.seasonNumber}`}
+                data={season.episodes}
+              />
             ); 
         }
       })} 

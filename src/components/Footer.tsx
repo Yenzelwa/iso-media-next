@@ -9,14 +9,14 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
 export const Footer = () => {
   const footerLinks = {
     resources: [
-      { name: 'About Us', href: '/about' },
-      { name: 'Contact Us', href: '/contact' },
+      { name: 'About Us', href: '/about-us' },
+      { name: 'Contact Us', href: '/contact-us' },
       { name: 'FAQs', href: '/faqs' },
       { name: 'Blog', href: '/blog' },
     ],
     legal: [
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms & Conditions', href: '/terms' },
+      { name: 'Privacy Policy', href: '/privacy-policy' },
+      { name: 'Terms & Conditions', href: '/terms-conditions' },
       { name: 'Cookie Policy', href: '/cookies' },
     ],
     social: [

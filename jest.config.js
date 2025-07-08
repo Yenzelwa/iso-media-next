@@ -45,8 +45,6 @@ const customJestConfig = {
     '^swiper/react$': '<rootDir>/node_modules/swiper/swiper.js',
   '^swiper/css$': '<rootDir>/__tests__/__mocks__/styleMock.js',
 '^swiper/css/.*$': '<rootDir>/__tests__/__mocks__/styleMock.js',
-
-
     '^@/(.*)$': '<rootDir>/$1', // Alias for @ imports
   },
 

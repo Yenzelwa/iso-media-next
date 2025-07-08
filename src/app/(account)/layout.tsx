@@ -12,9 +12,10 @@ interface Props {
 
 const AccountRootLayout: React.FC <Props> = ({ children } ) => {
   return (
+     <html lang="en">
+      <body>
     <AuthProvider>
-    <html lang="en">
-      <body className="bg-black">
+      <div className="bg-black">
       
 
     <div className="flex-shrink-0 text-white "> 
@@ -27,9 +28,10 @@ const AccountRootLayout: React.FC <Props> = ({ children } ) => {
         {children}
 
       </div>
-      </body>
-    </html>
+      </div>
     </AuthProvider>
+    </body>
+    </html>
   );
 }
 export default AccountRootLayout;
