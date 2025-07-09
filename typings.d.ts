@@ -130,6 +130,7 @@ declare module "next-auth" {
   }
 }
 export interface Membership {
+  full_name:string;
   plan: string;
   nextBilling: string;
   price: number;

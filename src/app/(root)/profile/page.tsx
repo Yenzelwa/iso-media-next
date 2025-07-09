@@ -16,6 +16,7 @@ export default function AccountSettings() {
   const router = useRouter()
 
   const [membership] = useState<Membership>(() => ({
+    full_name: "John Doe",
     plan: "Premium",
     nextBilling: "2024-02-15",
     price: 19.99,
@@ -93,17 +94,18 @@ export default function AccountSettings() {
   }));
 
   return (
-    <main className="w-screen text-white bg-neutral-900">
-      <div className="px-6 py-16 mx-auto max-w-[1200px]">
-        <h1 className="mb-12 text-5xl font-bold max-sm:text-3xl">
+    <>
+    
+      <div className="px-6 py-16">
+        <h1 className="mb-12 text-4xl font-bold max-sm:text-3xl justify-center">
           Account Settings
         </h1>
-        <div className="flex gap-8 max-md:flex-col">
+        <div className="flex flex-col md:flex-row gap-8 w-full justify-center">
           <NavigationTabs
             activeTab={activeTab}
             onTabChange={(tab) => setActiveTab(tab as TabType)}
           />
-          <div className="flex-[grow]">
+          <div className="flex-[grow] w-full md:w-[514px]">
             {activeTab === "membership" && (
               <MembershipSection
                 membership={membership}
@@ -127,6 +129,7 @@ export default function AccountSettings() {
           }}
         />
       </div>
-    </main>
+    </>
+  
   );
 }

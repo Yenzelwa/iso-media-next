@@ -31,10 +31,17 @@ export function MembershipSection({ membership, billingHistory }: MembershipSect
         <h2 className="mb-6 text-2xl font-bold">Membership</h2>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between max-sm:flex-col max-sm:gap-2">
+            <span className="text-neutral-400">Name</span>
+            <div className="flex gap-4 items-center">
+              <span>{membership.full_name}</span>
+              <button className="text-sm text-red-600">Edit name</button>
+            </div>
+          </div>
+          <div className="flex justify-between max-sm:flex-col max-sm:gap-2">
             <span className="text-neutral-400">Email</span>
             <div className="flex gap-4 items-center">
               <span>{membership.email}</span>
-              <button className="text-sm text-red-600">Change</button>
+              <button className="text-sm text-red-600">Change email</button>
             </div>
           </div>
           <div className="flex justify-between max-sm:flex-col max-sm:gap-2">
