@@ -6,6 +6,7 @@ import { setCookie, getCookie, deleteCookie } from 'cookies-next'; // Correct fu
 // Define the shape of the context
 interface AuthContextType {
   user: any;
+  updateUser: any;
   token: string | null;
   login: (token: string, user: any) => void;
   logout: () => void;
@@ -32,6 +33,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
      setLoading(false);
   }, []);
+  
+  const updateUser = (newUser: any) => {
+    setUser(newUser);
+    setCookie('auth_user', JSON.stringify(newUser), { maxAge: 60 * 60 * 24 * 7 });
+  };
 
   const login = (token: string, user: any) => {
     setUser(user);
@@ -52,11 +58,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, updateUser, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+
 
 // Custom hook to use the AuthContext
 export const useAuth = () => {
