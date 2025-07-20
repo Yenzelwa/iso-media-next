@@ -30,13 +30,6 @@ const RootLayout: React.FC<Props> = ({ children }) => {
             <AuthProvider>
               <div className="flex flex-col h-screen justify-between">
                 <Navigation />
-                {/* <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<AccountSettings />} />
-                    <Route path="/account-settings" element={<AccountSettings />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </BrowserRouter> */}
                 {children}
                 <Footer />
               </div>

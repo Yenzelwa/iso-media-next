@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Modal from "./Modal";
+import { set } from "lodash";
 
 interface EditNameModalProps {
   isOpen: boolean;
@@ -14,11 +15,9 @@ export default function EditNameModal({
   currentName,
   onSave,
 }: EditNameModalProps) {
-  const [firstName, setFirstName] = useState(currentName.split(" ")[0] || "");
-  const [lastName, setLastName] = useState(currentName.split(" ")[1] || "");
+  const [fullName, setFullName] = useState(currentName || "");
 
   const handleSave = () => {
-    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
     if (fullName) {
       onSave(fullName);
       onClose();
@@ -30,27 +29,14 @@ export default function EditNameModal({
       <div className="space-y-4">
         <div>
           <label className="block text-app-gray text-sm font-medium mb-2">
-            First Name
+            Full Name
           </label>
           <input
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             className="w-full px-4 py-3 bg-app-header border border-app-border/30 rounded-lg text-white placeholder-app-gray focus:outline-none focus:border-app-red/50 transition-colors duration-200"
             placeholder="Enter first name"
-          />
-        </div>
-
-        <div>
-          <label className="block text-app-gray text-sm font-medium mb-2">
-            Last Name
-          </label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="w-full px-4 py-3 bg-app-header border border-app-border/30 rounded-lg text-white placeholder-app-gray focus:outline-none focus:border-app-red/50 transition-colors duration-200"
-            placeholder="Enter last name"
           />
         </div>
 

@@ -30,10 +30,7 @@ describe('MembershipSection', () => {
 
   beforeEach(() => {
     render(
-      <MembershipSection
-        membership={mockMembership}
-        billingHistory={mockBillingHistory}
-      />
+      <MembershipSection/>
     );
   });
 
@@ -47,6 +44,7 @@ describe('MembershipSection', () => {
     expect(screen.getByText('Edit name')).toBeInTheDocument();
     expect(screen.getByText('Change email')).toBeInTheDocument();
     expect(screen.getByText('Change password')).toBeInTheDocument();
+     expect(screen.getByText('Change cellPhone')).toBeInTheDocument();
   });
 
   it('renders billing details section', () => {

@@ -52,18 +52,6 @@ export default function ChangePhoneModal({
       <div className="space-y-4">
         <div>
           <label className="block text-app-gray text-sm font-medium mb-2">
-            Current Phone Number
-          </label>
-          <input
-            type="text"
-            value={currentPhone}
-            disabled
-            className="w-full px-4 py-3 bg-app-header/50 border border-app-border/20 rounded-lg text-app-gray"
-          />
-        </div>
-
-        <div>
-          <label className="block text-app-gray text-sm font-medium mb-2">
             New Phone Number
           </label>
           <input

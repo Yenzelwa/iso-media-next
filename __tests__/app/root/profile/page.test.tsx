@@ -48,7 +48,7 @@ describe('AccountSettings Component', () => {
 
     render(<AccountSettings />);
     expect(screen.getByText('Account Settings')).toBeInTheDocument();
-    expect(screen.getByText('Membership Section Content')).toBeInTheDocument();
+    expect(screen.getByText('Membership')).toBeInTheDocument();
   });
 
   it('renders plan details when plan tab is clicked', () => {

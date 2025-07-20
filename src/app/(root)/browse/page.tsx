@@ -125,13 +125,13 @@ const BrowsePage = () => {
   const {user, loading} = useAuth();
   const router = useRouter();
 
-     useEffect(() => {
-    // Ensure this is only called on the client side
-    if (typeof window !== "undefined" && !loading && !user) {
-      // If no session is found, redirect to login page
-      router.push("/login");
-    }
-  }, [user, loading, router]);
+  //    useEffect(() => {
+  //   // Ensure this is only called on the client side
+  //   if (typeof window !== "undefined" && !loading && !user) {
+  //     // If no session is found, redirect to login page
+  //     router.push("/login");
+  //   }
+  // }, [user, loading, router]);
   
   return (
     <div className="text-white">
