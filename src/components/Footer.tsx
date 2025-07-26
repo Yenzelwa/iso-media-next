@@ -1,10 +1,30 @@
-
-
-"use client";
 import React from 'react';
 import Link from 'next/link';
-import { Logo } from './Logo';
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+
+// Social Media Icons as SVG components
+const FacebookIcon = () => (
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+);
+
+const TwitterIcon = () => (
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+  </svg>
+);
+
+const InstagramIcon = () => (
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323C5.902 8.198 7.053 7.708 8.449 7.708s2.448.49 3.323 1.297c.897.875 1.387 2.026 1.387 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.718 0c-1.297 0-2.448-.49-3.323-1.297-.897-.875-1.387-2.026-1.387-3.323s.49-2.448 1.297-3.323c.875-.897 2.026-1.387 3.323-1.387s2.448.49 3.323 1.297c.897.875 1.387 2.026 1.387 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297z"/>
+  </svg>
+);
+
+const YouTubeIcon = () => (
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  </svg>
+);
 
 export const Footer = () => {
   const footerLinks = {
@@ -20,43 +40,69 @@ export const Footer = () => {
       { name: 'Cookie Policy', href: '/cookies' },
     ],
     social: [
-      { name: 'Facebook', icon: FaFacebookF, href: '#' },
-      { name: 'Twitter', icon: FaTwitter, href: '#' },
-      { name: 'Instagram', icon: FaInstagram, href: '#' },
-      { name: 'YouTube', icon: FaYoutube, href: '#' },
+      { name: 'Facebook', icon: FacebookIcon, href: '#' },
+      { name: 'Twitter', icon: TwitterIcon, href: '#' },
+      { name: 'Instagram', icon: InstagramIcon, href: '#' },
+      { name: 'YouTube', icon: YouTubeIcon, href: '#' },
     ],
   };
 
   return (
-    <footer className="bg-neutral border-t border-neutral">
+    <div className="bg-neutral border-t border-neutral">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
           {/* Logo and Description */}
           <div className="col-span-1 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <Logo />
-              <span className="text-xl font-semibold text-white">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 border border-red-400/30">
+                  <div className="w-6 h-6 bg-white rounded-lg transition-all duration-300 group-hover:rounded-full"></div>
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              </div>
+              <span className="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-red-400">
                 IsolaKwaMUNTU
               </span>
             </Link>
-            <p className="mt-4 text-sm text-gray">
-              Your premier destination for African content. Watch unlimited movies, series, and documentaries anytime, anywhere.
+            <p className="mt-6 text-gray-400 leading-relaxed max-w-sm">
+              Your premier destination for transformative African content. Watch unlimited movies, series, and documentaries that elevate consciousness and inspire spiritual growth.
             </p>
+            
+            {/* Social Media Icons */}
+            <div className="flex items-center gap-4 mt-8">
+              {footerLinks.social.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-gradient-to-r hover:from-red-600 hover:to-red-700 transition-all duration-300 group hover:scale-110 border border-gray-700/50 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/25"
+                    aria-label={social.name}
+                  >
+                    <Icon />
+                  </a>
+                );
+              })}
+            </div>
           </div>
 
           {/* Resources */}
           <div>
-            <h3 className="text-white font-semibold uppercase tracking-wider mb-4">
+            <h3 className="text-white font-bold text-lg uppercase tracking-wider mb-6 relative">
               Resources
+              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-red-500 to-red-600 rounded-full"></div>
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray hover:text-red transition-colors duration-200 text-sm"
+                    className="text-gray-400 hover:text-red-400 transition-all duration-300 text-sm hover:translate-x-1 transform flex items-center group relative"
                   >
+                    <span className="w-1 h-1 bg-red-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:shadow-sm group-hover:shadow-red-500"></span>
                     {link.name}
+                    <span className="absolute inset-0 bg-red-500/5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></span>
                   </Link>
                 </li>
               ))}
@@ -65,17 +111,20 @@ export const Footer = () => {
 
           {/* Legal */}
           <div>
-            <h3 className="text-white font-semibold uppercase tracking-wider mb-4">
+            <h3 className="text-white font-bold text-lg uppercase tracking-wider mb-6 relative">
               Legal
+              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-red-500 to-red-600 rounded-full"></div>
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray hover:text-red transition-colors duration-200 text-sm"
+                    className="text-gray-400 hover:text-red-400 transition-all duration-300 text-sm hover:translate-x-1 transform flex items-center group relative"
                   >
+                    <span className="w-1 h-1 bg-red-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:shadow-sm group-hover:shadow-red-500"></span>
                     {link.name}
+                    <span className="absolute inset-0 bg-red-500/5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></span>
                   </Link>
                 </li>
               ))}
@@ -84,125 +133,66 @@ export const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-white font-semibold uppercase tracking-wider mb-4">
-              Stay Updated
+            <h3 className="text-white font-bold text-lg uppercase tracking-wider mb-6 relative">
+              Stay Connected
+              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-red-500 to-red-600 rounded-full"></div>
             </h3>
-            <p className="text-sm text-gray mb-4">
-              Subscribe to our newsletter for updates and exclusive content.
+            <p className="text-gray-400 mb-6 leading-relaxed">
+              Subscribe to our newsletter for updates, exclusive content, and spiritual insights delivered to your inbox.
             </p>
-            <form className="flex flex-col gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-2 bg-neutral border border-neutral rounded-md text-white placeholder-gray focus:outline-none focus:border-red transition-colors duration-200"
-              />
+            <form className="space-y-4">
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                />
+              </div>
               <button
                 type="submit"
-                className="px-4 py-2 bg-red-800 text-white rounded-md hover:bg-red transition-colors duration-200"
+                className="bg-red-900 text-white px-4 py-2 hover:bg-red-800 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
               >
-                Subscribe
+                Subscribe Now
               </button>
             </form>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-12 pt-8 bg-neutral border-t border-neutral">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-4">
-              {footerLinks.social.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <Link
-                    key={social.name}
-                    href={social.href}
-                    className="p-2 bg-neutral rounded-full hover:bg-red transition-colors duration-200 group"
-                    aria-label={social.name}
-                  >
-                    <Icon className="w-5 h-5 text-gray group-hover:text-white" />
-                  </Link>
-                );
-              })}
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center gap-4">
-              <p className="text-sm text-gray">
+        <div className="mt-16 pt-8 border-t border-gray-800/50">
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <p className="text-gray-400 text-sm">
                 © {new Date().getFullYear()} IsolaKwaMUNTU. All rights reserved.
               </p>
-              <div className="flex items-center gap-2">
-                <span className="text-gray">|</span>
+              <div className="flex items-center gap-6">
+                <span className="text-gray-600">|</span>
                 <Link
                   href="/sitemap"
-                  className="text-sm text-gray hover:text-red-500 transition-colors duration-200"
+                  className="text-sm text-gray-400 hover:text-red-400 transition-colors duration-300"
                 >
                   Sitemap
                 </Link>
+                <span className="text-gray-600">|</span>
+                <Link
+                  href="/accessibility"
+                  className="text-sm text-gray-400 hover:text-red-400 transition-colors duration-300"
+                >
+                  Accessibility
+                </Link>
               </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="text-gray-400 text-sm">Made with</span>
+              <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/50"></div>
+              <span className="text-gray-400 text-sm">for conscious living</span>
             </div>
           </div>
         </div>
       </div>
-    </footer>
+    </div>
   );
 };
 
-// import { Logo } from './Logo';
-
-// export const Footer = () => {
-//   return (
-//     <footer className="flex flex-wrap justify-between items-center p-4 bg-neutral-900">
-//       <div className="px-4 py-8 mx-auto w-full max-w-screen-xl">
-//         <div className="flex justify-between">
-//           <div className="flex shrink-0 items-center mr-6 text-sm leading-5">
-//             <Logo />
-//             <span className="text-xl font-semibold tracking-tight leading-7">
-//               IsolaKwaMUNTU
-//             </span>
-//           </div>
-//           <nav className="grid gap-6">
-//             <div>
-//               <h2 className="mb-6 text-sm font-semibold leading-5 uppercase">
-//                 Resources
-//               </h2>
-//               <ul className="font-medium">
-//                 <li className="mb-4"><a href="#about">About Us</a></li>
-//                 <li className="mb-4"><a href="#contact">Contact Us</a></li>
-//                 <li className="mb-4"><a href="#faq">FAQs</a></li>
-//               </ul>
-//             </div>
-//             <div>
-//               <h2 className="mb-6 text-sm font-semibold leading-5 uppercase">
-//                 Legal
-//               </h2>
-//               <ul className="font-medium">
-//                 <li className="mb-4"><a href="#privacy">Privacy Policy</a></li>
-//                 <li><a href="#terms">Terms & Conditions</a></li>
-//               </ul>
-//             </div>
-//           </nav>
-//         </div>
-//         <hr className="mx-auto my-8 h-0 border-t border-red-900" />
-//         <div className="flex justify-between items-center">
-//           <span className="text-sm leading-5 text-center">© 2023</span>
-//           <div className="flex justify-center gap-5">
-//             <a href="#facebook" aria-label="Facebook">
-//               <svg className="w-4 h-4 fill-white" viewBox="0 0 8 19">
-//                 <path fillRule="evenodd" d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z" />
-//               </svg>
-//             </a>
-//             <a href="#twitter" aria-label="Twitter">
-//               <svg className="w-4 h-4 fill-white" viewBox="0 0 20 17">
-//                 <path fillRule="evenodd" d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z" />
-//               </svg>
-//             </a>
-//             <a href="#dribbble" aria-label="Dribbble">
-//               <svg className="w-4 h-4 fill-white" viewBox="0 0 20 20">
-//                 <path fillRule="evenodd" d="M10 0a10 10 0 1 0 10 10A10.009 10.009 0 0 0 10 0Zm6.613 4.614a8.523 8.523 0 0 1 1.93 5.32 20.094 20.094 0 0 0-5.949-.274c-.059-.149-.122-.292-.184-.441a23.879 23.879 0 0 0-.566-1.239 11.41 11.41 0 0 0 4.769-3.366ZM8 1.707a8.821 8.821 0 0 1 2-.238 8.5 8.5 0 0 1 5.664 2.152 9.608 9.608 0 0 1-4.476 3.087A45.758 45.758 0 0 0 8 1.707ZM1.642 8.262a8.57 8.57 0 0 1 4.73-5.981A53.998 53.998 0 0 1 9.54 7.222a32.078 32.078 0 0 1-7.9 1.04h.002Zm2.01 7.46a8.51 8.51 0 0 1-2.2-5.707v-.262a31.64 31.64 0 0 0 8.777-1.219c.243.477.477.964.692 1.449-.114.032-.227.067-.336.1a13.569 13.569 0 0 0-6.942 5.636l.009.003ZM10 18.556a8.508 8.508 0 0 1-5.243-1.8 11.717 11.717 0 0 1 6.7-5.332.509.509 0 0 1 .055-.02 35.65 35.65 0 0 1 1.819 6.476 8.476 8.476 0 0 1-3.331.676Zm4.772-1.462A37.232 37.232 0 0 0 13.113 11a12.513 12.513 0 0 1 5.321.364 8.56 8.56 0 0 1-3.66 5.73h-.002Z" />
-//               </svg>
-//             </a>
-//           </div>
-//         </div>
-//       </div>
-//     </footer>
-//   );
-// };
+export default Footer;

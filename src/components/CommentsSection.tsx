@@ -1,388 +1,509 @@
-'use client';
+import React, { useState } from 'react';
+import { MessageCircle, Send, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp } from 'lucide-react';
 
-import { IsoComment, VideoComment } from "@/typings";
-import React, { FormEvent, useEffect, useState } from "react";
+interface Comment {
+  id: number;
+  user: {
+    name: string;
+    avatar: string;
+  };
+  text: string;
+  likes: number;
+  dislikes: number;
+  timestamp: Date;
+  replies?: Comment[];
+}
 
-interface CommentProps {
+interface CommentsSectionProps {
   video_id: number;
 }
 
-interface ReplyVisibleMap {
-  [key: string]: boolean;
-}
+const CommentSection: React.FC<CommentsSectionProps> = ({ video_id }) => {
+  const [comments, setComments] = useState<Comment[]>([
+    {
+      id: 1,
+      user: {
+        name: 'Spiritual Seeker',
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: 'This episode really opened my eyes to new perspectives on consciousness. The insights shared here are profound and life-changing.',
+      likes: 24,
+      dislikes: 1,
+      timestamp: new Date('2024-01-15T10:30:00'),
+      replies: [
+        {
+          id: 11,
+          user: {
+            name: 'Mindful Journey',
+            avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+          },
+          text: 'I completely agree! This content has helped me on my spiritual journey.',
+          likes: 8,
+          dislikes: 0,
+          timestamp: new Date('2024-01-15T11:45:00')
+        },
+        {
+          id: 12,
+          user: {
+            name: 'Peaceful Mind',
+            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+          },
+          text: 'The meditation techniques mentioned really work! Thank you for sharing.',
+          likes: 5,
+          dislikes: 0,
+          timestamp: new Date('2024-01-15T12:15:00')
+        }
+      ]
+    },
+    {
+      id: 2,
+      user: {
+        name: 'Conscious Explorer',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: 'The production quality and depth of knowledge presented in this series is exceptional. Thank you for creating such valuable content.',
+      likes: 18,
+      dislikes: 0,
+      timestamp: new Date('2024-01-14T16:20:00'),
+      replies: [
+        {
+          id: 21,
+          user: {
+            name: 'Wisdom Seeker',
+            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+          },
+          text: 'Absolutely! The cinematography and sound design really enhance the spiritual experience.',
+          likes: 12,
+          dislikes: 0,
+          timestamp: new Date('2024-01-14T17:30:00')
+        }
+      ]
+    },
+    {
+      id: 3,
+      user: {
+        name: 'Awakening Soul',
+        avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b2b5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: 'Can anyone recommend similar content? This episode resonated deeply with me and I\'m looking for more transformational material.',
+      likes: 12,
+      dislikes: 0,
+      timestamp: new Date('2024-01-14T09:15:00')
+    }
+  ]);
 
-export function CommentSection({ video_id }: CommentProps) {
-  const [comments, setComments] = useState<VideoComment[]>([]);
-  const [comment, setComment] = useState('');
-  const [isoComment, setIsoComment] = useState<IsoComment>();
-  const [showReplies, setShowReplies] = useState(false);
-  const [replyVisible, setReplyVisible] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [showReplies, setShowReplies] = useState<{ [key: number]: boolean }>({});
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState('');
-  const [replyVisibleMap, setReplyVisibleMap] = useState<ReplyVisibleMap>({});
-  const [repliesVisibleMap, setRepliesVisibleMap] = useState<ReplyVisibleMap>({});
+  const [visibleComments, setVisibleComments] = useState(3);
+  const [commentLikes, setCommentLikes] = useState<{ [key: number]: { liked: boolean; disliked: boolean } }>({});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Mock data for testing
-      const comments: VideoComment[] = [
-                    {
-                        iso_comment: {
-                            id: 1,
-                            comment: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.",
-                            customer_id: 1
+  // Mock additional comments for load more functionality
+  const allComments = [
+    ...comments,
+    {
+      id: 4,
+      user: {
+        name: 'Inner Light',
+        avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: 'The way this series approaches ancient wisdom through a modern lens is remarkable. It bridges the gap between traditional spirituality and contemporary understanding.',
+      likes: 31,
+      dislikes: 2,
+      timestamp: new Date('2024-01-13T14:22:00')
+    },
+    {
+      id: 5,
+      user: {
+        name: 'Enlightened Path',
+        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: 'I\'ve been practicing meditation for years, but this episode taught me techniques I\'d never encountered before. Truly transformative content.',
+      likes: 45,
+      dislikes: 1,
+      timestamp: new Date('2024-01-13T09:45:00'),
+      replies: [
+        {
+          id: 51,
+          user: {
+            name: 'Meditation Master',
+            avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+          },
+          text: 'Which technique resonated most with you? I\'m always looking to expand my practice.',
+          likes: 7,
+          dislikes: 0,
+          timestamp: new Date('2024-01-13T10:15:00')
+        }
+      ]
+    }
+  ];
 
-                        },
-                        post_date: new Date('2024-01-23'),
-                        customer: {
-                            id: 2556,
-                            name: "John Smith"
-                        },
-                        reply: [
-                            {
-                                id: 1,
-                                reply: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-                                posted_date: new Date('2024/02/10'),
-                                customer: {
-                                    id: 2556,
-                                    name: "Nokukhanya Dumakude"
-                                }
-                            },
-                            {
-                                id: 2,
-                                reply: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-                                posted_date: new Date('2024/01/05'),
-                                customer: {
-                                    id: 2556,
-                                    name: "Nicholas Jili"
-                                }
-                            },
-                            {
-                                id: 3,
-                                reply: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-                                posted_date: new Date('2024/02/12'),
-                                customer: {
-                                    id: 2556,
-                                    name: "Umi Jili"
-                                }
-                            },
-                        ]
-                    },
-                    {
-                        iso_comment: {
-                            id: 2,
-                            comment: "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.",
-                            customer_id: 2
-                        },
-                        post_date: new Date('2024-02-13'),
-                        customer: {
-                            id: 2556,
-                            name: "Tim Cook"
-                        },
-                        reply: [
-                            {
-                                id: 1,
-                                reply: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-                                posted_date: new Date('2024/02/11'),
-                                customer: {
-                                    id: 2556,
-                                    name: "New Guy"
-                                }
-                            },
-                            {
-                                id: 2,
-                                reply: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-                                posted_date: new Date('2024/03/09'),
-                                customer: {
-                                    id: 2556,
-                                    name: "Nicholas Jili"
-                                }
-                            },
-                            {
-                                id: 3,
-                                reply: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Enean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-                                posted_date: new Date('2024/02/01'),
-                                customer: {
-                                    id: 2556,
-                                    name: "Umi Jili"
-                                }
-                            },
-                        ]
-                    }
+  const handleSubmitComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim()) return;
 
-                ];
-                setComments(comments);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
+    const comment: Comment = {
+      id: Date.now(),
+      user: {
+        name: 'You',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: newComment,
+      likes: 0,
+      dislikes: 0,
+      timestamp: new Date()
     };
 
-    fetchData();
-  }, [video_id]);
+    setComments([comment, ...comments]);
+    setNewComment('');
+  };
 
-  useEffect(() => {
-    if (isoComment) {
-      setComments(prevComments => {
-        const newComment: VideoComment = {
-          iso_comment: {
-            id: isoComment.id,
-            comment: isoComment.comment,
-            customer_id: isoComment.customer_id
-          },
-          post_date: new Date(),
-          customer: {
-            id: 2556,
-            name: "Umi Jili"
-          },
-          reply: null
-        };
-        return [...prevComments, newComment];
-      });
-    }
-  }, [isoComment]);
+  const handleSubmitReply = (e: React.FormEvent, commentId: number) => {
+    e.preventDefault();
+    if (!replyText.trim()) return;
 
-  function PostComment() {
-    const data: IsoComment = {
-      id: Math.floor(Math.random() * 1000),
-      comment: comment,
-      customer_id: 1
+    const reply: Comment = {
+      id: Date.now(),
+      user: {
+        name: 'You',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      },
+      text: replyText,
+      likes: 0,
+      dislikes: 0,
+      timestamp: new Date()
     };
-    setIsoComment(data);
-    setComment('');
-  }
 
-  function formatPostedTime(postDate: string) {
-    const currentDate = new Date();
-    const postedDate = new Date(postDate);
-    const diffInMs = currentDate.getTime() - postedDate.getTime();
-    const diffInSeconds = Math.floor(diffInMs / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
+    setComments(prevComments =>
+      prevComments.map(comment =>
+        comment.id === commentId
+          ? { ...comment, replies: [...(comment.replies || []), reply] }
+          : comment
+      )
+    );
 
-    if (diffInDays > 0) {
-      return `${diffInDays} day${diffInDays !== 1 ? 's' : ''}`;
-    } else if (diffInHours > 0) {
-      return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''}`;
-    } else if (diffInMinutes > 0) {
-      return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''}`;
-    }
-    return 'Just now';
-  }
-
-  const toggleReply = (commentId: number) => {
-    setReplyVisibleMap(prevState => ({
-      ...prevState,
-      [commentId]: !prevState[commentId]
-    }));
+    setReplyText('');
+    setReplyingTo(null);
   };
 
   const toggleReplies = (commentId: number) => {
-    setRepliesVisibleMap(prevState => ({
-      ...prevState,
-      [commentId]: !prevState[commentId]
+    setShowReplies(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId]
     }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>, commentId: number) => {
-    event.preventDefault();
-
-    const newReply = {
-      id: comments.length + 1,
-      reply: replyText,
-      posted_date: new Date(),
-      customer: {
-        id: 2556,
-        name: "John Doe"
-      }
-    };
-
-    const commentIndexToUpdate = 2;
-    const updatedComments = comments ? [...comments] : [];
-
-    if (updatedComments[commentIndexToUpdate]?.reply) {
-      updatedComments[commentIndexToUpdate].reply.push(newReply);
-    } else if (updatedComments[commentIndexToUpdate]) {
-      updatedComments[commentIndexToUpdate].reply = [newReply];
+  const handleCommentLike = (commentId: number, isReply = false, parentId?: number) => {
+    if (isReply && parentId) {
+      setComments(prevComments =>
+        prevComments.map(comment =>
+          comment.id === parentId
+            ? {
+                ...comment,
+                replies: comment.replies?.map(reply =>
+                  reply.id === commentId
+                    ? { ...reply, likes: reply.likes + (commentLikes[commentId]?.liked ? -1 : 1) }
+                    : reply
+                )
+              }
+            : comment
+        )
+      );
+    } else {
+      setComments(prevComments =>
+        prevComments.map(comment =>
+          comment.id === commentId
+            ? { ...comment, likes: comment.likes + (commentLikes[commentId]?.liked ? -1 : 1) }
+            : comment
+        )
+      );
     }
 
-    setReplyText('');
-    setReplyVisible(false);
-    updateComments(updatedComments);
-    toggleReply(commentId);
+    setCommentLikes(prev => ({
+      ...prev,
+      [commentId]: {
+        liked: !prev[commentId]?.liked,
+        disliked: false
+      }
+    }));
   };
 
-  const updateComments = (updatedComments: VideoComment[]) => {
-    setComments(updatedComments);
+  const handleCommentDislike = (commentId: number, isReply = false, parentId?: number) => {
+    if (isReply && parentId) {
+      setComments(prevComments =>
+        prevComments.map(comment =>
+          comment.id === parentId
+            ? {
+                ...comment,
+                replies: comment.replies?.map(reply =>
+                  reply.id === commentId
+                    ? { ...reply, dislikes: reply.dislikes + (commentLikes[commentId]?.disliked ? -1 : 1) }
+                    : reply
+                )
+              }
+            : comment
+        )
+      );
+    } else {
+      setComments(prevComments =>
+        prevComments.map(comment =>
+          comment.id === commentId
+            ? { ...comment, dislikes: comment.dislikes + (commentLikes[commentId]?.disliked ? -1 : 1) }
+            : comment
+        )
+      );
+    }
+
+    setCommentLikes(prev => ({
+      ...prev,
+      [commentId]: {
+        liked: false,
+        disliked: !prev[commentId]?.disliked
+      }
+    }));
   };
 
-  function handleTextareaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    setComment(textarea.value);
-  }
+  const loadMoreComments = () => {
+    setVisibleComments(prev => Math.min(prev + 3, allComments.length));
+  };
 
-  function handleReplyTextareaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    setReplyText(textarea.value);
-  }
+  const formatTimestamp = (date: Date) => {
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
+    return date.toLocaleDateString();
+  };
 
   return (
-         <section className="comments-section bg-gray-900 rounded-xl shadow-2xl">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold text-white mb-6">Comments</h2>
-
-        {/* Comment Input */}
-        <div className="flex items-center space-x-4 mb-8">
-          <div className="flex-grow">
-            <textarea
-              rows={1}
-              className="w-full p-4 rounded-xl border border-gray-700 bg-gray-800 placeholder-gray-400 text-white resize-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200"
-              placeholder="Share your thoughts"
-              value={comment}
-              onChange={handleTextareaChange}
-            />
-          </div>
-          <button
-            type="button"
-            className="bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600 transform hover:scale-105 transition duration-200 font-semibold shadow-lg"
-            onClick={PostComment}
-          >
-            Comment
-          </button>
+    <div className="bg-gradient-to-br from-gray-900/80 to-slate-900/80 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8">
+      <div className="flex items-center space-x-4 mb-8">
+        <div className="bg-red-600/20 p-3 rounded-xl">
+          <MessageCircle className="w-6 h-6 text-red-400" />
         </div>
-
-        {/* Comments List */}
-        <div className="space-y-6">
-          {comments.map((videoComment) => (
-            <article
-              key={videoComment.iso_comment.id}
-              className="bg-gray-800 rounded-xl p-6 shadow-lg"
-            >
-              {/* Comment Header */}
-              <header className="flex items-center space-x-4 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold">
-                  {videoComment.customer.name.charAt(0)}
-                </div>
-                <div className="flex-grow">
-                  <span className="text-white font-semibold hover:text-red-500 transition duration-200">
-                    {videoComment.customer.name}
-                  </span>
-                  <span className="text-gray-400 text-sm ml-3">
-                    {formatPostedTime(videoComment.post_date.toString())}
-                  </span>
-                </div>
-              </header>
-
-              {/* Comment Content */}
-              <div className="mb-4">
-                <p className="text-gray-300 leading-relaxed">
-                  {videoComment.iso_comment.comment}
-                </p>
-                <div className="flex items-center space-x-4 mt-4">
-                  <button
-                    className="text-gray-400 hover:text-red-500 flex items-center space-x-2 transition duration-200"
-                    onClick={() => toggleReply(videoComment.iso_comment.id)}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-                    </svg>
-                    <span>Reply</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Reply Form */}
-              {replyVisibleMap[videoComment.iso_comment.id] && (
-                <form
-                  onSubmit={(e) => handleSubmit(e, videoComment.iso_comment.id)}
-                  className="ml-8 mt-4"
-                >
-                  <textarea
-                    rows={1}
-                    className="w-full p-4 rounded-xl border border-gray-700 bg-gray-900 placeholder-gray-400 text-white resize-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200"
-                    placeholder="Write your reply..."
-                    onChange={handleReplyTextareaChange}
-                    value={replyText}
-                  />
-                  <div className="flex justify-end space-x-3 mt-3">
-                    <button
-                      type="button"
-                      onClick={() => toggleReply(videoComment.iso_comment.id)}
-                      className="px-4 py-2 rounded-lg text-gray-400 hover:text-gray-200 transition duration-200"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transform hover:scale-105 transition duration-200"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              )}
-
-              {/* Replies Toggle */}
-              {videoComment.reply && videoComment.reply.length > 0 && (
-                <div className="mt-4">
-                  <button
-                    className="text-gray-400 hover:text-red-500 flex items-center space-x-2 transition duration-200"
-                    onClick={() => {
-                      setShowReplies(!showReplies);
-                      toggleReplies(videoComment.iso_comment.id);
-                    }}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d={showReplies ? "M19 9l-7 7-7-7" : "M9 5l7 7-7 7"}
-                      />
-                    </svg>
-                    <span>
-                      {showReplies
-                        ? `Hide Replies (${videoComment.reply.length})`
-                        : `View Replies (${videoComment.reply.length})`
-                      }
-                    </span>
-                  </button>
-                </div>
-              )}
-
-              {/* Replies List */}
-              {repliesVisibleMap[videoComment.iso_comment.id] &&
-               showReplies &&
-               videoComment.reply?.map((reply, index) => (
-                <div key={index} className="ml-8 mt-4 bg-gray-900 rounded-xl p-4">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-sm font-semibold">
-                      {reply.customer.name.charAt(0)}
-                    </div>
-                    <div>
-                      <span className="text-white font-semibold hover:text-red-500 transition duration-200">
-                        {reply.customer.name}
-                      </span>
-                      <span className="text-gray-400 text-sm ml-3">
-                        {formatPostedTime(reply.posted_date.toString())}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 ml-11">
-                    {reply.reply}
-                  </p>
-                </div>
-              ))}
-            </article>
-          ))}
+        <div>
+          <h3 className="text-2xl font-bold text-white">Discussion</h3>
+          <p className="text-gray-400 text-sm">{allComments.length} comments in this conversation</p>
         </div>
       </div>
-    </section>
+
+      {/* Comment Form */}
+      <form onSubmit={handleSubmitComment} className="mb-10">
+        <div className="flex space-x-4">
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt="Your avatar"
+              className="w-12 h-12 rounded-full ring-2 ring-red-500/20"
+            />
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+          </div>
+          <div className="flex-1">
+            <div className="bg-gray-800/30 rounded-2xl border border-gray-700/30 focus-within:border-red-500/50 transition-all duration-300">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Share your thoughts about this transformative episode..."
+                className="w-full bg-transparent px-6 py-4 text-white placeholder-gray-400 focus:outline-none resize-none rounded-2xl"
+                rows={3}
+              />
+              <div className="flex justify-between items-center px-6 pb-4">
+                <span className="text-gray-500 text-sm">Be respectful and constructive</span>
+                <button
+                  type="submit"
+                  disabled={!newComment.trim()}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white px-6 py-2 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 transform hover:scale-105 disabled:hover:scale-100"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Share</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      {/* Comments List */}
+      <div className="space-y-8">
+        {allComments.slice(0, visibleComments).map((comment) => (
+          <div key={comment.id} className="space-y-6">
+            {/* Main Comment */}
+            <div className="flex space-x-4">
+              <div className="relative">
+                <img
+                  src={comment.user.avatar}
+                  alt={comment.user.name}
+                  className="w-12 h-12 rounded-full ring-2 ring-gray-700/50"
+                />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+              </div>
+              <div className="flex-1">
+                <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <span className="font-bold text-white">{comment.user.name}</span>
+                    <span className="text-gray-400 text-sm">{formatTimestamp(comment.timestamp)}</span>
+                    <div className="flex items-center space-x-1 bg-gray-700/50 rounded-full px-2 py-1">
+                      <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                      <span className="text-gray-300 text-xs">Verified</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-200 leading-relaxed">{comment.text}</p>
+                </div>
+
+                {/* Comment Actions */}
+                <div className="flex items-center space-x-6 mt-4">
+                  <button
+                    onClick={() => handleCommentLike(comment.id)}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 ${
+                      commentLikes[comment.id]?.liked
+                        ? 'bg-red-600/20 text-red-400 border border-red-500/30'
+                        : 'text-gray-400 hover:text-red-400 hover:bg-red-600/10'
+                    }`}
+                  >
+                    <ThumbsUp className="w-4 h-4" />
+                    <span className="text-sm font-medium">{comment.likes}</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleCommentDislike(comment.id)}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 ${
+                      commentLikes[comment.id]?.disliked
+                        ? 'bg-gray-600/20 text-gray-300 border border-gray-500/30'
+                        : 'text-gray-400 hover:text-gray-300 hover:bg-gray-600/10'
+                    }`}
+                  >
+                    <ThumbsDown className="w-4 h-4" />
+                    <span className="text-sm font-medium">{comment.dislikes}</span>
+                  </button>
+
+                  <button
+                    onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
+                    className="text-gray-400 hover:text-white text-sm font-medium transition-colors px-3 py-2 rounded-xl hover:bg-gray-700/30"
+                  >
+                    Reply
+                  </button>
+
+                  {comment.replies && comment.replies.length > 0 && (
+                    <button
+                      onClick={() => toggleReplies(comment.id)}
+                      className="flex items-center space-x-2 text-red-400 hover:text-red-300 text-sm font-medium transition-colors px-3 py-2 rounded-xl hover:bg-red-600/10"
+                    >
+                      {showReplies[comment.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      <span>{showReplies[comment.id] ? 'Hide' : 'View'} {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Reply Form */}
+                {replyingTo === comment.id && (
+                  <form onSubmit={(e) => handleSubmitReply(e, comment.id)} className="mt-6 ml-4">
+                    <div className="flex space-x-3">
+                      <img
+                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt="Your avatar"
+                        className="w-10 h-10 rounded-full ring-2 ring-red-500/20"
+                      />
+                      <div className="flex-1">
+                        <div className="bg-gray-800/30 rounded-xl border border-gray-700/30 focus-within:border-red-500/50 transition-all duration-300">
+                          <textarea
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            placeholder={`Reply to ${comment.user.name}...`}
+                            className="w-full bg-transparent px-4 py-3 text-white placeholder-gray-400 focus:outline-none resize-none rounded-xl"
+                            rows={2}
+                          />
+                          <div className="flex justify-end items-center px-4 pb-3">
+                            <div className="flex space-x-2">
+                              <button
+                                type="button"
+                                onClick={() => setReplyingTo(null)}
+                                className="text-gray-400 hover:text-white px-4 py-2 rounded-lg transition-colors"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                type="submit"
+                                disabled={!replyText.trim()}
+                                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium transition-all duration-300"
+                              >
+                                Reply
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                )}
+
+                {/* Replies */}
+                {comment.replies && showReplies[comment.id] && (
+                  <div className="ml-8 mt-6 space-y-4 border-l-2 border-gray-700/30 pl-6">
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id} className="flex space-x-3">
+                        <div className="relative">
+                          <img
+                            src={reply.user.avatar}
+                            alt={reply.user.name}
+                            className="w-10 h-10 rounded-full ring-2 ring-gray-700/50"
+                          />
+                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-gray-800/20 backdrop-blur-sm rounded-xl p-4 border border-gray-700/20">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="font-semibold text-white text-sm">{reply.user.name}</span>
+                              <span className="text-gray-400 text-xs">{formatTimestamp(reply.timestamp)}</span>
+                            </div>
+                            <p className="text-gray-300 text-sm leading-relaxed">{reply.text}</p>
+                          </div>
+                          <div className="flex items-center space-x-4 mt-3">
+                            <button
+                              onClick={() => handleCommentLike(reply.id, true, comment.id)}
+                              className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+                                commentLikes[reply.id]?.liked
+                                  ? 'bg-red-600/20 text-red-400'
+                                  : 'text-gray-400 hover:text-red-400'
+                              }`}
+                            >
+                              <ThumbsUp className="w-3 h-3" />
+                              <span className="text-xs">{reply.likes}</span>
+                            </button>
+                            <button className="text-gray-400 hover:text-white text-xs transition-colors">
+                              Reply
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Load More Comments */}
+      {visibleComments < allComments.length && (
+        <div className="text-center mt-10">
+          <button
+            onClick={loadMoreComments}
+            className="bg-gray-800/50 hover:bg-gray-700/50 backdrop-blur-sm text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 border border-gray-700/50 hover:border-red-500/30 flex items-center space-x-3 mx-auto"
+          >
+            <ChevronDown className="w-5 h-5" />
+            <span>Load {Math.min(3, allComments.length - visibleComments)} more comments</span>
+          </button>
+          <p className="text-gray-400 text-sm mt-3">
+            Showing {visibleComments} of {allComments.length} comments
+          </p>
+        </div>
+      )}
+    </div>
   );
-}
+};
 
 export default CommentSection;

@@ -1,15 +1,12 @@
-"use client";
-import { useState } from 'react';
 import Link from 'next/link';
-import { useAuth } from '../app/context/authContext';
-import { Logo } from './Logo';
+import React, { useState } from 'react';
 
-export const Navigation = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { loading, user, logout } = useAuth();
+export const Navigation: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
@@ -19,116 +16,192 @@ export const Navigation = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await logout();
+  // Helper function to check if current route is active
+  const isActiveRoute = (path: string) => {
+    if (path === "/" && location.pathname === "/") return true;
+    if (path !== "/" && location.pathname.startsWith(path)) return true;
+    return false;
   };
 
   return (
-    <nav className="flex relative flex-wrap justify-between items-center p-4 -mt-0.5 w-full border-b border-solid bg-neutral-900 border-b-white border-b-opacity-10 max-md:p-3 max-sm:flex-col max-sm:gap-3 max-sm:items-start">
-      <div className="flex shrink-0 items-center mr-8 text-base tracking-normal leading-6">
-        <Link href="/" className="flex items-center">
-          <Logo />
-          <span className="text-xl font-semibold tracking-tight leading-7">
-            IsolaKwaMUNTU
-          </span>
-        </Link>
+    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out">
+      {/* Glassmorphism Background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-gray-900/90 to-black/95 backdrop-blur-xl border-b border-white/10">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-500/5 to-transparent"></div>
       </div>
 
-      <button
-        className="hidden p-2 text-white bg-transparent transition-opacity cursor-pointer border-none duration-200 ease-in-out max-sm:block max-sm:absolute max-sm:top-4 max-sm:right-4"
-        aria-label="Toggle mobile menu"
-        aria-controls="mobile-menu"
-        aria-expanded={mobileMenuOpen}
-        onClick={toggleMobileMenu}
-        onKeyDown={handleKeyPress}
-      >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 6H20M4 12H20M4 18H20"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-      </button>
+      {/* Navigation Container */}
+      <div className="relative max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between h-16 lg:h-20">
 
-      <div
-        id="mobile-menu"
-        role="navigation"
-        className={`flex grow items-center transition-all duration-300 ease-in-out
-          max-sm:flex-col max-sm:items-start max-sm:w-full
-          ${mobileMenuOpen
-            ? 'max-sm:max-h-[500px] max-sm:opacity-100 max-sm:visible max-sm:mt-12'
-            : 'max-sm:max-h-0 max-sm:opacity-0 max-sm:invisible max-sm:mt-0'
-          } max-sm:overflow-hidden`}
-        aria-hidden={!mobileMenuOpen}
-      >
-        <div className="grow text-sm font-semibold leading-5 uppercase">
-          <Link
-            href="/browse"
-            className="mr-6 text-white opacity-90 transition-opacity cursor-pointer duration-200 ease-in-out hover:opacity-100"
-          >
-            Browse
-          </Link>
-          <Link
-            href="/series"
-            className="mr-4 text-white opacity-90 hover:opacity-100"
-          >
-            Series
-          </Link>
-          <Link
-            href="/documentary"
-            className="text-white opacity-90 hover:opacity-100"
-          >
-            Documentary
-          </Link>
+          {/* Logo Section */}
+          <div className="flex items-center space-x-4 z-10">
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="relative">
+                {/* Logo Background with Enhanced Effects */}
+                <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-red-500/50 border border-red-400/30">
+                  <div className="w-6 h-6 bg-white rounded-lg transition-all duration-500 group-hover:rounded-full group-hover:scale-90 shadow-inner"></div>
+                </div>
+
+                {/* Animated Ring */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-2xl opacity-0 group-hover:opacity-75 transition-all duration-500 animate-pulse blur-sm"></div>
+
+                {/* Status Indicator - Simplified */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              </div>
+
+              {/* Brand Text */}
+              <div className="hidden sm:block">
+                <span className="text-2xl font-black text-white tracking-tight transition-all duration-300 group-hover:text-red-300 bg-gradient-to-r from-white to-gray-200 bg-clip-text">
+                  IsolaKwaMUNTU
+                </span>
+                <div className="text-xs text-gray-400 tracking-widest uppercase font-semibold opacity-75">
+                  Premium Streaming
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-2">
+            <div className="flex items-center space-x-1 bg-white/5 backdrop-blur-sm rounded-xl p-1 border border-white/10">
+              <Link
+                href="/"
+                className={`px-4 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
+                  isActiveRoute("/")
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 border border-red-400/50'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                BROWSE
+              </Link>
+              <Link
+                href="/series"
+                className={`px-4 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
+                  isActiveRoute("/series")
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 border border-red-400/50'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                SERIES
+              </Link>
+              <Link
+                href="/documentary"
+                className={`px-4 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
+                  isActiveRoute("/documentary")
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 border border-red-400/50'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                DOCUMENTARY
+              </Link>
+            </div>
+          </div>
+
+          {/* Desktop Actions - Simplified */}
+          <div className="hidden lg:flex items-center">
+            <Link
+              href="/login"
+              className="text-gray-300 hover:text-white px-6 py-2.5 font-semibold text-sm transition-all duration-300 mr-3"
+            >
+              Log In
+            </Link>
+            <Link
+              href="/register"
+              className="bg-red-900 text-white px-4 py-2 hover:bg-red-800 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button - Simplified */}
+          <div className="lg:hidden">
+            <button
+              onClick={toggleMobileMenu}
+              onKeyDown={handleKeyPress}
+              className="p-3 text-white hover:bg-white/10 rounded-xl transition-all duration-300"
+              aria-label="Toggle mobile menu"
+              aria-controls="mobile-menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              <div className="w-6 h-6 relative">
+                <span className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 top-3' : 'top-1'}`}></span>
+                <span className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 top-3 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                <span className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 top-3' : 'top-5'}`}></span>
+              </div>
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center max-sm:mt-4">
-          {loading ? (
-            <span className="text-white">Loading...</span>
-          ) : user ? (
-            <div className="flex items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
-              <span className="text-white mr-4 max-sm:mr-0">{user.email}</span>
-              <Link
-                href="/profile"
-                className="px-4 py-2 text-sm font-semibold leading-4 text-white hover:text-red-500 transition-colors duration-200"
-              >
-                Profile
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 ml-4 max-sm:ml-0 text-sm font-semibold leading-4 text-white hover:text-red-500 transition-colors duration-200"
-              >
-                Log Out
-              </button>
+        {/* Mobile Menu */}
+        <div className={`lg:hidden transition-all duration-500 ease-out ${
+          isMobileMenuOpen
+            ? 'max-h-screen opacity-100 pb-6'
+            : 'max-h-0 opacity-0 overflow-hidden'
+        }`}>
+          <div className="bg-gradient-to-b from-gray-900/95 to-black/95 backdrop-blur-xl rounded-2xl mt-4 border border-white/10 shadow-2xl">
+
+            {/* Mobile Navigation Links */}
+            <div className="p-6 space-y-4">
+              <div className="space-y-2">
+                <Link
+                  href="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
+                    isActiveRoute("/")
+                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  BROWSE
+                </Link>
+                <Link
+                  href="/series"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
+                    isActiveRoute("/series")
+                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  SERIES
+                </Link>
+                <Link
+                  href="/documentary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
+                    isActiveRoute("/documentary")
+                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  DOCUMENTARY
+                </Link>
+              </div>
+
+              {/* Mobile Actions - Simplified */}
+              <div className="pt-4 space-y-3 border-t border-white/10">
+                <Link
+                  href="/register"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="bg-red-900 text-white px-4 py-2 hover:bg-red-800 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full text-gray-300 hover:text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300"
+                >
+                  Log In
+                </Link>
+              </div>
             </div>
-          ) : (
-            <div className="flex items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
-              <Link
-                href="/account/create"
-                className="px-5 py-2 text-base font-medium leading-6 text-white bg-red-800 rounded-md cursor-pointer duration-200 ease-in-out transition-colors hover:bg-red-500"
-              >
-                Register
-              </Link>
-              <Link
-                href="/login"
-                className="px-4 py-2 ml-4 max-sm:ml-0 text-sm font-semibold leading-4 rounded border border-red-900 text-white hover:bg-red-900 transition-colors duration-200"
-              >
-                Log In
-              </Link>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </nav>
   );
 };
 
-export const dynamic = "force-dynamic";
+export default Navigation;

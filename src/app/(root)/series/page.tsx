@@ -1,154 +1,8 @@
-
 'use client'
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronLeft, ChevronRight, Play, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { Video } from '@/typings';
-import { SeriesHero } from '@/src/components/SeriesHero';
-import { MovieCarousel } from '@/src/components/MovieCarousel';
-
-const NetflixHeaderSlider: React.FC<{ videos: Video[] }> = ({ videos }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [scrollPosition, setScrollPosition] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % videos.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [videos.length]);
-
-  const scrollContent = (direction: "left" | "right") => {
-    const container = document.getElementById('header-slider');
-    if (container) {
-      const scrollAmount = 300;
-      const currentScroll = container.scrollLeft;
-      const maxScroll = container.scrollWidth - container.clientWidth;
-
-      let newPosition;
-      if (direction === "left") {
-        newPosition = Math.max(0, currentScroll - scrollAmount);
-      } else {
-        newPosition = Math.min(maxScroll, currentScroll + scrollAmount);
-      }
-
-      container.scrollTo({ left: newPosition, behavior: "smooth" });
-      setScrollPosition(newPosition);
-    }
-  };
-
-  const currentVideo = videos[currentIndex] || videos[0];
-
-  return (
-    <div className="relative  bg-black overflow-hidden">
-      {/* Background Video/Image */}
-      <div className="absolute inset-0">
-        <img
-          src={currentVideo.image_path}
-          alt={currentVideo.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-      </div>
-
-                  {/* Main Content */}
-      <div className="relative z-40 flex items-center min-h-[60vh] px-4 lg:px-8 pb-40 pt-16">
-        <div className="max-w-2xl space-y-6">
-          <div className="space-y-4">
-            <span className="inline-block bg-red-600 text-white text-sm px-3 py-1 rounded font-medium">
-              {currentVideo.type.category.name} Series
-            </span>
-            <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
-              {currentVideo.title}
-            </h1>
-            <p className="text-lg text-gray-300 leading-relaxed max-w-xl">
-              {currentVideo.description}
-            </p>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <button className="bg-white text-black hover:bg-gray-200 transition-colors px-6 py-3 rounded flex items-center space-x-2 font-semibold">
-              <Play className="w-5 h-5 fill-current" />
-              <span>Play</span>
-            </button>
-            <button className="bg-gray-600/70 text-white hover:bg-gray-600 transition-colors px-6 py-3 rounded flex items-center space-x-2 font-semibold">
-              <Info className="w-5 h-5" />
-              <span>More Info</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Slider
-      <div className="absolute bottom-6 left-0 right-0 z-50">
-        <div className="px-4 lg:px-8 mb-4">
-          <h3 className="text-white text-xl font-semibold">Continue Watching</h3>
-        </div>
-        <div className="relative group">
-          <button
-            onClick={() => scrollContent("left")}
-            className={`absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-20 bg-black/70 hover:bg-black text-white p-2 rounded transition-all duration-300 ${
-              scrollPosition > 0 ? 'opacity-100' : 'opacity-50'
-            }`}
-            disabled={scrollPosition <= 0}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-          <div
-            id="header-slider"
-            className="flex space-x-3 overflow-x-auto scrollbar-hide scroll-smooth px-4 lg:px-8"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {videos.map((video, index) => (
-              <div
-                key={video.id}
-                className={`flex-none w-48 cursor-pointer transition-all duration-300 ${
-                  index === currentIndex ? 'ring-2 ring-red-500' : ''
-                }`}
-                onClick={() => setCurrentIndex(index)}
-              >
-                <div className="relative overflow-hidden rounded">
-                  <img
-                    src={video.image_path}
-                    alt={video.title}
-                    className="w-full h-28 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <div className="absolute bottom-2 left-2 right-2">
-                    <h4 className="text-white text-sm font-medium line-clamp-1">
-                      {video.title}
-                    </h4>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={() => scrollContent("right")}
-            className="absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-20 bg-black/70 hover:bg-black text-white p-2 rounded transition-all duration-300"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
-      </div> */}
-
-      {/* Slide Indicators */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
-        {videos.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? 'bg-red-500 w-8' : 'bg-white/50'
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 
 const seriesVideos: Video[] = [
   {
@@ -263,6 +117,8 @@ const seriesVideos: Video[] = [
 
 const allSeries = [...seriesVideos];
 
+
+
 const SeriesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Latest');
@@ -290,15 +146,9 @@ const SeriesPage = () => {
 
   return (
     <div className="bg-background text-foreground">
-            {/* Netflix-style Header Slider */}
-      <NetflixHeaderSlider videos={seriesVideos.slice(0, 6)} />
-
-            <main>
-                {/* Hero Section */}
-        {/* <SeriesHero videos={seriesVideos.slice(0, 4)} /> */}
-
+      <main>
         {/* Series Content */}
-        <div className="bg-gradient-to-b from-black via-gray-900/50 to-black py-20 animate-fade-in">
+        <div className="bg-gradient-to-b from-gray-900 via-black to-gray-900 py-20 animate-fade-in pt-24">
           {/* Page Header */}
           <div className="px-4 lg:px-16 mb-12">
             <div className="flex items-center space-x-4 mb-6">
@@ -421,23 +271,14 @@ const SeriesPage = () => {
             </div>
           </div>
 
-          {/* Featured Series Carousels */}
-          <div className="space-y-16">
-            <MovieCarousel 
-              title="New Series" 
-              movies={sortedSeries.filter(s => s.release_date >= new Date('2023-06-01'))} 
-            />
-            <MovieCarousel 
-              title="Most Popular Series" 
-              movies={sortedSeries.sort((a, b) => b.likes - a.likes).slice(0, 8)} 
-            />
-            <MovieCarousel 
-              title="Spirituality Series" 
-              movies={sortedSeries.filter(s => s.type.category.name === 'Spirituality')} 
-            />
-          </div>
+          {/* Featured Series Slider */}
+          <EnhancedCarousel title="New Releases" movies={sortedSeries.filter(s => s.release_date >= new Date('2023-06-01'))} variant="series" />
+          <EnhancedCarousel title="Most Popular Series" movies={[...sortedSeries].sort((a, b) => b.likes - a.likes).slice(0, 8)} variant="series" />
+          <EnhancedCarousel title="Spirituality Collection" movies={sortedSeries.filter(s => s.type.category.name === 'Spirituality')} variant="series" />
+          <EnhancedCarousel title="Wellness Journey" movies={sortedSeries.filter(s => s.type.category.name === 'Wellness')} variant="series" />
         </div>
       </main>
+
     </div>
   );
 };

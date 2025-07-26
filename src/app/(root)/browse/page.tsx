@@ -1,28 +1,10 @@
 'use client'
+import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 import { Hero } from '@/src/components/Hero';
-import { MovieCarousel } from '@/src/components/MovieCarousel';
 import { Video } from '@/typings';
 import React from 'react';
 
 const videos: Video[] = [
-  {
-    id: 1,
-    title: 'Family Unit',
-    rating: 4.5,
-    type: {
-      id: 1,
-      name: 'Documentary',
-      category: {
-        id: 1,
-        name: 'Education'
-      }
-    },
-    description: 'Cupiditate aliquos voluptate itaque nostrum qui. Illum hapleado. Mocereos temporis nihilo quia consequsations laborios, sunt quam sapiente libero sit amet solupong emin neque sed prisam.',
-    image_path: 'https://cdn.builder.io/api/v1/image/assets%2F31f594b284154ff5ae9286805c63f323%2Fec11986a5ac6462ab89fd3e30a45085a?format=webp&width=800',
-    release_date: new Date('2023-01-01'),
-    video_path: '',
-    likes: 125,
-  },
   {
     id: 2,
     title: 'Personal Development',
@@ -117,33 +99,34 @@ const videos: Video[] = [
 
 const BrowsePage = () => {
   // Note: Auth context functionality would be added here when needed
-  // const {user, loading} = useAuth();
-  // const router = useRouter();
-  
-  // useEffect(() => {
-  //   if (typeof window !== "undefined" && !loading && !user) {
-  //     router.push("/login");
-  //   }
-  // }, [user, loading, router]);
   
   return (
-    <>
-      <main className="pt-20">
+    <div className="bg-background text-foreground">
+      <main className="pt-24">
         <Hero videos={videos} />
-        <div className="bg-gradient-to-b from-black via-gray-900/50 to-black space-y-16 py-20">
-          <MovieCarousel title="Trending Now" movies={videos} />
-          <MovieCarousel title="Spiritual Awakening" movies={videos.filter(v => v.type.category.name === 'Spirituality')} />
-          <MovieCarousel title="Documentary Collections" movies={videos.filter(v => v.type.name === 'Documentary')} />
-          <MovieCarousel title="Wellness & Healing" movies={videos.filter(v => v.type.category.name === 'Wellness')} />
+                <div className="bg-gradient-to-b from-black via-gray-900/50 to-black space-y-20 py-24 animate-fade-in">
+          {/* Section Header
+          <div className="px-4 lg:px-16 text-center">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+              Curated Collections
+            </h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Discover transformative content carefully selected to guide your journey of consciousness, wellness, and spiritual growth.
+            </p>
+          </div> */}
+
+          <EnhancedCarousel title="Trending Now" movies={videos} variant="home" />
+          <EnhancedCarousel title="Spiritual Awakening" movies={videos.filter(v => v.type.category.name === 'Spirituality')} variant="home" />
+          <EnhancedCarousel title="Documentary Collections" movies={videos.filter(v => v.type.name === 'Documentary')} variant="home" />
+          <EnhancedCarousel title="Wellness & Healing" movies={videos.filter(v => v.type.category.name === 'Wellness')} variant="home" />
         </div>
       </main>
-
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
       `}</style>
-</>
+    </div>
   );
 };
 
