@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import RootLayout from '@/src/app/(root)/layout';
 
 // Mock components
-jest.mock('@/src/components/NavBar', () => ({
+jest.mock('@/src/components/Navigation', () => ({
   Navigation: () => <nav data-testid="nav">Mock Navigation</nav>,
 }));
 

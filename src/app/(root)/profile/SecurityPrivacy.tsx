@@ -1,494 +1,318 @@
-import { useState } from "react";
-import { useAuth } from "../../context/authContext";
+import React, { useState } from 'react';
+import { Shield, Calendar, Bell, User, Settings, Eye, History } from 'lucide-react';
 
-export default function SecurityPrivacy() {
-  const { user } = useAuth();
+export const SecurityPrivacy: React.FC = () => {
   const [settings, setSettings] = useState({
     twoFactorEnabled: false,
     emailNotifications: true,
-    pushNotifications: false,
-    viewingHistoryEnabled: true,
-    dataCollection: true,
-    personalizedAds: false,
-    shareWatchHistory: false,
     autoLogout: "30",
+    loginAlerts: true,
+    dataCollection: false
   });
 
-  if (!user) {
-    return <div>Please log in to access security & privacy settings</div>;
-  }
-
-  const handleToggle = (setting: keyof typeof settings) => {
-    setSettings((prev) => ({
-      ...prev,
-      [setting]: !prev[setting],
-    }));
-  };
-
-  const handleSelectChange = (
-    setting: keyof typeof settings,
-    value: string,
-  ) => {
-    setSettings((prev) => ({
-      ...prev,
-      [setting]: value,
-    }));
-  };
-
-  const activeSessions = [
+  const [devices, setDevices] = useState([
     {
-      id: "1",
+      id: 1,
       device: "MacBook Pro",
-      location: "San Francisco, CA",
+      browser: "Chrome",
+      location: "Los Angeles, CA",
       lastActive: "Active now",
       current: true,
+      ip: "192.168.1.100"
     },
     {
-      id: "2",
-      device: "iPhone 15 Pro",
-      location: "San Francisco, CA",
+      id: 2,
+      device: "iPhone 14 Pro",
+      browser: "Safari",
+      location: "Los Angeles, CA",
       lastActive: "2 hours ago",
       current: false,
+      ip: "192.168.1.101"
     },
     {
-      id: "3",
-      device: "Samsung Smart TV",
-      location: "San Francisco, CA",
+      id: 3,
+      device: "Samsung TV",
+      browser: "Smart TV App",
+      location: "Los Angeles, CA",
       lastActive: "1 day ago",
       current: false,
+      ip: "192.168.1.102"
     },
-  ];
+    {
+      id: 4,
+      device: "Windows PC",
+      browser: "Edge",
+      location: "New York, NY",
+      lastActive: "3 days ago",
+      current: false,
+      ip: "203.45.67.89"
+    }
+  ]);
+
+  const handleToggle = (setting: keyof typeof settings) => {
+    setSettings(prev => ({
+      ...prev,
+      [setting]: typeof prev[setting] === 'boolean' ? !prev[setting] : prev[setting]
+    }));
+  };
+
+  const handleAutoLogoutChange = (value: string) => {
+    setSettings(prev => ({ ...prev, autoLogout: value }));
+  };
+
+  const logoutDevice = (deviceId: number) => {
+    const deviceToLogout = devices.find(d => d.id === deviceId);
+    if (deviceToLogout && !deviceToLogout.current) {
+      setDevices(prevDevices => prevDevices.filter(d => d.id !== deviceId));
+      alert(`Successfully logged out ${deviceToLogout.device}`);
+    }
+  };
+
+  const logoutAllDevices = () => {
+    const nonCurrentDevices = devices.filter(d => !d.current);
+    if (nonCurrentDevices.length > 0) {
+      if (confirm(`Are you sure you want to log out all ${nonCurrentDevices.length} other devices?`)) {
+        setDevices(prevDevices => prevDevices.filter(d => d.current));
+        alert(`Successfully logged out ${nonCurrentDevices.length} devices`);
+      }
+    } else {
+      alert('No other devices to log out');
+    }
+  };
 
   return (
-  <>
-            {/* Security Settings Section */}
-            <div className="border-b border-app-border pb-8 mb-8 relative">
-              <div className="absolute -left-4 md:-left-8 top-0 w-1 h-16 bg-app-red rounded-full"></div>
-              <h2 className="text-white text-2xl font-bold leading-8 mb-2">
-                Security Settings
-              </h2>
-              <p className="text-app-gray text-sm mb-6">
-                Manage your account security and authentication preferences
-              </p>
+    <div className="space-y-8">
+      {/* Security Settings */}
+      <div className="relative">
+        <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>
+        <h2 className="text-3xl font-bold text-white mb-2">Security Settings</h2>
+        <p className="text-gray-400 text-sm mb-6">Manage your account security and authentication</p>
 
-              {/* Two-Factor Authentication */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Two-Factor Authentication
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Add an extra layer of security to your account
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`text-sm ${settings.twoFactorEnabled ? "text-green-400" : "text-app-gray"}`}
-                    >
-                      {settings.twoFactorEnabled ? "Enabled" : "Disabled"}
-                    </span>
-                    <button
-                      onClick={() => handleToggle("twoFactorEnabled")}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        settings.twoFactorEnabled
-                          ? "bg-app-red"
-                          : "bg-app-border"
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                          settings.twoFactorEnabled
-                            ? "translate-x-6"
-                            : "translate-x-1"
-                        }`}
-                      />
-                    </button>
-                  </div>
+        <div className="space-y-4">
+          {/* Two-Factor Authentication */}
+          <div className="bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-green-800 rounded-xl flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <span className="text-white font-bold text-lg">Two-Factor Authentication</span>
+                  <p className="text-gray-400 text-sm">Add extra security layer to your account</p>
                 </div>
               </div>
-
-              {/* Auto Logout */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Auto Logout
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Automatically logout after inactivity
-                      </span>
-                    </div>
-                  </div>
-                  <select
-                    value={settings.autoLogout}
-                    onChange={(e) =>
-                      handleSelectChange("autoLogout", e.target.value)
-                    }
-                    className="bg-app-header border border-app-border/30 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-app-red/50"
-                  >
-                    <option value="15">15 minutes</option>
-                    <option value="30">30 minutes</option>
-                    <option value="60">1 hour</option>
-                    <option value="240">4 hours</option>
-                    <option value="never">Never</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Active Sessions Section */}
-            <div className="border-b border-app-border pb-8 mb-8 relative">
-              <div className="absolute -left-4 md:-left-8 top-0 w-1 h-16 bg-app-red rounded-full"></div>
-              <h2 className="text-white text-2xl font-bold leading-8 mb-2">
-                Active Sessions
-              </h2>
-              <p className="text-app-gray text-sm mb-6">
-                Manage devices that are currently signed in to your account
-              </p>
-
-              <div className="space-y-3">
-                {activeSessions.map((session) => (
-                  <div
-                    key={session.id}
-                    className="bg-app-header/50 border border-app-border/30 rounded-xl p-4"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-2 h-2 rounded-full ${session.current ? "bg-green-500 animate-pulse" : "bg-app-border"}`}
-                        ></div>
-                        <div>
-                          <div className="text-white font-medium">
-                            {session.device}
-                            {session.current && (
-                              <span className="text-green-400 text-xs ml-2">
-                                (This device)
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-app-gray text-sm">
-                            {session.location}
-                          </div>
-                          <div className="text-app-gray text-xs">
-                            {session.lastActive}
-                          </div>
-                        </div>
-                      </div>
-                      {!session.current && (
-                        <button className="text-app-error text-sm hover:underline">
-                          Sign Out
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button className="mt-4 w-full bg-app-header border border-app-border/30 text-app-gray py-3 rounded-lg font-medium hover:text-white hover:border-app-border/50 transition-all duration-200">
-                Sign Out All Other Devices
+              <button
+                onClick={() => handleToggle('twoFactorEnabled')}
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+                  settings.twoFactorEnabled ? 'bg-red-600' : 'bg-gray-600'
+                }`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                    settings.twoFactorEnabled ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
               </button>
             </div>
+          </div>
 
-            {/* Privacy Settings Section */}
-            <div className="border-b border-app-border pb-8 mb-8 relative">
-              <div className="absolute -left-4 md:-left-8 top-0 w-1 h-16 bg-app-red rounded-full"></div>
-              <h2 className="text-white text-2xl font-bold leading-8 mb-2">
-                Privacy Settings
-              </h2>
-              <p className="text-app-gray text-sm mb-6">
-                Control how your data is used and what information is shared
-              </p>
-
-              {/* Viewing History */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Save Viewing History
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Allow us to save what you watch for recommendations
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleToggle("viewingHistoryEnabled")}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      settings.viewingHistoryEnabled
-                        ? "bg-app-red"
-                        : "bg-app-border"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        settings.viewingHistoryEnabled
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                      }`}
-                    />
-                  </button>
+          {/* Auto Logout */}
+          <div className="bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-orange-800 rounded-xl flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <span className="text-white font-bold text-lg">Auto Logout</span>
+                  <p className="text-gray-400 text-sm">Automatically log out after inactivity</p>
                 </div>
               </div>
+              <select
+                value={settings.autoLogout}
+                onChange={(e) => handleAutoLogoutChange(e.target.value)}
+                className="bg-gray-700/50 border border-gray-600 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="60">1 hour</option>
+                <option value="120">2 hours</option>
+                <option value="480">8 hours</option>
+                <option value="never">Never</option>
+              </select>
+            </div>
+          </div>
 
-              {/* Data Collection */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Analytics & Performance Data
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Help improve our service by sharing usage data
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleToggle("dataCollection")}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      settings.dataCollection ? "bg-app-red" : "bg-app-border"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        settings.dataCollection
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                      }`}
-                    />
-                  </button>
+          {/* Login Alerts */}
+          <div className="bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center">
+                  <Bell className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <span className="text-white font-bold text-lg">Login Alerts</span>
+                  <p className="text-gray-400 text-sm">Get notified of new device logins</p>
                 </div>
               </div>
+              <button
+                onClick={() => handleToggle('loginAlerts')}
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+                  settings.loginAlerts ? 'bg-red-600' : 'bg-gray-600'
+                }`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                    settings.loginAlerts ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              {/* Personalized Ads */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Personalized Advertisements
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Show ads based on your interests and viewing habits
+      {/* Active Devices */}
+      <div className="relative">
+        <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>
+        <h2 className="text-3xl font-bold text-white mb-2">Active Devices</h2>
+        <p className="text-gray-400 text-sm mb-6">Manage devices that have access to your account</p>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-gray-400 text-sm">
+              {devices.length} active sessions found
+            </div>
+            <button
+              onClick={logoutAllDevices}
+              className="bg-red-600/20 text-red-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30 flex items-center space-x-2"
+            >
+              <History className="w-4 h-4" />
+              <span>Logout All Other Devices</span>
+            </button>
+          </div>
+
+          {devices.map((device) => (
+            <div
+              key={device.id}
+              className={`bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border transition-all duration-300 ${
+                device.current 
+                  ? 'border-red-500/40 bg-red-600/5' 
+                  : 'border-gray-700/30 hover:border-red-500/30'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                    device.current 
+                      ? 'bg-gradient-to-br from-red-600 to-red-800' 
+                      : 'bg-gradient-to-br from-gray-600 to-gray-800'
+                  }`}>
+                    {device.device.includes('iPhone') || device.device.includes('Samsung') ? (
+                      <User className="w-6 h-6 text-white" />
+                    ) : device.device.includes('TV') ? (
+                      <Eye className="w-6 h-6 text-white" />
+                    ) : (
+                      <Settings className="w-6 h-6 text-white" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-white font-bold text-lg">{device.device}</span>
+                      {device.current && (
+                        <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          Current Device
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-gray-400 text-sm">{device.browser} • {device.location}</p>
+                    <p className="text-gray-500 text-xs">IP: {device.ip} • {device.lastActive}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${
+                      device.current ? 'text-green-400' : 'text-gray-400'
+                    }`}>
+                      {device.lastActive}
+                    </div>
+                    <div className="flex items-center gap-1 mt-1">
+                      <div className={`w-2 h-2 rounded-full ${
+                        device.current ? 'bg-green-500 animate-pulse' : 'bg-gray-500'
+                      }`}></div>
+                      <span className="text-xs text-gray-500">
+                        {device.current ? 'Active' : 'Inactive'}
                       </span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleToggle("personalizedAds")}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      settings.personalizedAds ? "bg-app-red" : "bg-app-border"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        settings.personalizedAds
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                      }`}
-                    />
-                  </button>
+                  
+                  {!device.current && (
+                    <button
+                      onClick={() => logoutDevice(device.id)}
+                      className="bg-red-600/20 text-red-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30"
+                    >
+                      Logout
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
 
-            {/* Notification Preferences Section */}
-            <div className="border-b border-app-border pb-8 mb-8 relative">
-              <div className="absolute -left-4 md:-left-8 top-0 w-1 h-16 bg-app-red rounded-full"></div>
-              <h2 className="text-white text-2xl font-bold leading-8 mb-2">
-                Notification Preferences
-              </h2>
-              <p className="text-app-gray text-sm mb-6">
-                Choose how you want to be notified about updates and new content
-              </p>
+      {/* Privacy Settings */}
+      <div className="relative">
+        <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>
+        <h2 className="text-3xl font-bold text-white mb-2">Privacy Settings</h2>
+        <p className="text-gray-400 text-sm mb-6">Control your data and privacy preferences</p>
 
-              {/* Email Notifications */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Email Notifications
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Receive updates about new content and account changes
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleToggle("emailNotifications")}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      settings.emailNotifications
-                        ? "bg-app-red"
-                        : "bg-app-border"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        settings.emailNotifications
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                      }`}
-                    />
-                  </button>
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center">
+                  <Eye className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <span className="text-white font-bold text-lg">Data Collection</span>
+                  <p className="text-gray-400 text-sm">Allow collection of viewing analytics</p>
                 </div>
               </div>
-
-              {/* Push Notifications */}
-              <div className="group bg-app-header/50 border border-app-border/30 rounded-xl p-4 mb-4 hover:border-app-red/30 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-app-red rounded-full"></div>
-                    <div>
-                      <span className="text-white text-sm sm:text-base font-medium leading-6 block">
-                        Push Notifications
-                      </span>
-                      <span className="text-app-gray text-xs">
-                        Get notified on your devices about new releases
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleToggle("pushNotifications")}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      settings.pushNotifications
-                        ? "bg-app-red"
-                        : "bg-app-border"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        settings.pushNotifications
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                      }`}
-                    />
-                  </button>
-                </div>
-              </div>
+              <button
+                onClick={() => handleToggle('dataCollection')}
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+                  settings.dataCollection ? 'bg-red-600' : 'bg-gray-600'
+                }`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                    settings.dataCollection ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
             </div>
+          </div>
 
-            {/* Data Management Section */}
-            <div className="relative">
-              <div className="absolute -left-4 md:-left-8 top-0 w-1 h-16 bg-app-red rounded-full"></div>
-              <h2 className="text-white text-2xl font-bold leading-8 mb-2">
-                Data Management
-              </h2>
-              <p className="text-app-gray text-sm mb-6">
-                Download your data or delete your account
-              </p>
-
-              <div className="space-y-4">
-                {/* Download Data */}
-                <div className="bg-app-header/50 border border-app-border/30 rounded-xl p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-white font-medium mb-1">
-                        Download Your Data
-                      </h3>
-                      <p className="text-app-gray text-sm">
-                        Get a copy of all your account data, viewing history,
-                        and preferences
-                      </p>
-                    </div>
-                    <button className="bg-app-header border border-app-border/30 text-white px-4 py-2 rounded-lg font-medium hover:border-app-red/30 transition-all duration-200">
-                      Download
-                    </button>
-                  </div>
+          <div className="bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-xl flex items-center justify-center">
+                  <History className="w-6 h-6 text-white" />
                 </div>
-
-                {/* Clear Viewing History */}
-                <div className="bg-app-header/50 border border-app-border/30 rounded-xl p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-white font-medium mb-1">
-                        Clear Viewing History
-                      </h3>
-                      <p className="text-app-gray text-sm">
-                        Remove all your viewing history and reset
-                        recommendations
-                      </p>
-                    </div>
-                    <button className="bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 transition-colors duration-200">
-                      Clear
-                    </button>
-                  </div>
-                </div>
-
-                {/* Delete Account */}
-                <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-white font-medium mb-1">
-                        Delete Account
-                      </h3>
-                      <p className="text-app-gray text-sm">
-                        Permanently delete your account and all associated data
-                      </p>
-                    </div>
-                    <button className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors duration-200">
-                      Delete
-                    </button>
-                  </div>
+                <div>
+                  <span className="text-white font-bold text-lg">Download Account Data</span>
+                  <p className="text-gray-400 text-sm">Export your account information and data</p>
                 </div>
               </div>
-
-              <div className="mt-6 bg-app-header/30 border border-app-border/20 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12 8V12"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12 16H12.01"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="text-white font-medium text-sm">
-                    Data Protection
-                  </span>
-                </div>
-                <p className="text-app-gray text-sm">
-                  Your privacy is important to us. We follow industry standards
-                  to protect your data and give you control over your
-                  information.
-                  <a href="#" className="text-app-red hover:underline ml-1">
-                    Learn more about our privacy policy
-                  </a>
-                  .
-                </p>
-              </div>
+              <button className="bg-red-600/20 text-red-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30">
+                Export Data
+              </button>
             </div>
-         </>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};

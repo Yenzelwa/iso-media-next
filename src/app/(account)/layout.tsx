@@ -1,8 +1,8 @@
 'use client'
 import React from "react";
 import "@/src/globals.css";
-import AccountNav from "./components/NavBar";
 import { AuthProvider } from "../context/authContext";
+import AccountNav from "./components/NavBar";
 
 
 

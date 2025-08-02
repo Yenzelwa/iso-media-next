@@ -1,9 +1,11 @@
+import React, { use, useState } from 'react';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { UserMenu } from './UserMenu';
+import { useAuth } from '../app/context/authContext';
 
 export const Navigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const { user, logout } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -18,8 +20,8 @@ export const Navigation: React.FC = () => {
 
   // Helper function to check if current route is active
   const isActiveRoute = (path: string) => {
-    if (path === "/" && location.pathname === "/") return true;
-    if (path !== "/" && location.pathname.startsWith(path)) return true;
+    if (path === "/" ) return true;
+    if (path !== "/") return true;
     return false;
   };
 
@@ -98,20 +100,26 @@ export const Navigation: React.FC = () => {
             </div>
           </div>
 
-          {/* Desktop Actions - Simplified */}
+          {/* Desktop Actions */}
           <div className="hidden lg:flex items-center">
-            <Link
-              href="/login"
-              className="text-gray-300 hover:text-white px-6 py-2.5 font-semibold text-sm transition-all duration-300 mr-3"
-            >
-              Log In
-            </Link>
-            <Link
-              href="/register"
-              className="bg-red-900 text-white px-4 py-2 hover:bg-red-800 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
-            >
-              Get Started
-            </Link>
+            {user ? (
+              <UserMenu />
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-gray-300 hover:text-white px-6 py-2.5 font-semibold text-sm transition-all duration-300 mr-3"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/register"
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/30 border border-red-500/30"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button - Simplified */}
@@ -179,22 +187,45 @@ export const Navigation: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Mobile Actions - Simplified */}
+              {/* Mobile Actions */}
               <div className="pt-4 space-y-3 border-t border-white/10">
-                <Link
-                  href="/register"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="bg-red-900 text-white px-4 py-2 hover:bg-red-800 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
-                >
-                  Get Started
-                </Link>
-                <Link
-                  href="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-gray-300 hover:text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300"
-                >
-                  Log In
-                </Link>
+                {user ? (
+                  <div className="space-y-2">
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300 shadow-lg border border-red-500/30"
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        logout();
+                      }}
+                      className="block w-full text-gray-300 hover:text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <Link
+                      href="/register"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300 shadow-lg border border-red-500/30"
+                    >
+                      Get Started
+                    </Link>
+                    <Link
+                      href="/login"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full text-gray-300 hover:text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300"
+                    >
+                      Log In
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

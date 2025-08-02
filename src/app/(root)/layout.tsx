@@ -5,13 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "../context/authContext";
 import React from "react";
-import { Navigation } from "@/src/components/NavBar";
 import { Footer } from "@/src/components/Footer";
 import { Toaster } from "@/src/components/ui/sooner";
 import { Sonner } from "@/src/components/ui/sooner";
-import AccountSettings from "./profile/page";
-import NotFound from "./not-found";
 import { TooltipProvider } from "@/src/components/ui/tooltip";
+import Navigation from "@/src/components/Navigation";
 
 const queryClient = new QueryClient();
 
