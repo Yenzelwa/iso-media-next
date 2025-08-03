@@ -87,10 +87,9 @@ const ProfilePage = () => {
   };
 
   const tabs = [
-    { id: 'account', label: 'Membership & Billing', icon: CreditCard },
-    { id: 'subscription', label: 'Plan details', icon: Settings },
-    { id: 'security', label: 'Security and Privacy', icon: Shield },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'account', label: 'Account Settings', icon: CreditCard },
+    { id: 'subscription', label: 'Plan Details', icon: Settings },
+    { id: 'security', label: 'Security & Privacy', icon: Shield }
   ];
 
   if (!authUser || !extendedUser) {

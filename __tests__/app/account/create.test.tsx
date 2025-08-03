@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/src/app/context/authContext';
 import axios from 'axios';
-import CreateAccount from '@/src/app/(account)/account/create/page';
+import CreateAccount from '@/src/app/(account)/register/page';
 import {useForm } from 'react-hook-form';
 import React from 'react';
 

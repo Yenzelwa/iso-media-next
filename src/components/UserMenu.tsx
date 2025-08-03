@@ -102,15 +102,7 @@ export const UserMenu: React.FC = () => {
               {getInitials(user.name)}
             </div>
           )}
-
-          {/* Subscription Badge */}
-          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-gray-900 to-black rounded-full flex items-center justify-center border-2 border-gray-800 shadow-lg group-hover:border-red-500/30 transition-all duration-300">
-            {getSubscriptionIcon()}
-          </div>
-
-          {/* Online Status Indicator */}
-          <div className="absolute -top-1 -left-1 w-3 h-3 bg-green-400 rounded-full border-2 border-gray-900 animate-pulse shadow-lg shadow-green-400/50"></div>
-        </div>
+</div>
 
         {/* User Name & Chevron */}
         <div className="hidden sm:flex items-center space-x-2">
@@ -150,9 +142,6 @@ export const UserMenu: React.FC = () => {
                     {getInitials(user.name)}
                   </div>
                 )}
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-gray-900 to-black rounded-full flex items-center justify-center border-2 border-gray-800 shadow-lg">
-                  {getSubscriptionIcon()}
-                </div>
                 {/* Premium Glow Effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
@@ -161,18 +150,7 @@ export const UserMenu: React.FC = () => {
                   {user.name}
                 </h3>
                 <p className="text-gray-400 text-sm truncate mt-1">{user.email}</p>
-                <div className="flex items-center space-x-2 mt-2">
-                  <div className="flex items-center space-x-1 bg-gradient-to-r from-red-600/20 to-red-500/10 px-3 py-1 rounded-full border border-red-500/20">
-                    {getSubscriptionIcon()}
-                    <span className="text-xs text-red-300 font-semibold">
-                      {getSubscriptionLabel()} Member
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-400 font-medium">Online</span>
-                  </div>
-                </div>
+            
               </div>
             </div>
           </div>

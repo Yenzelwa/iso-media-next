@@ -31,11 +31,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
           </div>
           <h3 className="text-xl font-bold text-white">{user.name}</h3>
           <p className="text-gray-400 text-sm">{user.email}</p>
-          <div className="mt-3">
-            <span className="bg-red-600/20 text-red-400 text-xs px-3 py-1 rounded-full border border-red-500/30">
-              Premium Member
-            </span>
-          </div>
+          
         </div>
 
         {/* Navigation Tabs */}

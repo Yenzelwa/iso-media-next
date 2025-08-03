@@ -59,7 +59,6 @@ export const Footer = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 border border-red-400/30">
                   <div className="w-6 h-6 bg-white rounded-lg transition-all duration-300 group-hover:rounded-full"></div>
                 </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
               </div>
               <span className="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-red-400">
                 IsolaKwaMUNTU

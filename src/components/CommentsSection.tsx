@@ -299,7 +299,7 @@ const CommentSection: React.FC<CommentsSectionProps> = ({ video_id }) => {
               alt="Your avatar"
               className="w-12 h-12 rounded-full ring-2 ring-red-500/20"
             />
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+           
           </div>
           <div className="flex-1">
             <div className="bg-gray-800/30 rounded-2xl border border-gray-700/30 focus-within:border-red-500/50 transition-all duration-300">
@@ -338,17 +338,14 @@ const CommentSection: React.FC<CommentsSectionProps> = ({ video_id }) => {
                   alt={comment.user.name}
                   className="w-12 h-12 rounded-full ring-2 ring-gray-700/50"
                 />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                
               </div>
               <div className="flex-1">
                 <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30">
                   <div className="flex items-center space-x-3 mb-3">
                     <span className="font-bold text-white">{comment.user.name}</span>
                     <span className="text-gray-400 text-sm">{formatTimestamp(comment.timestamp)}</span>
-                    <div className="flex items-center space-x-1 bg-gray-700/50 rounded-full px-2 py-1">
-                      <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                      <span className="text-gray-300 text-xs">Verified</span>
-                    </div>
+                   
                   </div>
                   <p className="text-gray-200 leading-relaxed">{comment.text}</p>
                 </div>
@@ -450,7 +447,7 @@ const CommentSection: React.FC<CommentsSectionProps> = ({ video_id }) => {
                             alt={reply.user.name}
                             className="w-10 h-10 rounded-full ring-2 ring-gray-700/50"
                           />
-                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                         
                         </div>
                         <div className="flex-1">
                           <div className="bg-gray-800/20 backdrop-blur-sm rounded-xl p-4 border border-gray-700/20">

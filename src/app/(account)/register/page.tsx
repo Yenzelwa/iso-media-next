@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import {Input} from '../../../../components/Input'
+import {Input} from '../../../components/Input'
 import {
   firstName_validation,  email_validation,  password_validation,  lastName_validation,
   password_register_validation,
   termsAndConditions_validation,
-} from '../../../../utils/inputValidations'
+} from '../../../utils/inputValidations'
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from 'next-auth/react';

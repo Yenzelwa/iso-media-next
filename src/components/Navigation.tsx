@@ -48,8 +48,6 @@ export const Navigation: React.FC = () => {
                 {/* Animated Ring */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-2xl opacity-0 group-hover:opacity-75 transition-all duration-500 animate-pulse blur-sm"></div>
 
-                {/* Status Indicator - Simplified */}
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
               </div>
 
               {/* Brand Text */}
