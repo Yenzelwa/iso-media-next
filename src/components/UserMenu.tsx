@@ -1,5 +1,6 @@
+'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
+import Link  from 'next/link';
 import {
   User,
   HelpCircle,
@@ -8,15 +9,15 @@ import {
   Crown,
   Star
 } from 'lucide-react';
-import { useAuth } from '@/src/app/context/authContext';
-import {  useRouter } from 'next/navigation';
+import { useAuth } from '../app/context/authContext';
+import { useRouter } from 'next/navigation';
 
 export const UserMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
+  const rounter = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const router = useRouter();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -38,7 +39,7 @@ export const UserMenu: React.FC = () => {
   const handleLogout = () => {
     logout();
     setIsOpen(false);
-    router.push('/');
+    rounter.push('/');
   };
 
   const handleMenuItemClick = () => {
@@ -102,16 +103,16 @@ export const UserMenu: React.FC = () => {
               {getInitials(user.name)}
             </div>
           )}
-</div>
+        </div>
 
-        {/* User Name & Chevron */}
+        {/* User Info & Chevron */}
         <div className="hidden sm:flex items-center space-x-2">
           <div className="flex flex-col items-start">
-            <span className="text-white text-sm font-semibold max-w-24 truncate group-hover:text-red-100 transition-colors duration-300">
-              {user.name.split(' ')[0]}
+            <span className="text-white text-sm font-semibold truncate group-hover:text-red-100 transition-colors duration-300">
+              {user.name}
             </span>
-            <span className="text-gray-400 text-xs font-medium">
-              {getSubscriptionLabel()}
+            <span className="text-gray-400 text-xs truncate">
+              {user.email}
             </span>
           </div>
           <ChevronDown className={`w-4 h-4 text-gray-400 group-hover:text-red-400 transition-all duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -126,34 +127,6 @@ export const UserMenu: React.FC = () => {
         >
           {/* Decorative Header Background */}
           <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-br from-red-600/20 via-red-500/10 to-transparent"></div>
-
-          {/* User Info Header */}
-          <div className="relative p-6 border-b border-gray-700/20">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                {user.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.name}
-                    className="w-16 h-16 rounded-2xl object-cover ring-3 ring-white/10 shadow-xl"
-                  />
-                ) : (
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center text-white text-lg font-bold shadow-xl ring-3 ring-white/10">
-                    {getInitials(user.name)}
-                  </div>
-                )}
-                {/* Premium Glow Effect */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-bold text-xl truncate bg-gradient-to-r from-white to-gray-200 bg-clip-text">
-                  {user.name}
-                </h3>
-                <p className="text-gray-400 text-sm truncate mt-1">{user.email}</p>
-            
-              </div>
-            </div>
-          </div>
 
           {/* Menu Items */}
           <div className="py-4">
