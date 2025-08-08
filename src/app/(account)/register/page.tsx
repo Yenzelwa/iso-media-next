@@ -1,12 +1,13 @@
 'use client'
-import { useRouter } from 'next/navigation';import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import Link from 'next/link';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../context/authContext';
 import { UserMenu } from '@/src/components/UserMenu';
-import { email_validation, firstName_validation, password_register_validation, termsAndConditions_validation } from '@/src/utils/inputValidations';
 import { Input } from '@/src/components/Input';
+import { email_validation, firstName_validation, password_register_validation, termsAndConditions_validation } from '@/src/utils/inputValidations';
+import { useRouter } from 'next/navigation';
 
 type FormData = {
   first_name: string;
@@ -15,7 +16,7 @@ type FormData = {
 };
 
 const Register = () => {
-  const rounter = useRouter();
+  const router = useRouter();
   const methods = useForm<FormData>();
   const { formState: { errors } } = methods;
   const [isLoading, setIsLoading] = useState(false);
@@ -79,9 +80,9 @@ const Register = () => {
           subscription: 'basic' as const
         };
 
-        const mockToken = "mock_token_for_demo";
-        login(mockToken, mockUser);
-        rounter.push('/plan-selection');
+        const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag";
+        login(token, mockUser);
+        router.push('/plan-selection');
       }, 1500);
 
     } catch (error) {
@@ -120,7 +121,7 @@ const Register = () => {
             </div>
 
             {/* Step Indicator */}
-            <div className="hidden md:flex items-center space-x-2 text-sm text-gray-400">
+            <div className="hidden sm:flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-400">
               <div className="flex items-center space-x-1 text-red-400 font-semibold">
                 <div className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -141,12 +142,12 @@ const Register = () => {
 
             {/* User Section */}
             <div className="flex items-center space-x-4">
-              {user ? (
+              { user ? (
                 <UserMenu />
               ) : (
                 <Link
                   href="/login"
-                  className="text-gray-300 hover:text-white px-4 py-2 font-semibold text-sm transition-all duration-300"
+                  className="group relative bg-gradient-to-r from-gray-800/40 to-gray-700/40 hover:from-gray-700/60 hover:to-gray-600/60 text-gray-300 hover:text-white px-4 xl:px-6 py-2 xl:py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 mr-2 xl:mr-3 border border-gray-600/30 hover:border-gray-500/50 backdrop-blur-sm shadow-lg hover:shadow-gray-500/20 transform hover:scale-105"
                 >
                   Sign In
                 </Link>
@@ -171,22 +172,24 @@ const Register = () => {
           {user ? (
             <div className="container">
               <div className="text-center">
-                <div className="flex justify-center mb-8 transform transition-transform duration-500 hover:scale-110">
-                  <svg
-                    className="h-[54px] w-[54px] text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.3)]"
-                    viewBox="0 0 54 54"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
-                  </svg>
+                <div className="flex justify-center mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-green-500/30 animate-pulse">
+                    <CheckCircle className="w-16 h-16 text-white drop-shadow-lg" />
+                  </div>
                 </div>
-                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl ring-4 ring-green-500/20">
-                  <CheckCircle className="w-12 h-12 text-white" />
+
+                <div className="text-center mb-6">
+                  <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
+                    Welcome Aboard!
+                  </h1>
+                  <h3 className="text-lg text-gray-300 mb-4">
+                    Your account has been created successfully
+                  </h3>
+                  <div className="flex items-center justify-center space-x-2 text-green-400">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">Account verified and ready</span>
+                  </div>
                 </div>
-                <h1 className="text-4xl font-bold mb-4 text-white">Welcome Aboard!</h1>
-                <h3 className="text-lg text-gray-300 mb-6">
-                  Your account has been created successfully
-                </h3>
                 <div className="text-white font-medium mb-8 p-4 bg-gray-800/30 rounded-xl border border-gray-700/30">
                   {user && user.email}
                 </div>
@@ -213,19 +216,20 @@ const Register = () => {
                 autoComplete="off"
                 className="container"
               >
-                <div className="flex justify-center mb-8 transform transition-transform duration-500 hover:scale-110">
-                  <svg
-                    className="h-[54px] w-[54px] text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.3)]"
-                    viewBox="0 0 54 54"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
-                  </svg>
+                <div className="flex justify-center mb-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-blue-500/20 backdrop-blur-sm border border-blue-500/30">
+                    <CheckCircle className="w-12 h-12 text-blue-400 drop-shadow-lg" />
+                  </div>
                 </div>
 
-                <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent text-center">
-                  Create Your Account
-                </h1>
+                <div className="text-center mb-8">
+                  <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    Create Your Account
+                  </h1>
+                  <p className="text-gray-400 text-sm">
+                    Join our community and start your streaming journey
+                  </p>
+                </div>
                 {errorMessage && (
                   <p className="text-red-500 mb-6 transition-all duration-300 text-center bg-red-500/10 border border-red-500/20 rounded-xl p-3">
                     {errorMessage}

@@ -105,7 +105,7 @@ const PlanSelection: React.FC = () => {
               ) : (
                 <Link
                   href="/login"
-                  className="text-gray-300 hover:text-white px-4 py-2 font-semibold text-sm transition-all duration-300"
+                  className="group relative bg-gradient-to-r from-gray-800/40 to-gray-700/40 hover:from-gray-700/60 hover:to-gray-600/60 text-gray-300 hover:text-white px-4 xl:px-6 py-2 xl:py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 mr-2 xl:mr-3 border border-gray-600/30 hover:border-gray-500/50 backdrop-blur-sm shadow-lg hover:shadow-gray-500/20 transform hover:scale-105"
                 >
                   Sign In
                 </Link>
