@@ -31,6 +31,6 @@ export default async function WatchPage({ params }: PageProps) {
 
 // ✅ If you want to statically generate some routes at build time
 export function generateStaticParams() {
-  const ids = ['1', '2', '3', '4'];
+  const ids = ['1', '2', '3', '4', '254'];
   return ids.map((id) => ({ id }));
 }

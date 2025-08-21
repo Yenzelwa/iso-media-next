@@ -80,22 +80,22 @@ describe('CreateAccount Component', () => {
       expect(screen.getByText(/Yes, sign me up/i)).toBeInTheDocument();
     });
   
-    it('should enable the continue button only when the form is valid', () => {
+    it('should enable the create account button only when the form is valid', () => {
       render(  <AuthProvider><CreateAccount /></AuthProvider>);
   
-      const submitButton = screen.getByText(/Continue/i);
+      const submitButton = screen.getByText(/Create Account/i);
       
       // By default, form is valid, so the button should be enabled
       expect(submitButton).toBeEnabled();
     });
   
-    it('disables the Continue button when the form is invalid', () => { 
+    it('disables the create account button when the form is invalid', () => { 
       render(<CreateAccount />);
     
-      const button = screen.getByRole('button', { name: /continue/i });
+      const button = screen.getByRole('button', { name: /Create Account/i });
 
       expect(button).toBeDisabled();
-      expect(button).toHaveClass('bg-gray-400');
+      expect(button).toHaveClass('bg-gray-600 cursor-not-allowed');
     });
     
   it('should handle form submission', async () => {
@@ -154,7 +154,7 @@ describe('CreateAccount Component', () => {
   fireEvent.click(screen.getByLabelText(/t&cs/i));
 
   // Act - simulate submit
-fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form')!);
+fireEvent.submit(screen.getByRole('button', { name: /create account/i }).closest('form')!);
 
   // Assert
   await waitFor(() => {
@@ -198,7 +198,7 @@ fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form
   fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'Password123!' } });
   fireEvent.click(screen.getByLabelText(/t&cs/i));
 
-  fireEvent.click(screen.getByRole('button', { name: /continue/i }));
+  fireEvent.click(screen.getByRole('button', { name: /create account/i }));
   await waitFor(() => {
     expect(screen.queryByLabelText('status')).not.toBeInTheDocument();
   });
@@ -215,12 +215,12 @@ fireEvent.submit(screen.getByRole('button', { name: /Continue/i }).closest('form
          // Cast fetch as jest.Mock
          (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
 
-      const submitButton = screen.getByText(/Continue/i);
+      const submitButton = screen.getByText(/create account/i);
   
       fireEvent.click(submitButton);
   
       await waitFor(() => {
-        expect(mockRouterPush).toHaveBeenCalledWith('/plan-selection/plans');
+        expect(mockRouterPush).toHaveBeenCalledWith('plan-selection');
       });
     });
  
@@ -248,7 +248,7 @@ it('should show error message if account creation fails', async () => {
   // Mock fetch to simulate server error
   (fetch as jest.Mock).mockResolvedValue({
     ok: false,
-    json: jest.fn().mockResolvedValue('error occurred'),
+    json: jest.fn().mockResolvedValue('Something went wrong'),
   });
 
   // Mock useAuth
@@ -263,7 +263,7 @@ it('should show error message if account creation fails', async () => {
     </AuthProvider>
   );
 
-  fireEvent.submit(screen.getByRole('button', { name: /continue/i }).closest('form')!);
+  fireEvent.submit(screen.getByRole('button', { name: /create account/i }).closest('form')!);
   await waitFor(() => {
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
@@ -273,13 +273,13 @@ it('should show error message if account creation fails', async () => {
     it('should show session option if user is already authenticated', () => {
 
         (useAuth as jest.Mock).mockReturnValue({
-      user: { email: 'test@example.com' },
+      user: { email: 'test@example.com' , name: 'John Doe'},
       login: mockLogin,
     });
 
       render(<CreateAccount />);
   
-      expect(screen.getByText(/Account created/i)).toBeInTheDocument();
-      expect(screen.getByText(/use below email to log in/i)).toBeInTheDocument();
+      expect(screen.getByText(/Welcome Aboard!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Your account has been created successfully/i)).toBeInTheDocument();
     });
 });

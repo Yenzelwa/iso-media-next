@@ -62,7 +62,7 @@ const ContactUsPage = () => {
                         <HeadphonesIcon className="w-5 h-5 text-red-400" />
                       </div>
                       <div>
-                        <h3 className="text-white font-semibold mb-1">Technical Support</h3>
+                        <h3 className="text-white font-semibold mb-1">Technical Support Details</h3>
                         <p className="text-gray-300 text-sm mb-2">Platform and streaming issues</p>
                         <a href="mailto:support@isolakwamuntu.com" className="text-red-400 hover:text-red-300 text-sm">
                           support@isolakwamuntu.com

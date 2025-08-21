@@ -25,6 +25,7 @@ export function WatchPage({ params }: WatchPageProps) {
   const [series, setSeries] = useState<Series | undefined>();
   const [error, setError] = useState<string>('');
   const [showSeasons, setShowSeasons] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Initialize with mock data (replace with API call)
@@ -152,80 +153,113 @@ export function WatchPage({ params }: WatchPageProps) {
     setSeries(seriesData);
   }, [params.id]);
 
-  const playNextVideo = async () => {
-    if (!currentVideo?.next_episode_id) return;
+  const playNextVideo = () => {
+  if (!currentVideo?.next_episode_id || !series) return;
 
-    // Mock next video data (replace with API call)
-    const nextVideoData: Episode = {
-      series_id: 1,
-      season_id: 1,
-      episode_number: 2,
-      episode_short_detail: 'S01E02',
-      episode_detail: '30 October 2023 - Season 1 - Episode 02',
-      next_episode_id: 255,
-      id: 254,
-      video_id: 126,
-      title: "Meditation and Mindfulness Mastery",
-      description: `Learn advanced meditation techniques and mindfulness practices that have been used for centuries to achieve inner peace and spiritual enlightenment. This comprehensive guide will take you through various forms of meditation, from breath awareness to loving-kindness practices, helping you develop a sustainable daily practice that transforms your life from within.`,
-      image_path: 'https://images.unsplash.com/photo-1512756290469-ec264b7fbf87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2253&q=80',
-      release_date: new Date('2023-10-30'),
-      video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      likes: 3421,
-      dislikes: 8,
-      ratings: 4.5,
-      user: {
-        id: 1,
-        like: false,
-        dislike: false,
-        rating: 4.5
-      }
-    };
-    setCurrentVideo(nextVideoData);
-  };
+  // Find the episode with the matching id in any season
+  const nextEp = series.seasons
+    .flatMap(season => season.episodes)
+    .find(ep => ep.id === currentVideo.next_episode_id);
 
-  const updateLikes = async (like: boolean) => {
-    try {
-      if (!currentVideo) return;
+  if (nextEp) {
+    setCurrentVideo(nextEp);
+    router.push(`/watch/${nextEp.id}`);
+  } else {
+    console.warn('Next episode not found');
+  }
+};
 
-      const updatedVideo = { ...currentVideo };
-      if (!updatedVideo.user.like && like) {
-        updatedVideo.user.like = like;
-        updatedVideo.likes += 1;
-        if (updatedVideo.user.dislike) {
-          updatedVideo.user.dislike = false;
-          updatedVideo.dislikes -= 1;
-        }
-      } else if (updatedVideo.user.like && !like) {
-        updatedVideo.user.like = like;
-        updatedVideo.likes -= 1;
-      }
-      setCurrentVideo(updatedVideo);
-    } catch (err) {
-      setError('Error occurred updating likes');
-    }
-  };
 
-  const updateDislikes = async (dislike: boolean) => {
-    try {
-      if (!currentVideo) return;
+const updateLikes = async (like: boolean) => {
+  try {
+    if (!currentVideo) return;
 
-      const updatedVideo = { ...currentVideo };
-      if (!updatedVideo.user.dislike && dislike) {
-        updatedVideo.user.dislike = dislike;
-        updatedVideo.dislikes += 1;
-        if (updatedVideo.user.like) {
-          updatedVideo.user.like = false;
-          updatedVideo.likes -= 1;
-        }
-      } else if (updatedVideo.user.dislike && !dislike) {
-        updatedVideo.user.dislike = dislike;
+    // ✅ Optimistic UI update
+    const updatedVideo = { ...currentVideo };
+    if (!updatedVideo.user.like && like) {
+      updatedVideo.user.like = like;
+      updatedVideo.likes += 1;
+      if (updatedVideo.user.dislike) {
+        updatedVideo.user.dislike = false;
         updatedVideo.dislikes -= 1;
       }
-      setCurrentVideo(updatedVideo);
-    } catch (err) {
-      setError('Error occurred updating dislikes');
+    } else if (updatedVideo.user.like && !like) {
+      updatedVideo.user.like = like;
+      updatedVideo.likes -= 1;
     }
-  };
+    setCurrentVideo(updatedVideo);
+
+    // ✅ API call to persist like
+    const response = await fetch(`http://172.24.74.185:4002/videos/${currentVideo.id}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: updatedVideo.user.id,
+        like,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update like');
+    }
+
+    // Optional: update with backend’s authoritative state
+    const data = await response.json();
+    setCurrentVideo((prev) => prev ? { ...prev, likes: data.likes, dislikes: data.dislikes } : prev);
+
+  } catch (err) {
+    console.error(err);
+    setError('Error occurred updating likes');
+  }
+};
+
+
+const updateDislikes = async (dislike: boolean) => {
+  try {
+    if (!currentVideo) return;
+
+    // ✅ Optimistic UI update
+    const updatedVideo = { ...currentVideo };
+    if (!updatedVideo.user.dislike && dislike) {
+      updatedVideo.user.dislike = dislike;
+      updatedVideo.dislikes += 1;
+      if (updatedVideo.user.like) {
+        updatedVideo.user.like = false;
+        updatedVideo.likes -= 1;
+      }
+    } else if (updatedVideo.user.dislike && !dislike) {
+      updatedVideo.user.dislike = dislike;
+      updatedVideo.dislikes -= 1;
+    }
+    setCurrentVideo(updatedVideo);
+
+    // ✅ API call to persist dislike
+    const response = await fetch(`http://172.24.74.185:4002/videos/${currentVideo.id}/dislike`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: updatedVideo.user.id,
+        dislike,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update dislike');
+    }
+
+    // Optional: sync with backend state
+    const data = await response.json();
+    setCurrentVideo((prev) => prev ? { ...prev, likes: data.likes, dislikes: data.dislikes } : prev);
+
+  } catch (err) {
+    console.error(err);
+    setError('Error occurred updating dislikes');
+  }
+};
 
   const handleEpisodeSelect = (episode: Episode) => {
     setCurrentVideo(episode);
@@ -261,7 +295,7 @@ export function WatchPage({ params }: WatchPageProps) {
                 {currentVideo && currentVideo?.next_episode_id && currentVideo.next_episode_id > 0 && (
                   <button
                     onClick={playNextVideo}
-                    className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-2 px-6 rounded-xl flex items-center space-x-2 transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-red-600 to-red hover:from-red hover:to-red text-white font-semibold py-2 px-6 rounded-xl flex items-center space-x-2 transition-all duration-300 transform hover:scale-105"
                   >
                     <span className="text-sm">Next Episode</span>
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

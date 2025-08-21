@@ -3,11 +3,10 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { useRouter } from 'next/navigation';
 
 import Cookies from 'js-cookie';
-import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '@/src/app/context/authContext';
-import StripeCheckOutForm from '@/src/components/StripeCheckOutForm';
-import PaymentPage from '@/src/app/(account)/billing/payment/page';
+import PaymentPage from '@/src/app/(account)/payment/page';
+import { useElements, useStripe } from '@stripe/react-stripe-js';
 
 // Mocks
 jest.mock('next/navigation', () => ({
@@ -40,8 +39,8 @@ const stripePromise = loadStripe('pk_test_123');
 describe('StripeCheckOutForm Component', () => {
   const mockPush = jest.fn();
   const mockUseAuth = useAuth as jest.Mock;
-  const mockUseStripe = require('@stripe/react-stripe-js').useStripe;
-  const mockUseElements = require('@stripe/react-stripe-js').useElements;
+  const mockUseStripe = useStripe as jest.Mock;
+  const mockUseElements = useElements as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -65,16 +64,16 @@ describe('StripeCheckOutForm Component', () => {
   });
 
   it('renders the form when user is authenticated', () => {
-    mockUseAuth.mockReturnValue({ user: { email: 'test@example.com', id: 'user123' } });
+    mockUseAuth.mockReturnValue({ user: { email: 'test@example.com', id: 'user123' , name: 'Joe Doe' } });
 
     render(
       <PaymentPage/>
     );
 
-    expect(screen.getByPlaceholderText('Card Holder Name')).toBeInTheDocument();
-    expect(screen.getByTestId('CardNumberElement')).toBeInTheDocument();
-    expect(screen.getByTestId('CardExpiryElement')).toBeInTheDocument();
-    expect(screen.getByTestId('CardCvcElement')).toBeInTheDocument();
+   expect(screen.getByText('Card Holder Name')).toBeInTheDocument();
+    expect(screen.getByText('Card Number')).toBeInTheDocument();
+    expect(screen.getByText('Expiry Date')).toBeInTheDocument();
+    expect(screen.getByText('CVV')).toBeInTheDocument();
   });
 
   it('disables submit button when card holder name is empty', () => {
@@ -84,65 +83,74 @@ describe('StripeCheckOutForm Component', () => {
       <PaymentPage/>
     );
 
-    const submitButton = screen.getByRole('button', { name: /confirm payment/i });
+    const submitButton = screen.getByRole('button', { name: /complete payment/i });
     expect(submitButton).toBeDisabled();
   });
 
 it('submits payment info when form is valid', async () => {
-  const createPaymentMethodMock = jest.fn().mockResolvedValue({
-    paymentMethod: { id: 'pm_test123' },
-    error: null,
+    const mockCreatePaymentMethod = jest.fn().mockResolvedValue({
+      paymentMethod: { id: 'pm_test123' },
+      error: null,
+    });
+
+    const mockCardNumberElement = {};
+    const mockCardExpiryElement = {};
+    const mockCardCvcElement = {};
+
+    mockUseStripe.mockReturnValue({
+      createPaymentMethod: mockCreatePaymentMethod,
+    });
+
+    mockUseElements.mockReturnValue({
+      getElement: (type: string) => {
+        if (type === 'cardNumber') return mockCardNumberElement;
+        if (type === 'cardExpiry') return mockCardExpiryElement;
+        if (type === 'cardCvc') return mockCardCvcElement;
+        return null;
+      },
+    });
+
+    mockUseAuth.mockReturnValue({
+      user: {
+        email: 'test@example.com',
+        id: 'user123',
+        name: 'Joe Doe',
+      },
+    });
+
+    global.fetch = jest.fn().mockImplementation((url) => {
+      if (url.includes('/customer')) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              customer: JSON.stringify({ customer: 'cus_test123' }),
+            }),
+        });
+      }
+      if (url.includes('/subscription')) {
+        return Promise.resolve({ ok: true });
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
+
+    render(<PaymentPage />);
+
+    // Fill in card holder input
+    fireEvent.change(screen.getByLabelText(/card holder name/i), {
+      target: { value: 'John Doe' },
+    });
+
+    const submitButton = screen.getByRole('button', { name: /complete payment/i });
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    await waitFor(() => {
+      expect(mockCreatePaymentMethod).toHaveBeenCalled();
+      expect(mockPush).toHaveBeenCalledWith('/');
+    });
   });
-
-  const getElementMock = jest.fn().mockImplementation((type) => {
-    // Return dummy elements for all required Stripe elements
-    return {};
-  });
-
-  mockUseAuth.mockReturnValue({
-    user: { email: 'test@example.com', id: 'user123' },
-  });
-
-  mockUseStripe.mockReturnValue({
-    createPaymentMethod: createPaymentMethodMock,
-  });
-
-  mockUseElements.mockReturnValue({
-    getElement: getElementMock,
-  });
-
-  global.fetch = jest.fn().mockImplementation((url) => {
-    if (url.includes('/customer')) {
-      return Promise.resolve({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            customer: JSON.stringify({ customer: 'cus_test123' }),
-          }),
-      });
-    }
-    if (url.includes('/subscription')) {
-      return Promise.resolve({ ok: true });
-    }
-    return Promise.reject(new Error('Unknown endpoint'));
-  });
-
-  render(
-   <PaymentPage/>
-  );
-
-  const input = screen.getByPlaceholderText('Card Holder Name');
-  fireEvent.change(input, { target: { value: 'John Doe' } });
-
-  const submitButton = screen.getByRole('button', { name: /confirm payment/i });
-
-  await act(async () => {
-    fireEvent.click(submitButton);
-  });
-
-  await waitFor(() => {
-    expect(mockPush).toHaveBeenCalledWith('/');
-  });
-});
 
 });

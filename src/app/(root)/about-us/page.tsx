@@ -33,7 +33,7 @@ const AboutUsPage = () => {
                     <div className="bg-gray-800/30 rounded-xl p-6 border border-gray-700/30">
                       <p className="text-gray-300 leading-relaxed text-lg mb-4">
                         At IsolaKwaMUNTU, we believe in the transformative power of consciousness-expanding content. 
-                        Our mission is to create a sacred digital space where seekers of truth, wisdom, and spiritual 
+                        The mission is to create a sacred digital space where seekers of truth, wisdom, and spiritual 
                         growth can access carefully curated content that illuminates the path to awakening.
                       </p>
                       <p className="text-gray-300 leading-relaxed">

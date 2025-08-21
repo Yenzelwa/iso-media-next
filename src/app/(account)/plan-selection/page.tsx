@@ -192,7 +192,7 @@ const PlanSelection: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-center mt-16 space-y-6">
-          <Link
+          <Link id="payment-link"
             href="/payment"
             className="group relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-12 py-4 rounded-2xl inline-flex items-center space-x-3 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-red-500/50 font-semibold text-lg min-w-[280px] justify-center"
           >

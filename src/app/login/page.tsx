@@ -1,7 +1,6 @@
 'use client'
 import "@/src/globals.css";
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
@@ -26,9 +25,17 @@ const Login = () => {
     },
   });
 
-  const { register, handleSubmit, setError, formState: { errors } } = methods;
+  const { register, handleSubmit, setError, formState: { errors }, watch } = methods;
   const [isLoading, setIsLoading] = useState(false);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+
+    // Watch inputs to enable the button
+  const watchEmail = watch('email');
+  const watchPassword = watch('password');
+
+  useEffect(() => {
+    setIsButtonEnabled(!!watchEmail && !!watchPassword);
+  }, [watchEmail, watchPassword]);
 
   // Handle form submission and authentication
   const handleLogin = async (data: FormData) => {
@@ -39,39 +46,37 @@ const Login = () => {
     try {
       // For demo purposes, we'll use mock authentication
       // In production, replace with actual API call
-      setTimeout(async () => {
         try {
-          // Mock API call structure (commented for demo)
-          /*
-          const response = await fetch('http://172.24.74.185:4002/login', {
+
+          const response = await fetch('http://172.24.74.185:4002/login', {  
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ email, password }),
           });
+          if(response.ok){
           const user = await response.json();
           const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"; // Simulate token
-          */
-
-          // Mock successful login
-          const mockUser = {
-            id: '1',
-            name: 'Alex Johnson',
-            email: email,
-            avatar: '',
-            subscription: 'premium' as const
-          };
-          const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"; // Simulate token
-
-          login(token, mockUser);
-          router.push('/profile');
-        } catch {
-          setErrorMessage('An error occurred. Please try again.');
-        } finally {
-          setIsLoading(false);
-        }
-      }, 1500);
+            login(token, user);
+          if(user){
+          router.push('/');
+          }    
+          }
+          else{
+            const error = await response.json();
+            setErrorMessage(error)
+          }
+        } catch (error: any) {
+      if (error?.response?.status === 401) {
+        setError('email', { type: 'manual', message: 'Invalid credentials' });
+      } else {
+        setErrorMessage('Something went wrong. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+      
     } catch {
       setErrorMessage('An error occurred. Please try again.');
       setIsLoading(false);
@@ -131,21 +136,24 @@ const Login = () => {
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(handleLogin)}>
-            <p aria-label="error-msg" className={`text-red-500 text-sm mb-4 ${errorMessage ? 'opacity-100' : 'opacity-0'}`}>
+            <p aria-label="error-msg" className={`text-red text-sm mb-4 ${errorMessage ? 'opacity-100' : 'opacity-0'}`}>
               {errorMessage || 'No error'}
             </p>
 
             <div className="space-y-4 mb-6">
               <div className="relative">
+        
                 <Input
                   {...email_validation}
                 />
+            {errors.email && <p className="text-red-500">{errors.email.message}</p>}
               </div>
 
               <div className="relative">
                 <Input
                   {...password_register_validation}
                 />
+                  {errors.password && <p className="text-red-500">{errors.password.message}</p>}
               </div>
             </div>
 
@@ -155,30 +163,30 @@ const Login = () => {
                 <span className="text-red-300 font-medium">Signing you in...</span>
               </div>
             ) : (
-              <button
-                type="submit"
-                className={`group relative w-full py-4 rounded-xl font-bold text-lg transition-all duration-500 transform overflow-hidden ${
-                  isLoading
-                    ? 'bg-gray-600/50 cursor-not-allowed text-gray-400'
-                    : isButtonEnabled
-                      ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-[0_8px_25px_rgba(239,68,68,0.4)] hover:shadow-[0_12px_35px_rgba(239,68,68,0.6)] hover:scale-[1.02] active:scale-[0.98]'
-                      : 'bg-gray-500/30 cursor-not-allowed text-gray-500'
-                }`}
-                style={{
-                  cursor: isButtonEnabled ? 'pointer' : 'not-allowed',
-                }}
-                disabled={!isButtonEnabled || isLoading}
-              >
-                <span className="relative z-10 flex items-center justify-center">
-                  Sign In
-                  <svg className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-                {isButtonEnabled && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                )}
-              </button>
+                <button
+        type="submit"
+        className={`group relative w-full py-4 rounded-xl font-bold text-lg transition-all duration-500 transform overflow-hidden ${
+          isLoading
+            ? 'bg-gray-600/50 cursor-not-allowed text-gray-400'
+            : isButtonEnabled
+            ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-[0_8px_25px_rgba(239,68,68,0.4)] hover:shadow-[0_12px_35px_rgba(239,68,68,0.6)] hover:scale-[1.02] active:scale-[0.98]'
+            : 'bg-gray-500/30 cursor-not-allowed text-gray-500'
+        }`}
+        style={{
+          cursor: isButtonEnabled ? 'pointer' : 'not-allowed',
+        }}
+        disabled={!isButtonEnabled || isLoading}
+      >
+        <span className="relative z-10 flex items-center justify-center">
+          Log In
+          <svg className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </span>
+        {isButtonEnabled && (
+          <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        )}
+      </button>
             )}
           </form>
         </FormProvider>

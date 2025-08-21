@@ -3,20 +3,24 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import RootLayout from '@/src/app/(root)/layout';
 
-// Mock components
+
 jest.mock('@/src/components/Navigation', () => ({
-  Navigation: () => <nav data-testid="nav">Mock Navigation</nav>,
+  __esModule: true,
+  default: () => <nav data-testid="nav">Mock Navigation</nav>,
 }));
 
 jest.mock('@/src/components/Footer', () => ({
+  __esModule: true,
   Footer: () => <footer data-testid="footer">Mock Footer</footer>,
 }));
 
 jest.mock('@/src/app/context/authContext', () => ({
+  __esModule: true,
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="auth-provider">{children}</div>
   ),
 }));
+
 beforeAll(() => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -31,6 +35,7 @@ beforeAll(() => {
       dispatchEvent: jest.fn(),
     })),
   });
+  jest.clearAllMocks();
 });
 
 

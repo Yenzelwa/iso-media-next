@@ -23,17 +23,6 @@ const Register = () => {
   const [LoginBtnEnable, setLoginBtnEnable] = useState(true);
   const { login, user } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
-  const [registerError, setRegisterError] = useState('');
-
-  useEffect(() => {
-    if (registerError) {
-      setErrorMessage(registerError);
-      const timer = setTimeout(() => {
-        setErrorMessage('');
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [registerError]);
 
   useEffect(() => {
     const isFormValid = methods.formState.isValid;
@@ -44,7 +33,7 @@ const Register = () => {
     setIsLoading(true);
     try {
       // Mock API call structure (commented for demo)
-      /*
+      
       const response = await fetch(
         'http://172.24.74.185:4002/profile',
         {
@@ -66,28 +55,21 @@ const Register = () => {
           credentials: 'include',
         }
       );
+      if(response.ok){
       const user = await response.json();
       const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag";
-      */
-
-      // Mock successful registration for demo
-      setTimeout(() => {
-        const mockUser = {
-          id: '1',
-          name: data.first_name,
-          email: data.email,
-          avatar: '',
-          subscription: 'basic' as const
-        };
-
-        const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag";
-        login(token, mockUser);
-        router.push('/plan-selection');
-      }, 1500);
+      login(token, user)
+      router.push('plan-selection')
+    
+      }
+      else
+      {
+        var error = await response.json()
+        setErrorMessage(error)
+      }
 
     } catch (error) {
-      console.error('Error during account creation:', error);
-      setRegisterError('Something went wrong');
+      setErrorMessage('Something went wrong');
     } finally {
       setIsLoading(false);
     }

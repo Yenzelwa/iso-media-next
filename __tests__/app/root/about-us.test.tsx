@@ -13,9 +13,9 @@ describe('AboutUsPage', () => {
   it('renders mission and vision sections', () => {
     render(<AboutUsPage />);
     expect(screen.getByText(/our mission/i)).toBeInTheDocument();
-    expect(screen.getByText(/our vision/i)).toBeInTheDocument();
-    expect(screen.getByText(/our team/i)).toBeInTheDocument();
-    expect(screen.getByText(/join us/i)).toBeInTheDocument();
+    expect(screen.getByText(/our story/i)).toBeInTheDocument();
+    expect(screen.getByText(/our values/i)).toBeInTheDocument();
+    expect(screen.getByText(/what we offer/i)).toBeInTheDocument();
   });
 
   it('does not render any button', () => {

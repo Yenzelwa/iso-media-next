@@ -75,6 +75,7 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
 
   // Get user initials for avatar
   const getInitials = (name: string) => {
+    if(!name || typeof name !='string') return'';
     return name
       .split(' ')
       .map(word => word.charAt(0))

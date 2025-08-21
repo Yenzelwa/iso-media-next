@@ -17,7 +17,7 @@ const videos: Video[] = [
         name: 'Spirituality'
       }
     },
-    description: 'Journey into the world of conscious living and spiritual awakening. Discover ancient wisdom and modern practices that transform your daily experience.',
+    description: 'Journey into the world of conscious living and awakening. Discover ancient wisdom and modern practices that transform your daily experience.',
     image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
     release_date: new Date('2023-02-01'),
     video_path: '',

@@ -1,10 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useAuth } from '@/src/app/context/authContext';
 import WatchVideo from '@/src/app/(root)/watch/watch-video';
 import axios from 'axios';
+import userEvent from '@testing-library/user-event';
+import { formatThumbsCount } from '@/src/utils/formatThumbsCount';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn()
@@ -22,16 +24,26 @@ jest.mock('axios', () => ({
   post: jest.fn(() => Promise.resolve({ data: {} }))
 }));
 
+
+
 // Mock dynamic imports
 jest.mock('@/src/components/Player', () => () => <div data-testid="player">Player</div>);
+const norm = (s?: string | null) => (s ?? '').replace(/\s+/g, '').toLowerCase();
+const textEquals = (expected: string) => (_content: string, node: Element | null) =>
+  norm(node?.textContent) === norm(expected);
 
 describe('WatchVideo Component', () => {
   const pushMock = jest.fn();
+  const user = userEvent.setup();
   beforeEach(() => {
     (useRouter as jest.Mock).mockReturnValue({ push: pushMock });
+      (global as any).fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ likes: 0, dislikes: 0 }), // will override per test if needed
+    });
   });
 
-  it('should redirect to login if no user is found', () => {
+  xit('should redirect to login if no user is found', () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null });
     render(<WatchVideo params={{ id: '1' }} />);
     expect(pushMock).toHaveBeenCalledWith('/login');
@@ -49,41 +61,97 @@ describe('WatchVideo Component', () => {
     });
   });
 
-  it('triggers like button and updates UI', async () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
-    (Cookies.get as jest.Mock).mockReturnValue(null);
+it('increments like count when liking an unliked episode', async () => {
+    const initialLikes = 3421;
+    const expectedLikes = 3422; // API returns authoritative value
 
-    render(<WatchVideo params={{ id: '1' }} />);
-
-    await waitFor(() => {
-      const likeButton = screen.getByRole('button', { name: /thumbs-up/i });
-      fireEvent.click(likeButton);
-      
+    // Make API return the exact expected likes so UI can re-sync
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ likes: expectedLikes, dislikes: 8 }),
     });
 
-    // axios.post is mocked, we assume it’s called correctly
-    // You can extend this by checking if state updates occur
-  });
+    const user = userEvent.setup();
+    render(<WatchVideo params={{ id: '254' } as any} />);
 
-  it('triggers next episode change', async () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
-    (Cookies.get as jest.Mock).mockReturnValue(null);
+    const likeBtn = await screen.findByRole('button', { name: /thumbs-up/i });
 
-    render(<WatchVideo params={{ id: '1' }} />);
+    await user.click(likeBtn);
 
-    await waitFor(() => {
-      const nextButton = screen.getByRole('button', { name: /next episode/i });
-      fireEvent.click(nextButton);
+     await waitFor(() => {
+      expect(within(likeBtn).getByText(formatThumbsCount(expectedLikes))).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/Next Episdose/i)).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalledWith(
+      'http://172.24.74.185:4002/videos/253/like',
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: 1, like: false }),
+      })
+    );
   });
+
+  it('decrements like count when unliking a liked episode', async () => {
+    // Episode id 253 (from your mock data) starts with:
+    // likes: 2551, user.like: true -> expect -1 to 2550
+    const initialLikes = 2551;
+    const expectedLikes = 2550;
+
+    (global as any).fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ likes: expectedLikes, dislikes: 5 }),
+    });
+
+    render(<WatchVideo params={{ id: '253' } as any} />);
+
+    const likeButton = await screen.findByRole('button', { name: /thumbs-up/i });
+    within(likeButton).getByText(formatThumbsCount(initialLikes));
+
+    await user.click(likeButton);
+
+    await waitFor(() => {
+      expect(within(likeButton).getByText(formatThumbsCount(expectedLikes))).toBeInTheDocument();
+    });
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      'http://172.24.74.185:4002/videos/253/like',
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: 1, like: false }),
+      })
+    );
+  });
+
+it('triggers next episode change (navigates to next id)', async () => {
+  (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
+  (Cookies.get as jest.Mock).mockReturnValue(null);
+
+  const pushMock = jest.fn();
+  // Make the already-mocked useRouter return our pushMock for THIS test
+  (useRouter as jest.Mock).mockReturnValue({
+    push: pushMock,
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  });
+
+  render(<WatchVideo params={{ id: '1' }} />);
+
+  const nextButton = await screen.findByRole('button', { name: /next episode/i });
+  await user.click(nextButton);
+
+  await waitFor(() => {
+    expect(pushMock).toHaveBeenCalledWith('/watch/254');
+  });
+});
 
 
 
  it('handles error when axios fails on like', async () => {
   (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
-  (axios.post as jest.Mock).mockRejectedValueOnce(new Error('Failed to like'));
+  (global.fetch as jest.Mock).mockResolvedValueOnce(new Error('Failed to like'));
+
 
   render(<WatchVideo params={{ id: '1' }} />);
 

@@ -18,7 +18,7 @@ export const Input = ({ label, type, id, placeholder, name, validation }: InputP
     formState: { errors },
   } = useFormContext();
 
-  const inputError = errors[id];
+  const inputError = errors[name];
 
   return (
     <div className="flex flex-col w-full gap-2">
@@ -37,7 +37,7 @@ export const Input = ({ label, type, id, placeholder, name, validation }: InputP
           }`}
         placeholder={placeholder}
         {...register(id, validation)}
-        onKeyUp={() => trigger(id)}
+        onKeyUp={() => trigger(name)}
       />
 
 

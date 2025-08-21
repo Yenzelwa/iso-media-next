@@ -5,6 +5,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { setCookie } from 'cookies-next';
 import { AuthProvider, useAuth } from '@/src/app/context/authContext';
+import userEvent from '@testing-library/user-event';
 
 
 
@@ -57,7 +58,7 @@ describe('LoginPage', () => {
     const mockResponse = { ok: true, json: jest.fn().mockResolvedValue(mockUser) };
     (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
 
-    render(<LoginPage />);
+    render(<LoginPage  />);
 
     // Simulate user input for email and password
     fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
@@ -87,7 +88,7 @@ describe('LoginPage', () => {
 
   it('should show error message on failed login', async () => {
 
-    const mockResponse = { ok: false, json: jest.fn().mockResolvedValue({}) };
+    const mockResponse = { ok: false, json: jest.fn().mockResolvedValue( "Invalid email or password" ) };
     (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
 
     render(<LoginPage />);
@@ -101,7 +102,7 @@ describe('LoginPage', () => {
 
     // Wait for the error message to be displayed
     await waitFor(() => {
-      expect(screen.getByText(/Invalid email or password./i)).toBeInTheDocument();
+      expect(screen.getByText(/Invalid email or password/i)).toBeInTheDocument();
     });
   });
 
@@ -121,36 +122,22 @@ describe('LoginPage', () => {
     });
   });
 
-  it('should show validation errors for empty email and password fields', async () => {
-    render(<LoginPage />);
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
+it('should show validation errors for empty email and password fields', async () => {
+  render(<LoginPage />);
 
-    const loginButton = screen.getByRole('button', { name: /log in/i });
-  
-    fireEvent.input(emailInput, { target: { value: '' } });
-    fireEvent.input(passwordInput, { target: { value: '' } });
-  
-    fireEvent.click(loginButton);
-  
-    await waitFor(() => {
-      const errors = document.querySelectorAll('.text-red');
-      const errorTexts = Array.from(errors).map(el => el.textContent?.toLowerCase());
-  
-      expect(errorTexts).toContain('email is required.');
-      expect(errorTexts).toContain('password is required.');
-    });
-  });
+  // leave fields empty and submit
+  await userEvent.click(screen.getByRole('button', { name: /log in/i }));
+
+  // assert by text; RHF should now show required errors
+  expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
+  expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
+});
   
  xit('should show validation error when email is invalid', async () => {
  render(<LoginPage />);
 
     fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'invalidemail' } });
 
-//    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
-
-  // Assert the validation message appears
- // await waitFor(() => {
     expect(screen.getByText(/email address is not valid/i)).toBeInTheDocument();
  // });
 });
