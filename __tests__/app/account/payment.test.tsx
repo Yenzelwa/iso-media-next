@@ -149,7 +149,7 @@ it('submits payment info when form is valid', async () => {
 
     await waitFor(() => {
       expect(mockCreatePaymentMethod).toHaveBeenCalled();
-      expect(mockPush).toHaveBeenCalledWith('/');
+     expect(mockPush).toHaveBeenCalledWith('/');
     });
   });
 

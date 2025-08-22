@@ -29,9 +29,9 @@ export const StripeCheckOutForm: React.FC = () => {
   const handlePayment = async () => {
     if (!stripe || !elements) return;
   
-    const cardNumberElement = elements.getElement(CardNumberElement);
-    const cardExpiryElement = elements.getElement(CardExpiryElement);
-    const cardCvcElement = elements.getElement(CardCvcElement);
+    const cardNumberElement = elements.getElement('cardNumber');
+    const cardExpiryElement = elements.getElement('cardExpiry');
+    const cardCvcElement = elements.getElement('cardCvc');
   
     if (!cardNumberElement || !cardExpiryElement || !cardCvcElement) {
       console.error('Card elements not found');
@@ -319,6 +319,8 @@ export const StripeCheckOutForm: React.FC = () => {
                 placeholder="Enter name as it appears on card"
                 className="w-full px-4 py-3 bg-gray-100 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
                 required
+            value={billingInfo.cardHolder}
+          onChange={(e) => setBillingInfo({ cardHolder: e.target.value })}
               />
             </div>
 
