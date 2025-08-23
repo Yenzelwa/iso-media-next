@@ -108,7 +108,7 @@ export default function ChangePasswordModal({
             </span>
           </p>
           <ul className="text-app-gray text-sm mt-1 space-y-1">
-            <li>• At least 8 characters long</li>
+            <li>• A minimun of 8 characters</li>
             <li>• Mix of letters, numbers, and symbols recommended</li>
           </ul>
         </div>
