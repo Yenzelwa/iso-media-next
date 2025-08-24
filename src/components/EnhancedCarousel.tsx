@@ -20,7 +20,7 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
       const currentScroll = container.scrollLeft;
       const maxScroll = container.scrollWidth - container.clientWidth;
       
-      let newPosition;
+      let newPosition: number;
       if (direction === "left") {
         newPosition = Math.max(0, currentScroll - scrollAmount);
       } else {
