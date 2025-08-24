@@ -105,15 +105,6 @@ const BrowsePage = () => {
       <main className="pt-24">
         <Hero videos={videos} />
                 <div className="bg-gradient-to-b from-black via-gray-900/50 to-black space-y-20 py-24 animate-fade-in">
-          {/* Section Header
-          <div className="px-4 lg:px-16 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-              Curated Collections
-            </h2>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-              Discover transformative content carefully selected to guide your journey of consciousness, wellness, and spiritual growth.
-            </p>
-          </div> */}
 
           <EnhancedCarousel title="Trending Now" movies={videos} variant="home" />
           <EnhancedCarousel title="Spiritual Awakening" movies={videos.filter(v => v.type.category.name === 'Spirituality')} variant="home" />

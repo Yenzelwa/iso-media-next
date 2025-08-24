@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Video } from "@/typings";
 import { MovieCard } from "./VideoCard";
 interface VideosProps {

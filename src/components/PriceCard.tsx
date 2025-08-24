@@ -1,6 +1,5 @@
 import { PricingPlan } from '@/typings';
-import { useRouter } from 'next/navigation';
-import React, { use } from 'react';
+import React from 'react';
 
 interface PricingCardProps {
   plan: PricingPlan;
@@ -16,7 +15,6 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   isPopular = false
 }) => {
 
-const router = useRouter();
 
 // Removed incorrect onSelect usage
 

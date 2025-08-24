@@ -57,7 +57,6 @@ export const StripeCheckOutForm: React.FC = () => {
         setIsProcessing(false); // Reset loading state in case of error
         return;
       }
-    const email = user;
       // Send request to create customer on the backend
       const customerResponse = await fetch('http://172.24.74.185:4000/customer', {
         method: 'POST',
@@ -371,7 +370,7 @@ export const StripeCheckOutForm: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-red-400">$1.99</p>
-                  <p className="text-xs text-gray-500">Today's charge</p>
+                  <p className="text-xs text-gray-500">Today&apos;s charge</p>
                 </div>
               </div>
             </div>

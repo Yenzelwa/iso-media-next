@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor, within } from '@testing-library/rea
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useAuth } from '@/src/app/context/authContext';
-import WatchVideo from '@/src/app/(root)/watch/watch-video';
+import WatchVideo from '@/src/app/(root)/watch/[id]/watch-video';
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 import { formatThumbsCount } from '@/src/utils/formatThumbsCount';

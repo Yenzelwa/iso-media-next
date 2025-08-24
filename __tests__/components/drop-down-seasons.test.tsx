@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import DropdownSeasons from '@/src/components/DropDownSeasons';
+import { DropdownSeasons } from '@/src/components/DropDownSeasons';
 
 describe('DropdownSeasons', () => {
   const seasons = [

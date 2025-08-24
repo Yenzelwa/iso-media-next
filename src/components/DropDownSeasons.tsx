@@ -52,4 +52,4 @@ export function DropdownSeasons({ seasons, onSelectSeason }: DropdownSeasonsProp
   );
 }
 
-export default DropdownSeasons;
+

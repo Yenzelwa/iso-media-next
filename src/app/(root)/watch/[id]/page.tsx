@@ -1,8 +1,8 @@
 // app/watch/[id]/page.tsx
 
 import React from "react";
-import WatchVideo from "../watch-video";
 import { Metadata } from 'next';
+import WatchVideo from "./watch-video";
 
 interface PageProps {
   params: Promise<{

@@ -1,6 +1,4 @@
-import NextAuth from "next-auth";
-import { JWT } from "next-auth/jwt";
-import exp from "constants";
+
 import Episode from "./app/components/shared/Episode";
 
 export interface Video {

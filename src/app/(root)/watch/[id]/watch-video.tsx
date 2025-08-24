@@ -2,10 +2,7 @@
 
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../context/authContext';
 import dynamic from 'next/dynamic';
 import Seasons from '@/src/components/WatchSeries';
 import CommentSection from '@/src/components/CommentsSection';
@@ -260,13 +257,6 @@ const updateDislikes = async (dislike: boolean) => {
     setError('Error occurred updating dislikes');
   }
 };
-
-  const handleEpisodeSelect = (episode: Episode) => {
-    setCurrentVideo(episode);
-    setShowSeasons(false);
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">

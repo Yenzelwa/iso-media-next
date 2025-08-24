@@ -131,6 +131,7 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
     <div className="relative">
       {/* User Avatar Button */}
       <button
+      aria-label='toggle'
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 sm:space-x-3 p-1.5 sm:p-2 pr-2 sm:pr-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-gray-800/30 to-gray-900/30 backdrop-blur-xl border border-white/10 hover:border-red-500/30 hover:bg-gradient-to-r hover:from-red-900/20 hover:to-gray-900/40 transition-all duration-500 group shadow-lg hover:shadow-red-500/20"
@@ -242,7 +243,7 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
                   <HelpCircle className="w-5 h-5 text-orange-400 group-hover:text-red-400 transition-colors" />
                 </div>
                 <div className="flex-1">
-                  <span className="font-semibold text-lg">FAQ's</span>
+                  <span className="font-semibold text-lg">FAQ&apos;s</span>
                   <p className="text-sm text-gray-500 group-hover:text-gray-400">Frequently asked questions</p>
                 </div>
               </Link>
