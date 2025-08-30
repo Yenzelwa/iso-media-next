@@ -169,9 +169,9 @@ const SeriesPage = () => {
             <div className="flex flex-wrap items-center gap-6 p-6 bg-gray-900/50 rounded-lg backdrop-blur-sm border border-gray-800/50">
               {/* Category Filter */}
               <div className="relative">
-                <label className="text-gray-400 text-sm font-medium mb-2 block">Category</label>
+                <label htmlFor='category' className="text-gray-400 text-sm font-medium mb-2 block">Category</label>
                 <div className="relative">
-                  <select
+                  <select id='category'
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="bg-gray-800 text-white border border-gray-700 rounded-sm px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none cursor-pointer min-w-[140px]"
@@ -186,9 +186,9 @@ const SeriesPage = () => {
 
               {/* Sort Filter */}
               <div className="relative">
-                <label className="text-gray-400 text-sm font-medium mb-2 block">Sort by</label>
+                <label htmlFor='sort by' className="text-gray-400 text-sm font-medium mb-2 block">Sort by</label>
                 <div className="relative">
-                  <select
+                  <select id='sort by'
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className="bg-gray-800 text-white border border-gray-700 rounded-sm px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none cursor-pointer min-w-[160px]"

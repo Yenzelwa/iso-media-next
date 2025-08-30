@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 import React from "react";
-import { Series, Video } from "@/typings";
+import { Series } from "@/typings";
 import Videos from "../../../../components/shared/Videos";
 
 interface PageProps {
   params: Promise<{
-    id: string;
+    id: number;
   }>;
 }
 
@@ -21,7 +21,7 @@ export default async function SeriesByIdPage({ params }: PageProps) {
 
   const series: Series = 
     {
-      id: 1,
+      id: id,
       title: "Family Unit",
       description: "Family unit is the doundation of all civilazation",
       realese_date: new Date(),

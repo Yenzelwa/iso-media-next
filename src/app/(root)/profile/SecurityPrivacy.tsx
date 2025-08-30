@@ -101,7 +101,7 @@ export const SecurityPrivacy: React.FC = () => {
                   <p className="text-gray-400 text-sm">Add extra security layer to your account</p>
                 </div>
               </div>
-              <button
+              <button data-testid="toggle"
                 onClick={() => handleToggle('twoFactorEnabled')}
                 className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
                   settings.twoFactorEnabled ? 'bg-red-600' : 'bg-gray-600'
@@ -155,7 +155,7 @@ export const SecurityPrivacy: React.FC = () => {
                   <p className="text-gray-400 text-sm">Get notified of new device logins</p>
                 </div>
               </div>
-              <button
+              <button data-testid="login-alert"
                 onClick={() => handleToggle('loginAlerts')}
                 className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
                   settings.loginAlerts ? 'bg-red-600' : 'bg-gray-600'
@@ -193,7 +193,7 @@ export const SecurityPrivacy: React.FC = () => {
           </div>
 
           {devices.map((device) => (
-            <div
+            <div role="region" aria-label={device.device}
               key={device.id}
               className={`bg-gradient-to-r from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border transition-all duration-300 ${
                 device.current 

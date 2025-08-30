@@ -1,4 +1,5 @@
 'use client'
+import React from "react";
 import { Video } from "@/typings";
 import { ChevronLeft, ChevronRight, Play, Plus, Info, Star } from "lucide-react";
 import { useState, useEffect } from "react";

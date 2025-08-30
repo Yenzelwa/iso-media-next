@@ -7,13 +7,14 @@ import WatchVideo from "./watch-video";
 interface PageProps {
   params: Promise<{
     id: string;
+    title:string
   }>;
 }
 
 // Optional: Generate metadata dynamically
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   return {
-    title: `Watch Video ${(await params).id}`,
+    title: `${(await params).title} ${(await params).id}`,
   };
 }
 

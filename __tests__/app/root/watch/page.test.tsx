@@ -26,8 +26,8 @@ test('generateStaticParams returns the expected id list', () => {
 });
 
 test('generateMetadata builds a title using the dynamic id', async () => {
-  const md = await PageModule.generateMetadata({ params: Promise.resolve({ id: '42' }) } as any);
-  expect(md.title).toBe('Watch Video 42');
+  const md = await PageModule.generateMetadata({ params: Promise.resolve({ id: '42', title:'title' }) } as any);
+  expect(md.title).toBe('title 42');
 });
 
 test('WatchPage renders the id and passes it to <WatchVideo />', async () => {

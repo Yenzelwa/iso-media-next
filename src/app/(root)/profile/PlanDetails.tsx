@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CreditCard, Settings, X } from 'lucide-react';
+import { toCents } from '@/src/utils/cents';
 
 export const PlanDetails: React.FC = () => {
   const [showManagePlan, setShowManagePlan] = useState(false);
@@ -19,7 +20,7 @@ export const PlanDetails: React.FC = () => {
     {
       id: 'premium',
       name: 'Premium',
-      price: '$19.99',
+      price: '$29.99',
       period: 'month',
       features: ['4K Ultra HD streaming on 4 devices', 'Complete content library access', 'Unlimited offline downloads'],
       current: true,
@@ -30,7 +31,7 @@ export const PlanDetails: React.FC = () => {
     {
       id: 'family',
       name: 'Family',
-      price: '$29.99',
+      price: '$49.99',
       period: 'month',
       features: ['4K Ultra HD streaming on 6 devices', 'Complete library + exclusive content', 'Multiple user profiles'],
       color: 'from-purple-600 to-purple-800',
@@ -40,13 +41,14 @@ export const PlanDetails: React.FC = () => {
   ];
 
   const currentPlan = plans.find(plan => plan.current);
+  console.log('currentplan', currentPlan);
 
   return (
     <div className="space-y-8">
       {/* Current Plan Details */}
-      <div className="relative">
+      <div data-testid="current-plan" className="relative">
         <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>
-        <h2 className="text-3xl font-bold text-white mb-2">Current Plan</h2>
+        <h2 id="currentPlan" className="text-3xl font-bold text-white mb-2">Current Plan</h2>
         <p className="text-gray-400 text-sm mb-6">Your active subscription and plan details</p>
 
         <div className="bg-gradient-to-br from-red-600/20 to-red-800/10 border border-red-500/30 rounded-3xl p-8 relative overflow-hidden">
@@ -90,20 +92,20 @@ export const PlanDetails: React.FC = () => {
 
             <div className="flex items-center justify-between">
               <div className="flex space-x-3">
-                <button
+                <button data-testid="manage-plan"
                   onClick={() => setShowManagePlan(true)}
                   className="bg-red-600/20 text-red-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30"
                 >
                   Manage Plan
                 </button>
-                <button
+                <button data-testid="cancel-subscription"
                   onClick={() => setShowCancelSubscription(true)}
                   className="bg-gray-600/20 text-gray-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-600/30 transition-colors border border-gray-500/30"
                 >
                   Cancel Subscription
                 </button>
               </div>
-              <button
+              <button data-testid="upgrade-popup"
                 onClick={() => setShowUpgradePlan(true)}
                 className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-xl font-medium hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105"
               >
@@ -115,7 +117,7 @@ export const PlanDetails: React.FC = () => {
       </div>
 
       {/* Plan Comparison */}
-      <div className="relative">
+      <div data-testid="plan_summary" className="relative">
         <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>
         <h2 className="text-3xl font-bold text-white mb-2">All Available Plans</h2>
         <p className="text-gray-400 text-sm mb-6">Compare features and choose the perfect plan for you</p>
@@ -170,18 +172,18 @@ export const PlanDetails: React.FC = () => {
               </div>
 
               {plan.current ? (
-                <button className="w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white py-3 rounded-xl font-medium cursor-not-allowed" disabled>
+                <button aria-label={currentPlan?.id} className="w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white py-3 rounded-xl font-medium cursor-not-allowed" disabled>
                   Current Plan
                 </button>
               ) : (
-                <button
+                <button 
                   onClick={() => {
                     const action = Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'upgrade' : 'downgrade';
                     alert(`${action === 'upgrade' ? 'Upgrading' : 'Downgrading'} to ${plan.name} plan for ${plan.price}/month`);
                   }}
                   className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-3 rounded-xl font-medium hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105"
                 >
-                  {plan.price > (currentPlan?.price ?? '') ? 'Upgrade' : 'Downgrade'}
+                  {toCents(plan.price) > toCents(currentPlan?.price ?? '') ? 'Upgrade Plan' : 'Downgrade Plan'}
                 </button>
               )}
             </div>
