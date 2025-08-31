@@ -23,12 +23,15 @@ const makeUser = (overrides: Partial<any> = {}) => ({
   ...overrides,
 });
 
+
+// ---- tweak setup to return rerender ----
 const setup = (userOverrides: Partial<any> = {}) => {
   const user = makeUser(userOverrides);
   const updateUser = jest.fn();
-  render(<MembershipBilling user={user} updateUser={updateUser} />);
-  return { user, updateUser };
+  const view = render(<MembershipBilling user={user} updateUser={updateUser} />);
+  return { user, updateUser, rerender: view.rerender };
 };
+
 
 describe('MembershipBilling', () => {
   beforeEach(() => {
@@ -205,7 +208,7 @@ test('change email via prompt', () => {
     expect(screen.getByText('Recent Transactions')).toBeInTheDocument();
   });
 
-  xtest('close modal with X icon', () => {
+  test('close modal with X icon', () => {
     setup();
 
     // Open modal
@@ -214,9 +217,128 @@ test('change email via prompt', () => {
 
     // Click X icon button (no name, but it is the button next to the heading)
     const dialogHeader = screen.getByText('Update Payment Details').closest('div')!;
-    const xButton = within(dialogHeader.parentElement as HTMLElement).getByRole('button');
+    const xButton = within(dialogHeader.parentElement as HTMLElement).getByRole('button', { name:/cancel/i });
     fireEvent.click(xButton);
 
     expect(screen.queryByText('Update Payment Details')).not.toBeInTheDocument();
   });
+
+test('handleSave(name) — positive: saves edited value and exits edit mode', () => {
+  const { user, updateUser, rerender } = setup();
+
+  // Enter edit mode for "name"
+  fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+
+  // Change the value and save
+  const input = screen.getByDisplayValue('Jane Doe') as HTMLInputElement;
+  fireEvent.change(input, { target: { value: 'Janet Smith' } });
+  fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+  // Callback received with the new value
+  expect(updateUser).toHaveBeenCalledWith({ name: 'Janet Smith' });
+
+  // Simulate parent updating the prop
+  const updatedUser = { ...user, name: 'Janet Smith' };
+  rerender(<MembershipBilling user={updatedUser} updateUser={updateUser} />);
+
+  // Edit mode should be closed and new name rendered
+  expect(screen.queryByDisplayValue('Janet Smith')).not.toBeInTheDocument();
+  expect(screen.getByText('Janet Smith')).toBeInTheDocument();
+});
+
+
+test('handleSave(name) — negative: cancel does not save and remains original display', () => {
+  const { updateUser } = setup();
+
+  // Enter edit mode and type a change
+  fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+  const input = screen.getByDisplayValue('Jane Doe') as HTMLInputElement;
+  fireEvent.change(input, { target: { value: 'Nope Nope' } });
+
+  // Cancel instead of saving
+  fireEvent.click(screen.getByRole('button', { name: /cancel/i }));
+
+  // Should NOT call updateUser and edit input disappears
+  expect(updateUser).not.toHaveBeenCalled();
+  expect(screen.queryByDisplayValue('Nope Nope')).not.toBeInTheDocument();
+  expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+});
+
+xtest('handleBillingUpdate — positive: new card number updates masked payment method, closes modal, clears sensitive fields', () => {
+  const { user, updateUser } = setup();
+
+  // Open modal
+  fireEvent.click(screen.getByRole('button', { name: /update card/i }));
+  expect(screen.getByText('Update Payment Details')).toBeInTheDocument();
+
+  // Fill in fields including a NEW card number
+  fireEvent.change(screen.getByLabelText(/cardholder name/i), { target: { value: 'Card Holder' } });
+  fireEvent.change(screen.getByLabelText(/card number/i), { target: { value: '4111111111115678' } });
+  fireEvent.change(screen.getByLabelText(/expiry date/i), { target: { value: '01/31' } });
+  fireEvent.change(screen.getByLabelText(/cvv/i), { target: { value: '123' } });
+
+  // Submit update
+  fireEvent.click(screen.getByRole('button', { name: /update payment method/i }));
+
+  // Expect updated masked payment method + other fields sent
+  expect(updateUser).toHaveBeenCalledWith({
+    cardholderName: 'Card Holder',
+    cardExpiry: '01/31',
+    billingAddress: {
+      street: user.billingAddress.street,
+      city: user.billingAddress.city,
+      state: user.billingAddress.state,
+      zipCode: user.billingAddress.zipCode,
+      country: user.billingAddress.country,
+    },
+    paymentMethod: 'Visa ****-****-****-5678',
+  });
+
+  // Modal should close
+  expect(screen.queryByText('Update Payment Details')).not.toBeInTheDocument();
+
+  // Re-open to ensure sensitive fields were cleared
+  fireEvent.click(screen.getByRole('button', { name: /update card/i }));
+  const cardNumberInput = screen.getByLabelText(/card number/i) as HTMLInputElement;
+  const cvvInput = screen.getByLabelText(/cvv/i) as HTMLInputElement;
+  expect(cardNumberInput.value).toBe('');
+  expect(cvvInput.value).toBe('');
+});
+
+xtest('handleBillingUpdate — negative: no new card number keeps previous payment method and closes modal', () => {
+  const { user, updateUser } = setup();
+
+  // Open modal
+  fireEvent.click(screen.getByRole('button', { name: /update card/i }));
+  expect(screen.getByText('Update Payment Details')).toBeInTheDocument();
+
+  // Do NOT set card number; change other fields
+  fireEvent.change(screen.getByLabelText(/cardholder name/i), { target: { value: 'Card Holder' } });
+  fireEvent.change(screen.getByLabelText(/expiry date/i), { target: { value: '01/31' } });
+
+  // Submit update
+  fireEvent.click(screen.getByRole('button', { name: /update payment method/i }));
+
+  // Should keep previous payment method
+  expect(updateUser).toHaveBeenCalledWith({
+    cardholderName: 'Card Holder',
+    cardExpiry: '01/31',
+    billingAddress: {
+      street: user.billingAddress.street,
+      city: user.billingAddress.city,
+      state: user.billingAddress.state,
+      zipCode: user.billingAddress.zipCode,
+      country: user.billingAddress.country,
+    },
+    paymentMethod: user.paymentMethod,
+  });
+
+  // Modal should close
+  expect(screen.queryByText('Update Payment Details')).not.toBeInTheDocument();
+});
+
+
+  // add test for below functionality, add both negetive and positive
+  // 1. handleSave
+  // 2.handleBillingUpdate
 });
