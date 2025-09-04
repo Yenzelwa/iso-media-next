@@ -64,11 +64,11 @@ const Register = () => {
       }
       else
       {
-        var error = await response.json()
+        const error = await response.json()
         setErrorMessage(error)
       }
 
-    } catch (error) {
+    } catch  {
       setErrorMessage('Something went wrong');
     } finally {
       setIsLoading(false);
@@ -252,7 +252,7 @@ const Register = () => {
                       className="rounded border-gray-300 text-red-500 focus:ring-red-500 mt-1 bg-gray-800 border-gray-600" 
                     />
                     <span className="text-sm leading-relaxed">
-                      Yes, sign me up for emails about IsolaKwaMUNTU's latest
+                      Yes, sign me up for emails about IsolaKwaMUNTU&apos;s latest
                       releases and news.
                     </span>
                   </label>

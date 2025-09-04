@@ -183,6 +183,8 @@ export interface Episode {
   series_id: number;
   season_id: number;
   episode_number: number;
+  season_number: number;
+  duration: string;
   episode_short_detail: string;
   episode_detail: string;
   next_episode_id: number;

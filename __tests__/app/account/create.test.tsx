@@ -36,7 +36,6 @@ jest.mock('react-hook-form', () => {
 describe('CreateAccount Component', () => {
   const mockRouterPush = jest.fn();
   const mockLogin = jest.fn();
-  const mockSetErrorMessage = jest.fn();
 
   beforeEach(() => {
     // Correctly mock the useRouter to match the expected return type
@@ -282,4 +281,50 @@ it('should show error message if account creation fails', async () => {
       expect(screen.getByText(/Welcome Aboard!/i)).toBeInTheDocument();
       expect(screen.getByText(/Your account has been created successfully/i)).toBeInTheDocument();
     });
+
+  it('gracefully handles unexpected errors in submit (try/catch path)', async () => {
+  // Make the form valid and provide values
+  const mockUseFormReturn = {
+    register: jest.fn(),
+    handleSubmit: jest.fn((fn: FormData) => fn),
+    setValue: jest.fn(),
+    getValues: jest.fn(() => ({
+      first_name: 'John Doe',
+      email: 'email@email.com',
+      password: 'Password123!',
+      t_and_cs: true,
+    })),
+    watch: jest.fn(),
+    trigger: jest.fn(),
+    control: {},
+    formState: { isValid: true, errors: {} },
+  };
+  (useForm as jest.Mock).mockReturnValue(mockUseFormReturn);
+
+  // Force the network to reject so the component's try/catch executes
+  (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+
+  // (Optional) quiet console noise, or just omit the spy entirely
+  const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+  render(
+    <AuthProvider>
+      <CreateAccount />
+    </AuthProvider>
+  );
+
+  // Submit the form
+  fireEvent.submit(
+    screen.getByRole('button', { name: /create account/i }).closest('form')!
+  );
+
+  // Assert: error message rendered by catch block
+  await waitFor(() => {
+    expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+  });
+
+  consoleSpy.mockRestore();
+});
+
+
 });

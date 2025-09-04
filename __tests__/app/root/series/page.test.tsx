@@ -8,6 +8,31 @@ import SeriesPage from "@/src/app/(root)/series/page";
 jest.mock("lucide-react", () => ({
   ChevronDown: (props: any) => <svg data-testid="chevron" {...props} />,
 }));
+// Mock next/navigation for App Router hooks
+jest.mock("next/navigation", () => {
+  return {
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+    }),
+    usePathname: () => "/series",
+    useSearchParams: () =>
+      new (class extends URLSearchParams {
+        toString() { return ""; }
+      })(),
+  };
+});
+
+// (Optional) Mock next/image to behave like a normal <img> in JSDOM
+jest.mock("next/image", () => (props: any) => {
+  const { src, alt, ...rest } = props;
+  return <img src={typeof src === "string" ? src : src?.src} alt={alt} {...rest} />;
+});
+
 
 // Mock EnhancedCarousel and capture props
 const enhancedCarouselMock = jest.fn(() => <div data-testid="carousel" />);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, AlertTriangle, CreditCard, Users, Gavel, Calendar } from 'lucide-react';
+import { FileText, AlertTriangle, CreditCard, Users, Gavel } from 'lucide-react';
 
 const TermsConditionsPage = () => {
   return (
@@ -215,7 +215,7 @@ const TermsConditionsPage = () => {
                   <div className="pl-16">
                     <div className="bg-gray-800/30 rounded-xl p-6 border border-gray-700/30">
                       <p className="text-gray-300 leading-relaxed mb-4">
-                        IsolaKwaMUNTU provides services "as is" without warranties of any kind. We strive to maintain 
+                        IsolaKwaMUNTU provides services &quot;as is" without warranties of any kind. We strive to maintain 
                         high service availability but cannot guarantee uninterrupted access.
                       </p>
                       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">

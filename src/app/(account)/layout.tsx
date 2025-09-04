@@ -2,7 +2,7 @@
 import React from "react";
 import "@/src/globals.css";
 import { AuthProvider } from "../context/authContext";
-import AccountNav from "./components/NavBar";
+import { Navigation } from "@/src/components/Navigation";
 
 
 
@@ -20,7 +20,7 @@ const AccountRootLayout: React.FC <Props> = ({ children } ) => {
 
     <div className="flex-shrink-0 text-white "> 
         <div className="border-b bg-slate-100">
-    <AccountNav/>
+    <Navigation/>
       </div>
       </div>
         <div className="p-12 flex items-center justify-center text-white">

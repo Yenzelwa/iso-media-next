@@ -1,8 +1,10 @@
+
 'use client'
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Video } from '@/typings';
 import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
+import { useRouter } from 'next/navigation';
 
 const seriesVideos: Video[] = [
   {
@@ -120,6 +122,7 @@ const allSeries = [...seriesVideos];
 
 
 const SeriesPage = () => {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Latest');
 
@@ -171,7 +174,7 @@ const SeriesPage = () => {
               <div className="relative">
                 <label htmlFor='category' className="text-gray-400 text-sm font-medium mb-2 block">Category</label>
                 <div className="relative">
-                  <select id='category'
+                  <select id="category"
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="bg-gray-800 text-white border border-gray-700 rounded-sm px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none cursor-pointer min-w-[140px]"
@@ -188,7 +191,7 @@ const SeriesPage = () => {
               <div className="relative">
                 <label htmlFor='sort by' className="text-gray-400 text-sm font-medium mb-2 block">Sort by</label>
                 <div className="relative">
-                  <select id='sort by'
+                  <select id="sort by"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className="bg-gray-800 text-white border border-gray-700 rounded-sm px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none cursor-pointer min-w-[160px]"
@@ -217,6 +220,7 @@ const SeriesPage = () => {
                 <div
                   key={series.id}
                   className="group cursor-pointer"
+                  onClick={() => router.push(`/series/${series.id}`)}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="relative overflow-hidden rounded-lg transition-all duration-700 group-hover:scale-105 group-hover:z-10 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50">
