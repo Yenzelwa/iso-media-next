@@ -1,3 +1,5 @@
+# iso-media-next
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -22,13 +24,34 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Using Claude AI for Development
 
-## Deploy on Vercel
+This repo includes two key documents for guiding feature work with Claude AI:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `claude-feature.md` → The **Context-First Feature Playbook**  
+- `FEATURES-UI.md` → The **UI Feature List**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Quick Start Prompt
+
+When starting a Claude session, attach both `claude-feature.md` and `FEATURES-UI.md`, then paste this:
+
+```markdown
+Use **claude-feature.md** as your workflow guide and **FEATURES-UI.md** for the feature list.  
+Repo: `iso-media-next` (UI frontend calling external API).  
+Follow the playbook step by step (§0 → §1 → … → §6).  
+Start with §0 Inputs using the **Browse Page tasks** in FEATURES-UI.md.  
+Pause after each step and wait for me to say “Proceed.”
+```
+
+### Running Instructions
+
+1. **Attach Files**: Upload `claude-feature.md` and `FEATURES-UI.md` into your Claude session.  
+2. **Paste Prompt**: Use the Quick Start prompt above.  
+3. **Work in Steps**: Claude will begin with §0 Inputs, then move through the playbook.  
+4. **Control Flow**: After reviewing each output, say **“Proceed”** to move forward.  
+5. **Outputs**: At each stage Claude will provide specs, plans, diffs, validations, and PR docs as defined in the playbook.  
+6. **Batching**: Group related UI changes into PR batches (Browse, Header/Footer, etc.) as outlined in `FEATURES-UI.md`.  
+
+This ensures feature work follows a **repeatable, high-quality workflow** with clear inputs, outputs, and checkpoints.
