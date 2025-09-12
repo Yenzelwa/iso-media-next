@@ -1,10 +1,11 @@
 // NotFoundPage.tsx
 import React from "react";
 import Link from "next/link";
+import { themeClasses } from "@/src/lib/theme";
 
 const NotFoundPage = () => {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4 text-white">
+    <div className={`min-h-screen ${themeClasses.pageBackground()} flex items-center justify-center px-4 text-white`}>
       <div className="text-center">
         <h1 className="text-6xl font-bold mb-4 text-red-600">404</h1>
         <h3 className="text-2xl font-semibold mb-2">Page not found!</h3>

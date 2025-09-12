@@ -76,7 +76,7 @@ describe('CreateAccount Component', () => {
       expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Terms of Use and Privacy Policy/i)).toBeInTheDocument();
-      expect(screen.getByText(/Yes, sign me up/i)).toBeInTheDocument();
+      expect(screen.getByText(/Yes, I would like to receive emails about/i)).toBeInTheDocument();
     });
   
     it('should enable the create account button only when the form is valid', () => {

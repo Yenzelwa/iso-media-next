@@ -60,6 +60,10 @@ export const Navigation: React.FC = () => {
                 <div className="text-xs text-gray-400 tracking-widest uppercase font-semibold opacity-75 hidden lg:block">
                   Premium Streaming
                 </div>
+                {/* Enhanced Slogan */}
+                <div className="text-xs text-gray-500 tracking-wider uppercase font-medium opacity-60 hidden lg:block mt-1 transition-all duration-300 group-hover:text-red-400 group-hover:opacity-80">
+                  Elevate Your Consciousness
+                </div>
               </div>
             </Link>
           </div>

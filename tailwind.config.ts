@@ -118,9 +118,6 @@ const config: Config = {
     },
   },
    plugins: [require("tailwindcss-animate")],
-  corePlugins: {
-    gradientColorStops: false,
-  },
 }
 
 export default config

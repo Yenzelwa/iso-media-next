@@ -469,8 +469,17 @@ const CommentSection: React.FC<CommentsSectionProps> = ({ video_id }) => {
                               <ThumbsUp className="w-3 h-3" />
                               <span className="text-xs">{reply.likes}</span>
                             </button>
-                            <button className="text-gray-400 hover:text-white text-xs transition-colors">
-                              Reply
+                            
+                            <button
+                              onClick={() => handleCommentDislike(reply.id, true, comment.id)}
+                              className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+                                commentLikes[reply.id]?.disliked
+                                  ? 'bg-red-600/20 text-red-400'
+                                  : 'text-gray-400 hover:text-red-400'
+                              }`}
+                            >
+                              <ThumbsDown className="w-3 h-3" />
+                              <span className="text-xs">{reply.dislikes}</span>
                             </button>
                           </div>
                         </div>

@@ -10,17 +10,85 @@ const ContactUsPage = () => {
     message: ''
   });
 
+  const [formState, setFormState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [submitMessage, setSubmitMessage] = useState('');
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+    
+    // Clear errors when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    if (!formData.subject) {
+      newErrors.subject = 'Please select a subject';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message must be at least 10 characters long';
+    }
+    
+    return newErrors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+    
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setFormState('error');
+      return;
+    }
+
+    setFormState('loading');
+    setErrors({});
+
+    try {
+      // Simulate API call - replace with actual contact service
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setFormState('success');
+      setSubmitMessage('Thank you for your message! We\'ll get back to you within 24 hours.');
+      
+      // Reset form after success
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+        setFormState('idle');
+        setSubmitMessage('');
+      }, 5000);
+      
+    } catch (error) {
+      setFormState('error');
+      setSubmitMessage('Failed to send message. Please try again or email us directly.');
+    }
   };
 
   return (
@@ -139,9 +207,22 @@ const ContactUsPage = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           required
-                          className="w-full bg-gray-800/50 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
+                          disabled={formState === 'loading'}
+                          className={`w-full bg-gray-800/50 border rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none transition-all duration-300 ${
+                            errors.name
+                              ? 'border-red-500 focus:ring-2 focus:ring-red-400'
+                              : formState === 'success'
+                              ? 'border-green-500 focus:ring-2 focus:ring-green-400'
+                              : 'border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          } ${formState === 'loading' ? 'opacity-50 cursor-not-allowed' : ''}`}
                           placeholder="Your full name"
                         />
+                        {errors.name && (
+                          <p className="mt-2 text-sm text-red-400 flex items-center">
+                            <span className="mr-2">⚠</span>
+                            {errors.name}
+                          </p>
+                        )}
                       </div>
                       
                       <div>
@@ -155,9 +236,22 @@ const ContactUsPage = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           required
-                          className="w-full bg-gray-800/50 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
+                          disabled={formState === 'loading'}
+                          className={`w-full bg-gray-800/50 border rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none transition-all duration-300 ${
+                            errors.email
+                              ? 'border-red-500 focus:ring-2 focus:ring-red-400'
+                              : formState === 'success'
+                              ? 'border-green-500 focus:ring-2 focus:ring-green-400'
+                              : 'border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          } ${formState === 'loading' ? 'opacity-50 cursor-not-allowed' : ''}`}
                           placeholder="your.email@example.com"
                         />
+                        {errors.email && (
+                          <p className="mt-2 text-sm text-red-400 flex items-center">
+                            <span className="mr-2">⚠</span>
+                            {errors.email}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -171,7 +265,14 @@ const ContactUsPage = () => {
                         value={formData.subject}
                         onChange={handleInputChange}
                         required
-                        className="w-full bg-gray-800/50 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
+                        disabled={formState === 'loading'}
+                        className={`w-full bg-gray-800/50 border rounded-xl px-4 py-3 text-white focus:outline-none transition-all duration-300 ${
+                          errors.subject
+                            ? 'border-red-500 focus:ring-2 focus:ring-red-400'
+                            : formState === 'success'
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-400'
+                            : 'border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                        } ${formState === 'loading' ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <option value="">Select a subject</option>
                         <option value="general">General Inquiry</option>
@@ -181,6 +282,12 @@ const ContactUsPage = () => {
                         <option value="partnership">Partnership Opportunities</option>
                         <option value="feedback">Feedback & Suggestions</option>
                       </select>
+                      {errors.subject && (
+                        <p className="mt-2 text-sm text-red-400 flex items-center">
+                          <span className="mr-2">⚠</span>
+                          {errors.subject}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -194,9 +301,22 @@ const ContactUsPage = () => {
                         onChange={handleInputChange}
                         required
                         rows={6}
-                        className="w-full bg-gray-800/50 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300 resize-none"
+                        disabled={formState === 'loading'}
+                        className={`w-full bg-gray-800/50 border rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none transition-all duration-300 resize-none ${
+                          errors.message
+                            ? 'border-red-500 focus:ring-2 focus:ring-red-400'
+                            : formState === 'success'
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-400'
+                            : 'border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                        } ${formState === 'loading' ? 'opacity-50 cursor-not-allowed' : ''}`}
                         placeholder="Please describe your inquiry in detail..."
                       />
+                      {errors.message && (
+                        <p className="mt-2 text-sm text-red-400 flex items-center">
+                          <span className="mr-2">⚠</span>
+                          {errors.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
@@ -206,12 +326,43 @@ const ContactUsPage = () => {
                       </p>
                     </div>
 
+                    {/* Form Status Messages */}
+                    {submitMessage && (
+                      <div className={`p-4 rounded-xl flex items-center ${
+                        formState === 'success'
+                          ? 'bg-green-500/20 border border-green-500/30 text-green-200'
+                          : 'bg-red-500/20 border border-red-500/30 text-red-200'
+                      }`}>
+                        <span className="mr-3">
+                          {formState === 'success' ? '✓' : '⚠'}
+                        </span>
+                        {submitMessage}
+                      </div>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
+                      disabled={formState === 'loading' || formState === 'success'}
+                      className={`w-full px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform flex items-center justify-center space-x-2 ${
+                        formState === 'loading'
+                          ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                          : formState === 'success'
+                          ? 'bg-green-600 text-white cursor-not-allowed'
+                          : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white hover:scale-105 hover:shadow-lg active:scale-95'
+                      }`}
                     >
-                      <Send className="w-5 h-5" />
-                      <span>Send Message</span>
+                      {formState === 'loading' && (
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      )}
+                      {formState !== 'loading' && <Send className="w-5 h-5" />}
+                      <span>
+                        {formState === 'loading' ? 'Sending...' :
+                         formState === 'success' ? 'Message Sent ✓' :
+                         'Send Message'}
+                      </span>
                     </button>
                   </form>
                 </div>

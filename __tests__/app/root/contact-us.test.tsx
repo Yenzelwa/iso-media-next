@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import ContactUsPage from '@/src/app/(root)/contact-us/page';
@@ -59,17 +59,14 @@ describe('ContactUsPage', () => {
     expect((subjectSelect as HTMLSelectElement).value).toBe('technical');
     expect(messageTextarea.value).toBe('Having trouble with streaming.');
 
-    // Submit
-    await user.click(submitButton);
-
-    expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith('Form submitted:', {
-      name: 'Ada Lovelace',
-      email: 'ada@example.com',
-      subject: 'technical',
-      message: 'Having trouble with streaming.',
+    // Submit with act wrapper
+    await act(async () => {
+      await user.click(submitButton);
     });
-  });
+
+    // Wait for the form submission to complete and check success state
+    await screen.findByText(/thank you for your message/i, {}, { timeout: 5000 });
+  }, 15000);
 
   it('displays contact info blocks and their details', () => {
     render(<ContactUsPage />);

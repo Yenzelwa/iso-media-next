@@ -13,7 +13,6 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [editValues, setEditValues] = useState({
     name: user.name,
-    email: user.email,
     phone: user.phone,
     cardholderName: user.cardholderName,
     cardNumber: "",
@@ -38,12 +37,6 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     setEditValues(prev => ({ ...prev, cardNumber: "", cvv: "" }));
   };
 
-  const handleEmailChange = () => {
-    const newEmail = prompt("Enter new email address:", user.email);
-    if (newEmail && newEmail !== user.email) {
-      updateUser({ email: newEmail });
-    }
-  };
 
   const handlePhoneChange = () => {
     const newPhone = prompt("Enter new phone number:", user.phone);
@@ -124,24 +117,6 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
             </div>
           </div>
 
-          {/* Email Field */}
-          <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                <div>
-                  <label className="text-gray-400 text-sm font-medium">Email Address</label>
-                  <p className="text-white font-semibold mt-1">{user.email}</p>
-                </div>
-              </div>
-              <button
-                onClick={handleEmailChange}
-                className="bg-red-600/20 text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30"
-              >
-                Change
-              </button>
-            </div>
-          </div>
 
           {/* Phone Field */}
           <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">

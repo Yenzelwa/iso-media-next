@@ -178,4 +178,9 @@ describe("SeriesDetail page", () => {
     await user.click(likeBtn);
     expect(likeBtn.className).not.toMatch(/bg-red-600/);
   });
+
+  it("matches snapshot", () => {
+    const { container } = renderPage();
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });

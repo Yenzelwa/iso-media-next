@@ -8,6 +8,7 @@ import { UserMenu } from '@/src/components/UserMenu';
 import { Input } from '@/src/components/Input';
 import { email_validation, firstName_validation, password_register_validation, termsAndConditions_validation } from '@/src/utils/inputValidations';
 import { useRouter } from 'next/navigation';
+import { themeClasses } from '@/src/lib/theme';
 
 type FormData = {
   first_name: string;
@@ -76,7 +77,7 @@ const Register = () => {
   });
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen ${themeClasses.pageBackground()} text-white`}>
       {/* Netflix-style Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/95 to-transparent">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -92,7 +93,7 @@ const Register = () => {
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
                 <div className="hidden sm:block">
-                  <span className="text-2xl font-black text-white tracking-tight transition-all duration-300 group-hover:text-red-300 bg-gradient-to-r from-white to-gray-200 bg-clip-text">
+                  <span className="text-2xl font-black text-white tracking-tight transition-all duration-300 group-hover:text-red-400 bg-gradient-to-r from-white to-gray-200 bg-clip-text">
                     IsolaKwaMUNTU
                   </span>
                   <div className="text-xs text-gray-400 tracking-widest uppercase font-semibold opacity-75">
@@ -139,18 +140,31 @@ const Register = () => {
         </div>
       </nav>
 
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80')] bg-cover bg-center opacity-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
-        <div className="absolute top-0 left-1/4 w-72 h-72 bg-red-500/20 rounded-full blur-[100px] animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
+      {/* Enhanced Dynamic Background */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-red-950/20"></div>
+
+        {/* Cinematic background image */}
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599456039-e5d9af20a5d1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20"></div>
+
+        {/* Overlay with blur */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
+
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-red-950/10 via-transparent to-red-950/10 animate-pulse"></div>
+
+        {/* Floating particles effect */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-red-500/20 rounded-full animate-ping"></div>
+          <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-red-400/30 rounded-full animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-red-300/25 rounded-full animate-ping delay-500"></div>
+        </div>
       </div>
 
       {/* Content */}
       <div className="flex flex-col items-center justify-center min-h-screen relative pt-24 pb-12">
-        <div className="relative z-10 bg-gradient-to-br from-gray-900/95 via-slate-900/95 to-black/95 backdrop-blur-2xl p-12 rounded-3xl shadow-2xl border border-gray-700/40 max-w-md w-full mx-4 transform transition-all duration-500 hover:shadow-red-500/20">
+        <div className="relative z-10 bg-gradient-to-br from-gray-900/95 via-slate-900/95 to-black/95 backdrop-blur-2xl p-12 rounded-3xl shadow-2xl border border-gray-700/40 max-w-lg w-full mx-4 transform transition-all duration-500 hover:shadow-red-500/20">
           {user ? (
             <div className="container">
               <div className="text-center">
@@ -199,8 +213,8 @@ const Register = () => {
                 className="container"
               >
                 <div className="flex justify-center mb-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-blue-500/20 backdrop-blur-sm border border-blue-500/30">
-                    <CheckCircle className="w-12 h-12 text-blue-400 drop-shadow-lg" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-red-500/20 backdrop-blur-sm border border-red-500/30">
+                    <CheckCircle className="w-12 h-12 text-red-400 drop-shadow-lg" />
                   </div>
                 </div>
 
@@ -229,33 +243,49 @@ const Register = () => {
                   </div>
                 </div>
 
-                <div className="mt-8 space-y-4">
-                  <label className="flex items-start space-x-3 text-gray-300">
-                    <div className="rounded border-gray-300 text-red-500 focus:ring-red-500 mt-1">
-                      <Input {...termsAndConditions_validation} />
-                    </div>
-                    <span className="text-sm leading-relaxed">
-                      To create an account, you must agree to the
-                      <a
-                        className="text-red-500 hover:text-red-400 ml-1 hover:underline"
-                        href="/terms-conditions"
-                        target="_blank"
-                      >
-                        Terms of Use and Privacy Policy
-                      </a>
-                    </span>
-                  </label>
+                <div className="mt-8 space-y-6">
+                  <div className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4">
+                    <label className="flex items-start space-x-4 text-gray-300 cursor-pointer group">
+                      <div className="mt-1 flex-shrink-0">
+                        <Input {...termsAndConditions_validation} />
+                      </div>
+                      <div className="text-sm leading-relaxed">
+                        <p className="mb-2 font-medium text-gray-200 group-hover:text-white transition-colors duration-200">
+                          Terms & Conditions Agreement
+                        </p>
+                        <p>
+                          I agree to the{' '}
+                          <a
+                            className="text-red-400 hover:text-red-400 font-medium hover:underline transition-colors duration-200"
+                            href="/terms-conditions"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Terms of Use and Privacy Policy
+                          </a>
+                          {' '}and acknowledge that I have read and understood them.
+                        </p>
+                      </div>
+                    </label>
+                  </div>
 
-                  <label className="flex items-start space-x-3 text-gray-300">
-                    <input 
-                      type="checkbox" 
-                      className="rounded border-gray-300 text-red-500 focus:ring-red-500 mt-1 bg-gray-800 border-gray-600" 
-                    />
-                    <span className="text-sm leading-relaxed">
-                      Yes, sign me up for emails about IsolaKwaMUNTU&apos;s latest
-                      releases and news.
-                    </span>
-                  </label>
+                  <div className="bg-gray-800/20 border border-gray-700/30 rounded-xl p-4">
+                    <label className="flex items-start space-x-4 text-gray-300 cursor-pointer group">
+                      <input 
+                        type="checkbox" 
+                        className="rounded border-gray-600 text-red-400 focus:ring-red-400 focus:ring-offset-0 focus:ring-2 mt-1 bg-gray-800 hover:border-red-400/50 transition-colors duration-200" 
+                      />
+                      <div className="text-sm leading-relaxed">
+                        <p className="font-medium text-gray-200 group-hover:text-white transition-colors duration-200 mb-1">
+                          Marketing Communications (Optional)
+                        </p>
+                        <p>
+                          Yes, I would like to receive emails about IsolaKwaMUNTU's latest
+                          releases, exclusive content, and news updates.
+                        </p>
+                      </div>
+                    </label>
+                  </div>
                 </div>
 
                 <div className="mt-8">
@@ -294,7 +324,7 @@ const Register = () => {
                 <div className="mt-6 text-center">
                   <p className="text-gray-400 text-sm">
                     Already have an account?{' '}
-                    <Link href="/login" className="text-red-500 hover:text-red-400 hover:underline">
+                    <Link href="/login" className="text-red-400 hover:text-red-300 hover:underline">
                       Sign in
                     </Link>
                   </p>

@@ -151,7 +151,7 @@ const SeriesPage = () => {
     <div className="bg-background text-foreground">
       <main>
         {/* Series Content */}
-        <div className="bg-gradient-to-b from-gray-900 via-black to-gray-900 py-20 animate-fade-in pt-24">
+        <div className="bg-gradient-to-b from-gray-900 via-black to-gray-900 py-20 animate-fade-in pt-32">
           {/* Page Header */}
           <div className="px-4 lg:px-16 mb-12">
             <div className="flex items-center space-x-4 mb-6">
@@ -223,7 +223,7 @@ const SeriesPage = () => {
                   onClick={() => router.push(`/series/${series.id}`)}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="relative overflow-hidden rounded-lg transition-all duration-700 group-hover:scale-105 group-hover:z-10 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50">
+                  <div className="relative overflow-hidden rounded-xl transition-all duration-700 group-hover:scale-105 group-hover:z-10 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50">
                     <img
                       src={series.image_path}
                       alt={series.title}
@@ -261,7 +261,7 @@ const SeriesPage = () => {
                             ★ {series.rating}
                           </span>
                           <span className="text-gray-400 text-sm">
-                            {series.likes} likes
+                            {new Date(series.release_date).getFullYear()}
                           </span>
                         </div>
                         <span className="text-gray-400 text-xs">

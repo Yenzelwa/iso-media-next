@@ -21,17 +21,13 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
   return (
     <div className="lg:col-span-1">
       <div className="bg-gradient-to-br from-gray-900/80 to-slate-900/80 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-6 sticky top-24">
-        {/* User Avatar & Info */}
+        {/* User Info */}
         <div className="text-center mb-8">
-          <div className="relative mx-auto mb-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center mx-auto">
-              <User className="w-10 h-10 text-white" />
-            </div>
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-gray-900"></div>
+          <div className="flex justify-center mb-4">
+            <User className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-xl font-bold text-white">{user.name}</h3>
+          <h3 className="text-xl font-bold text-white mb-2">{user.name}</h3>
           <p className="text-gray-400 text-sm">{user.email}</p>
-          
         </div>
 
         {/* Navigation Tabs */}

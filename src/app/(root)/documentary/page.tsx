@@ -118,6 +118,8 @@ const documentaryVideos: Video[] = [
 
 
 const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="bg-gradient-to-r from-slate-900 to-gray-900 p-8 lg:p-12 rounded-3xl border border-gray-800/50 backdrop-blur-sm">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -151,7 +153,7 @@ const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) 
               <span className="text-white font-semibold">{documentary.rating}</span>
             </div>
             <div className="text-gray-400">
-              {documentary.likes} viewers
+              Released {new Date(documentary.release_date).getFullYear()}
             </div>
           </div>
 
@@ -160,19 +162,37 @@ const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) 
               <Play className="w-6 h-6 mr-3 inline fill-current" />
               Watch Now
             </button>
-            <button className="border-2 border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white px-8 py-4 rounded-xl font-bold transition-all duration-300">
-              Learn More
-            </button>
           </div>
         </div>
 
-        <div className="relative group">
+        <div 
+          className="relative group"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <div className="relative overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 group-hover:scale-105">
-            <img
-              src={documentary.image_path}
-              alt={documentary.title}
-              className="w-full h-80 object-cover"
-            />
+            {isHovered ? (
+              <video
+                autoPlay
+                muted
+                loop
+                className="w-full h-80 object-cover"
+                poster={documentary.image_path}
+              >
+                <source src="/videos/sample-trailer.mp4" type="video/mp4" />
+                <img
+                  src={documentary.image_path}
+                  alt={documentary.title}
+                  className="w-full h-80 object-cover"
+                />
+              </video>
+            ) : (
+              <img
+                src={documentary.image_path}
+                alt={documentary.title}
+                className="w-full h-80 object-cover"
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div className="bg-white/20 backdrop-blur-sm rounded-full p-6">
@@ -191,6 +211,7 @@ const DocumentaryPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Latest');
+  const [hoveredDoc, setHoveredDoc] = useState<number | null>(null);
 
   const categories = ['All', 'Education', 'Science', 'Spirituality', 'Wellness'];
   const sortOptions = ['Latest', 'Most Popular', 'Highest Rated', 'A-Z'];
@@ -302,13 +323,32 @@ const DocumentaryPage = () => {
                 key={doc.id}
                 className="group cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onMouseEnter={() => setHoveredDoc(doc.id)}
+                onMouseLeave={() => setHoveredDoc(null)}
               >
                 <div className="relative overflow-hidden rounded-2xl transition-all duration-500 group-hover:scale-105 shadow-2xl ring-1 ring-gray-700/50 hover:ring-red-500/50">
-                  <img
-                    src={doc.image_path}
-                    alt={doc.title}
-                    className="w-full h-72 object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-75"
-                  />
+                  {hoveredDoc === doc.id ? (
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      className="w-full h-72 object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-75"
+                      poster={doc.image_path}
+                    >
+                      <source src="/videos/sample-trailer.mp4" type="video/mp4" />
+                      <img
+                        src={doc.image_path}
+                        alt={doc.title}
+                        className="w-full h-72 object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-75"
+                      />
+                    </video>
+                  ) : (
+                    <img
+                      src={doc.image_path}
+                      alt={doc.title}
+                      className="w-full h-72 object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-75"
+                    />
+                  )}
                   
                   {/* Enhanced overlay for text readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
@@ -328,7 +368,7 @@ const DocumentaryPage = () => {
                           ★ {doc.rating}
                         </span>
                         <span className="text-gray-300 text-sm">
-                          {doc.likes} views
+                          {Math.floor(Math.random() * 60 + 30)} min
                         </span>
                       </div>
                       <span className="bg-red-600/80 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full font-medium">
@@ -380,7 +420,7 @@ const DocumentaryPage = () => {
                     </p>
                     <div className="flex items-center space-x-4">
                       <span className="text-yellow-400 font-semibold">★ {doc.rating}</span>
-                      <span className="text-gray-400">{doc.likes} views</span>
+                      <span className="text-gray-400">{Math.floor(Math.random() * 60 + 30)} min</span>
                       <span className="bg-red-600/20 text-red-400 text-xs px-3 py-1 rounded-full">
                         {doc.type.category.name}
                       </span>

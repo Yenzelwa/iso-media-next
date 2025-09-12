@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, Settings, X } from 'lucide-react';
 import { toCents } from '@/src/utils/cents';
 
@@ -13,7 +13,7 @@ export const PlanDetails: React.FC = () => {
       price: '$9.99',
       period: 'month',
       features: ['HD streaming on 1 device', 'Access to basic content library', 'Limited offline downloads'],
-      color: 'from-blue-600 to-blue-800',
+      color: 'from-gray-600 to-gray-800',
       devices: '1 Device',
       quality: 'HD 720p'
     },
@@ -28,20 +28,26 @@ export const PlanDetails: React.FC = () => {
       devices: '4 Devices',
       quality: '4K Ultra HD'
     },
-    {
-      id: 'family',
-      name: 'Family',
-      price: '$49.99',
-      period: 'month',
-      features: ['4K Ultra HD streaming on 6 devices', 'Complete library + exclusive content', 'Multiple user profiles'],
-      color: 'from-purple-600 to-purple-800',
-      devices: '6 Devices',
-      quality: '4K Ultra HD'
-    },
   ];
 
   const currentPlan = plans.find(plan => plan.current);
   console.log('currentplan', currentPlan);
+
+  // Handle escape key to close modals
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowManagePlan(false);
+        setShowCancelSubscription(false);
+        setShowUpgradePlan(false);
+      }
+    };
+
+    if (showManagePlan || showCancelSubscription || showUpgradePlan) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [showManagePlan, showCancelSubscription, showUpgradePlan]);
 
   return (
     <div className="space-y-8">
@@ -109,7 +115,7 @@ export const PlanDetails: React.FC = () => {
                 onClick={() => setShowUpgradePlan(true)}
                 className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-xl font-medium hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105"
               >
-                Upgrade Plan
+                Change Plan
               </button>
             </div>
           </div>
@@ -122,7 +128,7 @@ export const PlanDetails: React.FC = () => {
         <h2 className="text-3xl font-bold text-white mb-2">All Available Plans</h2>
         <p className="text-gray-400 text-sm mb-6">Compare features and choose the perfect plan for you</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.id}
@@ -205,7 +211,6 @@ export const PlanDetails: React.FC = () => {
                   <th className="text-left p-6 text-white font-bold">Features</th>
                   <th className="text-center p-6 text-white font-bold">Basic</th>
                   <th className="text-center p-6 text-white font-bold">Premium</th>
-                  <th className="text-center p-6 text-white font-bold">Family</th>
                 </tr>
               </thead>
               <tbody>
@@ -213,25 +218,21 @@ export const PlanDetails: React.FC = () => {
                   <td className="p-6 text-gray-300">Streaming Quality</td>
                   <td className="p-6 text-center text-gray-400">HD 720p</td>
                   <td className="p-6 text-center text-red-400 font-bold">4K Ultra HD</td>
-                  <td className="p-6 text-center text-red-400 font-bold">4K Ultra HD</td>
                 </tr>
                 <tr className="border-b border-gray-700/20">
                   <td className="p-6 text-gray-300">Simultaneous Streams</td>
                   <td className="p-6 text-center text-gray-400">1 Device</td>
                   <td className="p-6 text-center text-red-400 font-bold">4 Devices</td>
-                  <td className="p-6 text-center text-red-400 font-bold">6 Devices</td>
                 </tr>
                 <tr className="border-b border-gray-700/20">
                   <td className="p-6 text-gray-300">Offline Downloads</td>
                   <td className="p-6 text-center text-gray-400">Limited</td>
-                  <td className="p-6 text-center text-green-400">Unlimited</td>
                   <td className="p-6 text-center text-green-400">Unlimited</td>
                 </tr>
                 <tr>
                   <td className="p-6 text-gray-300">User Profiles</td>
                   <td className="p-6 text-center text-gray-400">1 Profile</td>
                   <td className="p-6 text-center text-green-400">4 Profiles</td>
-                  <td className="p-6 text-center text-green-400">6 Profiles</td>
                 </tr>
               </tbody>
             </table>
@@ -241,8 +242,8 @@ export const PlanDetails: React.FC = () => {
 
       {/* Manage Plan Modal */}
       {showManagePlan && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 max-w-lg w-full">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-white">Manage Plan</h3>
               <button
@@ -288,8 +289,8 @@ export const PlanDetails: React.FC = () => {
 
       {/* Cancel Subscription Modal */}
       {showCancelSubscription && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 max-w-lg w-full">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-white">Cancel Subscription</h3>
               <button
@@ -338,10 +339,10 @@ export const PlanDetails: React.FC = () => {
 
       {/* Upgrade Plan Modal */}
       {showUpgradePlan && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 max-w-lg w-full">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-white">Upgrade Plan</h3>
+              <h3 className="text-2xl font-bold text-white">Change Plan</h3>
               <button
                 onClick={() => setShowUpgradePlan(false)}
                 className="text-gray-400 hover:text-white transition-colors"
@@ -351,35 +352,44 @@ export const PlanDetails: React.FC = () => {
             </div>
 
             <div className="mb-6">
-              <div className="bg-gradient-to-r from-purple-600/20 to-purple-800/10 border border-purple-500/30 rounded-xl p-4">
-                <h4 className="text-purple-400 font-medium mb-2">🚀 Upgrade to Family Plan</h4>
-                <p className="text-gray-300 text-sm mb-3">
-                  Get more value with our Family plan:
+              <div className="bg-gradient-to-r from-red-600/20 to-red-800/10 border border-red-500/30 rounded-xl p-4">
+                <h4 className="text-red-400 font-medium mb-2">🚀 Available Plan Options</h4>
+                <p className="text-gray-300 text-sm mb-4">
+                  Choose the plan that works best for you:
                 </p>
-                <ul className="text-gray-300 text-sm space-y-1">
-                  <li>• Stream on 6 devices simultaneously</li>
-                  <li>• Multiple user profiles</li>
-                  <li>• Exclusive family content</li>
-                  <li>• Only $10 more per month</li>
-                </ul>
+                <div className="space-y-3">
+                  {plans.filter(plan => plan.id !== currentPlan?.id).map(plan => (
+                    <button
+                      key={plan.id}
+                      onClick={() => {
+                        const action = Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'upgrade' : 'downgrade';
+                        alert(`${action === 'upgrade' ? 'Upgrading' : 'Downgrading'} to ${plan.name} plan for ${plan.price}/month`);
+                        setShowUpgradePlan(false);
+                      }}
+                      className="w-full bg-gray-800/40 hover:bg-gray-700/40 border border-gray-600/30 hover:border-red-500/30 rounded-lg p-4 transition-all duration-300 text-left"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h5 className="text-white font-medium">{plan.name}</h5>
+                          <p className="text-gray-400 text-sm">{plan.price}/{plan.period}</p>
+                          <p className="text-xs text-gray-500 mt-1">{plan.quality} • {plan.devices}</p>
+                        </div>
+                        <div className="text-red-400 text-sm font-medium">
+                          {Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'Upgrade' : 'Downgrade'}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="flex space-x-3">
-              <button
-                onClick={() => {
-                  alert('Upgrading to Family plan for $29.99/month. Changes will take effect immediately.');
-                  setShowUpgradePlan(false);
-                }}
-                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl font-medium hover:from-purple-700 hover:to-purple-800 transition-all duration-300"
-              >
-                Upgrade Now
-              </button>
+            <div className="flex justify-end">
               <button
                 onClick={() => setShowUpgradePlan(false)}
                 className="bg-gray-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-700 transition-colors"
               >
-                Maybe Later
+                Cancel
               </button>
             </div>
           </div>

@@ -104,7 +104,7 @@ const BrowsePage = () => {
     <div className="bg-background text-foreground">
       <main className="pt-24">
         <Hero videos={videos} />
-                <div className="bg-gradient-to-b from-black via-gray-900/50 to-black space-y-20 py-24 animate-fade-in">
+                <div className="bg-gradient-to-b from-black via-gray-900/50 to-black space-y-12 py-8 animate-fade-in">
 
           <EnhancedCarousel title="Trending Now" movies={videos} variant="home" />
           <EnhancedCarousel title="Spiritual Awakening" movies={videos.filter(v => v.type.category.name === 'Spirituality')} variant="home" />

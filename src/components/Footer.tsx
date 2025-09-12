@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { siteTheme, themeClasses } from '@/src/lib/theme';
 
 // Social Media Icons as SVG components
 const FacebookIcon = () => (
@@ -27,6 +28,51 @@ const YouTubeIcon = () => (
 );
 
 export const Footer = () => {
+  // Newsletter subscription state
+  const [email, setEmail] = useState('');
+  const [subscriptionState, setSubscriptionState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Email validation
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Handle newsletter subscription
+  const handleSubscription = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      setErrorMessage('Email address is required');
+      setSubscriptionState('error');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setErrorMessage('Please enter a valid email address');
+      setSubscriptionState('error');
+      return;
+    }
+
+    setSubscriptionState('loading');
+    setErrorMessage('');
+
+    try {
+      // Simulate API call - replace with actual subscription service
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setSubscriptionState('success');
+      setEmail('');
+      
+      // Reset success state after 3 seconds
+      setTimeout(() => setSubscriptionState('idle'), 3000);
+    } catch (error) {
+      setErrorMessage('Failed to subscribe. Please try again.');
+      setSubscriptionState('error');
+    }
+  };
+
   const footerLinks = {
     resources: [
       { name: 'About Us', href: '/about-us' },
@@ -48,7 +94,7 @@ export const Footer = () => {
   };
 
   return (
-    <div className="bg-neutral border-t border-neutral">
+    <div className={`${themeClasses.pageBackground()} border-t ${siteTheme.borders.default}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
@@ -59,10 +105,18 @@ export const Footer = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 border border-red-400/30">
                   <div className="w-6 h-6 bg-white rounded-lg transition-all duration-300 group-hover:rounded-full"></div>
                 </div>
+                {/* Animated Ring to match Navigation */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-2xl opacity-0 group-hover:opacity-75 transition-all duration-500 animate-pulse blur-sm"></div>
               </div>
-              <span className="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-red-400">
-                IsolaKwaMUNTU
-              </span>
+              <div>
+                <span className="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-red-400">
+                  IsolaKwaMUNTU
+                </span>
+                {/* Enhanced Slogan to match Navigation */}
+                <div className="text-xs text-gray-500 tracking-wider uppercase font-medium opacity-60 mt-1 transition-all duration-300 group-hover:text-red-400 group-hover:opacity-80">
+                  Elevate Your Consciousness
+                </div>
+              </div>
             </Link>
             <p className="mt-6 text-gray-400 leading-relaxed max-w-sm">
               Your premier destination for transformative African content. Watch unlimited movies, series, and documentaries that elevate consciousness and inspire spiritual growth.
@@ -139,19 +193,63 @@ export const Footer = () => {
             <p className="text-gray-400 mb-6 leading-relaxed">
               Subscribe to our newsletter for updates, exclusive content, and spiritual insights delivered to your inbox.
             </p>
-            <form className="space-y-4">
+            <form onSubmit={handleSubscription} className="space-y-4">
               <div className="relative">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (subscriptionState === 'error') {
+                      setSubscriptionState('idle');
+                      setErrorMessage('');
+                    }
+                  }}
                   placeholder="Enter your email address"
-                  className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                  className={`w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 ${
+                    subscriptionState === 'error' 
+                      ? 'border-red-500 focus:border-red-400 focus:ring-1 focus:ring-red-400'
+                      : subscriptionState === 'success'
+                      ? 'border-green-500 focus:border-green-400 focus:ring-1 focus:ring-green-400'
+                      : 'border-gray-700/50 focus:border-red-500 focus:ring-1 focus:ring-red-500'
+                  }`}
+                  disabled={subscriptionState === 'loading'}
                 />
+                {subscriptionState === 'error' && (
+                  <p className="text-red-400 text-sm mt-2 flex items-center">
+                    <span className="w-4 h-4 mr-2 text-red-500">⚠</span>
+                    {errorMessage}
+                  </p>
+                )}
+                {subscriptionState === 'success' && (
+                  <p className="text-green-400 text-sm mt-2 flex items-center">
+                    <span className="w-4 h-4 mr-2 text-green-500">✓</span>
+                    Successfully subscribed! Welcome to our community.
+                  </p>
+                )}
               </div>
               <button
                 type="submit"
-                className="bg-red-900 text-white px-4 py-2 hover:bg-red-800 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
+                disabled={subscriptionState === 'loading' || subscriptionState === 'success'}
+                className={`w-full px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 transform ${
+                  subscriptionState === 'loading'
+                    ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                    : subscriptionState === 'success'
+                    ? 'bg-green-600 text-white cursor-not-allowed'
+                    : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white hover:scale-105 hover:shadow-lg active:scale-95'
+                }`}
               >
-                Subscribe Now
+                {subscriptionState === 'loading' && (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Subscribing...
+                  </span>
+                )}
+                {subscriptionState === 'success' && 'Subscribed ✓'}
+                {(subscriptionState === 'idle' || subscriptionState === 'error') && 'Subscribe Now'}
               </button>
             </form>
           </div>
