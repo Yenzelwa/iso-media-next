@@ -6,7 +6,7 @@ This document describes how to use Claude with the provided playbooks and featur
 
 ## Files for Context
 
-1. **claude-feature.md** — Context-First Feature Playbook (UI frontend that calls external API).  
+1. **claude.md** — Context-First Feature Playbook (UI frontend that calls external API).  
    - Defines workflow for new features: Inputs → Repo Understanding → Feature Design → Implementation Plan → Implement → Validate → Documentation/PR → Rollout.
 
 2. **FEATURES-UI.md** — Feature List (UI Enhancements & Fixes).  
@@ -17,13 +17,13 @@ This document describes how to use Claude with the provided playbooks and featur
 ## Prompt to Use in Claude
 
 ```markdown
-You are to use the **claude-feature.md** playbook as your strict operating guide for all actions.  
+You are to use the **claude.md** playbook as your strict operating guide for all actions.  
 You are also given a feature list in **FEATURES-UI.md** that contains the current set of UI enhancements and fixes for the `iso-media-next` repo (Next.js frontend that calls an external API).
 
 **Instructions:**
 
 1. **Context & Rules**
-   - Read and internalize all sections of `claude-feature.md`.  
+   - Read and internalize all sections of `claude.md`.  
    - Follow it step by step: §0 Inputs → §1 Repo Understanding → §2 Feature Design → §3 Implementation Plan → §4 Implement → §5 Validate → §6 Docs & PR → rollout.  
    - Never skip sections. Always output artifacts listed in each section.
 
@@ -58,6 +58,6 @@ You are also given a feature list in **FEATURES-UI.md** that contains the curren
 
 ## Usage Notes
 
-- Always attach both **claude-feature.md** and **FEATURES-UI.md** to Claude when starting a session.  
+- Always attach both **claude.md** and **FEATURES-UI.md** to Claude when starting a session.  
 - Use the above prompt to ensure Claude stays within the structured workflow.  
 - After each step, review outputs carefully before telling Claude to “Proceed.”  

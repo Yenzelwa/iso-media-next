@@ -17,14 +17,14 @@ jest.mock('next/link', () => {
 describe('ForgotPasswordPassword', () => {
   it('renders the page heading and description', () => {
     render(<ForgotPasswordPassword />);
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(/forgot password/i);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/reset password/i);
     expect(screen.getByText(/enter your email address/i)).toBeInTheDocument();
   });
 
   it('renders input and submit button', () => {
     render(<ForgotPasswordPassword />);
-    const emailInput = screen.getByPlaceholderText(/you@example.com/i);
-    const resetButton = screen.getByRole('button', { name: /reset password/i });
+    const emailInput = screen.getByPlaceholderText(/enter your email address/i);
+    const resetButton = screen.getByRole('button', { name: /send reset link/i });
 
     expect(emailInput).toBeInTheDocument();
     expect(resetButton).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('ForgotPasswordPassword', () => {
 
   it('accepts user input in email field', async () => {
     render(<ForgotPasswordPassword />);
-    const emailInput = screen.getByPlaceholderText(/you@example.com/i);
+    const emailInput = screen.getByPlaceholderText(/enter your email address/i);
 
     await userEvent.type(emailInput, 'test@example.com');
     expect(emailInput).toHaveValue('test@example.com');
@@ -49,7 +49,7 @@ describe('ForgotPasswordPassword', () => {
     const onSubmit = jest.fn();
     render(<ForgotPasswordPassword />);
 
-    const button = screen.getByRole('button', { name: /reset password/i });
+    const button = screen.getByRole('button', { name: /send reset link/i });
     fireEvent.click(button);
 
     expect(onSubmit).not.toHaveBeenCalled(); // Because no submission handler exists yet

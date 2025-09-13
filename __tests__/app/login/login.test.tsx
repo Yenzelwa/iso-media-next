@@ -144,16 +144,22 @@ xit('should show validation errors for empty email and password fields', async (
 
 
   it('should show error message for short password', async () => {
+    const user = userEvent.setup();
     render(<LoginPage />);
 
-    fireEvent.input(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
-    fireEvent.input(screen.getByLabelText(/password/i), { target: { value: 'sho' } });
-
-    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'sho');
+    
+    // Submit form to trigger validation
+    await user.click(screen.getByRole('button', { name: /log in/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Password must be at least 6 characters/i)).toBeInTheDocument();
-    });
+      const errorMessages = screen.getAllByText(/Password must be at least 6 characters\./i);
+      expect(errorMessages.length).toBeGreaterThanOrEqual(1);
+    }, { timeout: 3000 });
   });
   it('should mask password input', async () => {
     render(<LoginPage />);

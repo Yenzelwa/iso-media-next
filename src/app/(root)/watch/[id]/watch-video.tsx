@@ -285,7 +285,7 @@ const updateDislikes = async (dislike: boolean) => {
                 {currentVideo && currentVideo?.next_episode_id && currentVideo.next_episode_id > 0 && (
                   <button
                     onClick={playNextVideo}
-                    className="bg-gradient-to-r from-red-600 to-red hover:from-red hover:to-red text-white font-semibold py-2 px-6 rounded-xl flex items-center space-x-2 transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-2 px-6 rounded-xl flex items-center space-x-2 transition-all duration-300 transform hover:scale-105"
                   >
                     <span className="text-sm">Next Episode</span>
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -373,7 +373,13 @@ const updateDislikes = async (dislike: boolean) => {
           {/* Seasons Panel */}
           {showSeasons && (
             <section className="mt-8 bg-gradient-to-br from-gray-900/80 to-slate-900/80 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8">
-              <Seasons seasons={series?.seasons ?? []} />
+              <Seasons 
+                seasons={series?.seasons ?? []} 
+                onEpisodeSelect={(episode) => {
+                  setCurrentVideo(episode);
+                  router.push(`/watch/${episode.id}`);
+                }}
+              />
             </section>
           )}
 

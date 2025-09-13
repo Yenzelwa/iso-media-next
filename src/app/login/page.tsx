@@ -34,7 +34,10 @@ const Login = () => {
   const watchPassword = watch('password');
 
   useEffect(() => {
-    setIsButtonEnabled(!!watchEmail && !!watchPassword);
+    // Enable button only if email is valid and password is at least 6 characters
+    const isValidEmail = watchEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchEmail);
+    const isValidPassword = watchPassword && watchPassword.length >= 6;
+    setIsButtonEnabled(isValidEmail && isValidPassword);
   }, [watchEmail, watchPassword]);
 
   // Handle form submission and authentication
@@ -117,7 +120,7 @@ const Login = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-gray-700/50 max-w-md w-full mx-4 transform transition-all duration-700 hover:shadow-[0_25px_50px_rgba(239,68,68,0.15)] hover:border-red-500/30">
+      <div className="relative z-10 bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-gray-700/50 max-w-lg w-full mx-4 transform transition-all duration-700 hover:shadow-[0_25px_50px_rgba(239,68,68,0.15)] hover:border-red-500/30">
         {/* Welcome Section */}
         <div className="text-center mb-6">
           <h1 className="text-4xl sm:text-5xl font-bold mb-3 bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent drop-shadow-lg">

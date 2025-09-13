@@ -4,6 +4,7 @@ import  Link  from 'next/link';
 import { ArrowLeft, CheckCircle, Shield, Play } from 'lucide-react';
 import { useAuth } from '../../context/authContext';
 import { UserMenu } from '@/src/components/UserMenu';
+import { themeClasses } from '@/src/lib/theme';
 import { PricingCard } from '@/src/components/PriceCard';
 
 interface PricingPlan {
@@ -52,7 +53,7 @@ const PlanSelection: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen ${themeClasses.pageBackground()} text-white`}>
       {/* Netflix-style Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/95 to-transparent">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -121,10 +122,10 @@ const PlanSelection: React.FC = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80')] bg-cover bg-center opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
         <div className="absolute top-0 left-1/4 w-72 h-72 bg-red-500/20 rounded-full blur-[100px] animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
       </div>
 
-      <section className="relative w-full max-w-7xl mx-auto px-6 pt-32 pb-24 overflow-hidden z-10">
+      <section className="relative w-full max-w-7xl mx-auto px-6 pt-24 pb-24 overflow-hidden z-10">
 
         {/* Back Button */}
         <div className="mb-8">

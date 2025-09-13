@@ -2,6 +2,13 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { AnimatePresence, motion } from 'framer-motion';
 
+const framer_error = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 10 },
+  transition: { duration: 0.2 },
+};
+
 interface InputProps {
   label: string;
   type: string;
@@ -33,14 +40,25 @@ export const Input = ({ label, type, id, placeholder, name, validation }: InputP
         type={type}
         className={`${type === 'checkbox'
           ? 'mr-2'
-          : 'w-full p-3 font-medium border text-black rounded-md border-slate-300 placeholder-opacity-60'
+          : `w-full p-3 font-medium border text-black rounded-md placeholder-opacity-60 ${
+              inputError ? 'border-red-500' : 'border-slate-300'
+            }`
           }`}
         placeholder={placeholder}
         {...register(id, validation)}
         onKeyUp={() => trigger(name)}
       />
 
-
+      <AnimatePresence mode="wait" initial={false}>
+        {inputError && (
+          <motion.p
+            className="text-red-500 text-sm mt-1"
+            {...framer_error}
+          >
+            {inputError.message}
+          </motion.p>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

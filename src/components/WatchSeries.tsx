@@ -42,7 +42,7 @@ const Seasons: React.FC<SeasonsProps> = ({ seasons, onEpisodeSelect }) => {
               <img
                 src={episode.image_path}
                 alt={episode.title}
-                className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <div className="bg-red-600 rounded-full p-3">

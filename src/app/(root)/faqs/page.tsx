@@ -222,18 +222,36 @@ const FAQsPage = () => {
             <div className="mt-12">
               <h3 className="text-xl font-bold text-white mb-6">Popular Topics</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30 hover:border-red-500/30 transition-colors duration-300">
-                  <h4 className="text-red-400 font-semibold mb-2">Getting Started</h4>
-                  <p className="text-gray-300 text-sm">Learn how to set up your account and start your consciousness journey</p>
-                </div>
-                <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30 hover:border-red-500/30 transition-colors duration-300">
-                  <h4 className="text-red-400 font-semibold mb-2">Content Library</h4>
-                  <p className="text-gray-300 text-sm">Discover our curated collection of transformational content</p>
-                </div>
-                <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30 hover:border-red-500/30 transition-colors duration-300">
-                  <h4 className="text-red-400 font-semibold mb-2">Troubleshooting</h4>
-                  <p className="text-gray-300 text-sm">Resolve common technical issues and optimize your viewing experience</p>
-                </div>
+                <button 
+                  onClick={() => {
+                    setSelectedCategory('general');
+                    setSearchTerm('account');
+                  }}
+                  className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30 hover:border-red-500/30 hover:bg-gray-700/30 transition-all duration-300 text-left group cursor-pointer transform hover:scale-105"
+                >
+                  <h4 className="text-red-400 font-semibold mb-2 group-hover:text-red-300">Getting Started</h4>
+                  <p className="text-gray-300 text-sm group-hover:text-gray-200">Learn how to set up your account and start your consciousness journey</p>
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedCategory('content');
+                    setSearchTerm('');
+                  }}
+                  className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30 hover:border-red-500/30 hover:bg-gray-700/30 transition-all duration-300 text-left group cursor-pointer transform hover:scale-105"
+                >
+                  <h4 className="text-red-400 font-semibold mb-2 group-hover:text-red-300">Content Library</h4>
+                  <p className="text-gray-300 text-sm group-hover:text-gray-200">Discover our curated collection of transformational content</p>
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedCategory('technical');
+                    setSearchTerm('');
+                  }}
+                  className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/30 hover:border-red-500/30 hover:bg-gray-700/30 transition-all duration-300 text-left group cursor-pointer transform hover:scale-105"
+                >
+                  <h4 className="text-red-400 font-semibold mb-2 group-hover:text-red-300">Troubleshooting</h4>
+                  <p className="text-gray-300 text-sm group-hover:text-gray-200">Resolve common technical issues and optimize your viewing experience</p>
+                </button>
               </div>
             </div>
           </div>

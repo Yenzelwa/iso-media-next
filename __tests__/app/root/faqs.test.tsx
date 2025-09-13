@@ -12,7 +12,7 @@ describe('FaqsPage', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/frequently asked questions/i);
 
     const questions = screen.getAllByRole('button');
-    expect(questions).toHaveLength(19); 
+    expect(questions).toHaveLength(22); // 7 category buttons + 12 FAQ buttons + 3 popular topic buttons 
     expect(questions[0]).toHaveTextContent(/all questions/i);
     expect(questions[1]).toHaveTextContent(/general/i);
     expect(questions[2]).toHaveTextContent(/subscription/i);

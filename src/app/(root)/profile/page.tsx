@@ -6,6 +6,7 @@ import { PlanDetails } from './PlanDetails';
 import { SecurityPrivacy } from './SecurityPrivacy';
 import { useAuth } from '../../context/authContext';
 import { ProfileSidebar } from './ProfileSidebar';
+import { themeClasses } from '@/src/lib/theme';
 
 // Extended user data for profile functionality
 interface ExtendedUser {
@@ -121,7 +122,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-black via-gray-900 to-black text-white">
+    <div className={`${themeClasses.pageBackground()} text-white`}>
       
       <main className="pt-24 pb-20">
         <div className="px-4 lg:px-16">

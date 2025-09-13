@@ -3,6 +3,7 @@ import React from "react";
 import "@/src/globals.css";
 import { AuthProvider } from "../context/authContext";
 import { Navigation } from "@/src/components/Navigation";
+import { themeClasses } from "@/src/lib/theme";
 
 
 
@@ -15,7 +16,7 @@ const AccountRootLayout: React.FC <Props> = ({ children } ) => {
      <html lang="en">
       <body>
     <AuthProvider>
-      <div className="bg-black">
+      <div className={themeClasses.pageBackground()}>
       
 
     <div className="flex-shrink-0 text-white "> 

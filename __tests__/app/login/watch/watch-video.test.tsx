@@ -150,7 +150,7 @@ it('triggers next episode change (navigates to next id)', async () => {
 
  it('handles error when axios fails on like', async () => {
   (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 } });
-  (global.fetch as jest.Mock).mockResolvedValueOnce(new Error('Failed to like'));
+  (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Failed to like'));
 
 
   render(<WatchVideo params={{ id: '1' }} />);

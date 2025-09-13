@@ -65,7 +65,7 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
           title: "text-3xl lg:text-4xl font-bold text-white",
           cardContainer: "flex-none w-80 group/item cursor-pointer",
           card: "relative overflow-hidden rounded-2xl transition-all duration-500 group-hover/item:scale-105 shadow-2xl ring-1 ring-gray-800/50 hover:ring-red-500/30",
-          image: "w-full h-52 object-cover transition-all duration-500 group-hover/item:scale-110 group-hover/item:brightness-50",
+          image: "w-full h-52 object-cover rounded-xl transition-all duration-500 group-hover/item:scale-110 group-hover/item:brightness-50",
           overlay: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 opacity-0 group-hover/item:opacity-100 transition-all duration-500",
           additionalOverlay: "absolute inset-0 bg-black/40 opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controls: "absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300 z-20",
@@ -80,7 +80,7 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
           title: "text-4xl lg:text-5xl font-bold text-white tracking-tight",
           cardContainer: "flex-none w-80 group/item cursor-pointer",
           card: "relative overflow-hidden rounded-3xl transition-all duration-700 group-hover/item:scale-105 shadow-2xl ring-2 ring-gray-700/50 hover:ring-red-500/50",
-          image: "w-full h-56 object-cover transition-all duration-700 group-hover/item:scale-110 group-hover/item:brightness-75",
+          image: "w-full h-56 object-cover rounded-xl transition-all duration-700 group-hover/item:scale-110 group-hover/item:brightness-75",
           overlay: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent opacity-0 group-hover/item:opacity-100 transition-all duration-500",
           additionalOverlay: "absolute inset-0 bg-black/30 opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controls: "absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300 z-20",
@@ -95,8 +95,8 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
           title: "text-4xl lg:text-5xl font-bold text-white tracking-tight",
           cardContainer: "flex-none w-80 group/item cursor-pointer",
           card: "relative overflow-hidden rounded-2xl transition-all duration-700 group-hover/item:scale-105 group-hover/item:z-10 shadow-2xl ring-1 ring-gray-700/50 group-hover/item:ring-red-500/50",
-          image: "w-full h-48 object-cover transition-transform duration-700 group-hover/item:scale-110 group-hover/item:brightness-75",
-          overlay: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent opacity-0 group-hover/item:opacity-100 transition-all duration-500",
+          image: "w-full h-48 object-cover rounded-xl transition-transform duration-700 group-hover/item:scale-110 group-hover/item:brightness-75",
+          overlay: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/40 opacity-0 group-hover/item:opacity-100 transition-all duration-500",
           additionalOverlay: "absolute inset-0 bg-black/20 opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controls: "absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controlsContent: "flex items-center space-x-4 bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-2xl border border-white/20",
@@ -107,6 +107,17 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
 
   const styles = getVariantStyles();
   const currentScrollPos = scrollPositions[title] || 0;
+  
+  // Check if there's content to scroll right
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  
+  useEffect(() => {
+    const container = document.getElementById(`scroll-${title.replace(/\s+/g, '-')}`);
+    if (container) {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      setCanScrollRight(currentScrollPos < maxScroll - 10); // 10px buffer
+    }
+  }, [currentScrollPos, title]);
 
   return (
     <div className="px-4 lg:px-16 mb-12">
@@ -124,18 +135,15 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
         </div>
         
         <div className="relative">
-          {/* Left Arrow - Only show on hover */}
-          <button
-            onClick={() => scrollContent("left")}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-gray-900/95 backdrop-blur-sm hover:bg-gray-800 text-white p-4 rounded-full shadow-2xl border border-gray-700 transition-all duration-300 hover:scale-110 -ml-6 ${
-              isHovered && currentScrollPos > 0 
-                ? 'opacity-100 pointer-events-auto' 
-                : 'opacity-0 pointer-events-none'
-            }`}
-            disabled={currentScrollPos <= 0}
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+          {/* Left Arrow - Only show when content can scroll left */}
+          {currentScrollPos > 0 && (
+            <button
+              onClick={() => scrollContent("left")}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-gray-900/95 backdrop-blur-sm hover:bg-gray-800 text-white p-4 rounded-full shadow-2xl border border-gray-700 transition-all duration-300 hover:scale-110 -ml-6 opacity-0 group-hover:opacity-100"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
 
           {/* Content Container */}
           <div
@@ -148,6 +156,10 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                 key={movie.id}
                 className={styles.cardContainer}
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => {
+                  // Navigate to watch page when card is clicked
+                  window.location.href = `/watch/${movie.id}`;
+                }}
               >
                 <div className={styles.card}>
                   <img
@@ -160,17 +172,44 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                   <div className={styles.overlay}></div>
                   {styles.additionalOverlay && <div className={styles.additionalOverlay}></div>}
                   
+                  {/* Always visible text readability overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  
+                  {/* Bottom text area shadow */}
+                  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                  
                   {/* Hover Controls */}
                   <div className={styles.controls}>
                     <div className={styles.controlsContent}>
-                      <button className="bg-white/95 backdrop-blur-sm text-black hover:bg-white rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:shadow-white/20">
+                      <button 
+                        onClick={() => {
+                          // Navigate to watch page
+                          window.location.href = `/watch/${movie.id}`;
+                        }}
+                        className="bg-white/95 backdrop-blur-sm text-black hover:bg-white rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:shadow-white/20"
+                        title="Play video"
+                      >
                         <Play className="w-6 h-6 fill-current" />
                       </button>
-                      <button className="border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white">
+                      <button 
+                        onClick={() => {
+                          // Add to watchlist functionality
+                          alert('Added to My List!');
+                        }}
+                        className="border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white"
+                        title="Add to My List"
+                      >
                         <Plus className="w-6 h-6" />
                       </button>
                       {variant === 'documentary' && (
-                        <button className="border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white">
+                        <button 
+                          onClick={() => {
+                            // Show more info functionality  
+                            alert(`More info about: ${movie.title}`);
+                          }}
+                          className="border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white"
+                          title="More Info"
+                        >
                           <Info className="w-6 h-6" />
                         </button>
                       )}
@@ -218,14 +257,10 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                   </h3>
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center space-x-3">
-                      <span className="text-gray-300">{movie.likes} likes</span>
                       {variant !== 'home' && (
-                        <>
-                          <span className="text-gray-500">•</span>
-                          <span className="text-gray-400">
-                            {new Date(movie.release_date).getFullYear()}
-                          </span>
-                        </>
+                        <span className="text-gray-400">
+                          {new Date(movie.release_date).getFullYear()}
+                        </span>
                       )}
                     </div>
                     {variant === 'home' && (
@@ -252,15 +287,15 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
             ))}
           </div>
 
-          {/* Right Arrow - Only show on hover */}
-          <button
-            onClick={() => scrollContent("right")}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-gray-900/95 backdrop-blur-sm hover:bg-gray-800 text-white p-4 rounded-full shadow-2xl border border-gray-700 transition-all duration-300 hover:scale-110 -mr-6 ${
-              isHovered ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-            }`}
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {/* Right Arrow - Only show when content can scroll right */}
+          {canScrollRight && (
+            <button
+              onClick={() => scrollContent("right")}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-gray-900/95 backdrop-blur-sm hover:bg-gray-800 text-white p-4 rounded-full shadow-2xl border border-gray-700 transition-all duration-300 hover:scale-110 -mr-6 opacity-0 group-hover:opacity-100"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
         </div>
       </div>
     </div>

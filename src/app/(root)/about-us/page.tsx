@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Heart, Users, Target, Award, Globe, Lightbulb } from 'lucide-react';
 
 const AboutUsPage = () => {
@@ -249,18 +250,18 @@ const AboutUsPage = () => {
                       connections to support your path of awakening.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <a 
+                      <Link 
                         href="/register" 
-                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 text-center"
                       >
                         Start Your Journey
-                      </a>
-                      <a 
+                      </Link>
+                      <Link 
                         href="/contact-us" 
-                        className="border-2 border-red-500 text-red-400 hover:bg-red-500/10 px-8 py-3 rounded-xl font-semibold transition-all duration-300"
+                        className="border-2 border-red-500 text-red-400 hover:bg-red-500/10 px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:border-red-400 text-center"
                       >
                         Contact Us
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </section>

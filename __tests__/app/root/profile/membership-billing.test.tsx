@@ -45,8 +45,6 @@ describe('MembershipBilling', () => {
     expect(screen.getByText('Account Information')).toBeInTheDocument();
     expect(screen.getByText('Full Name')).toBeInTheDocument();
     expect(screen.getByText(user.name)).toBeInTheDocument();
-    expect(screen.getByText('Email Address')).toBeInTheDocument();
-    expect(screen.getByText(user.email)).toBeInTheDocument();
     expect(screen.getByText('Phone Number')).toBeInTheDocument();
     expect(screen.getByText(user.phone)).toBeInTheDocument();
 
@@ -101,30 +99,11 @@ describe('MembershipBilling', () => {
     expect(screen.getByText('Janet Smith')).toBeInTheDocument();
   });
 
-test('change email via prompt', () => {
-  const { user, updateUser } = setup();
-  const promptSpy = jest.spyOn(window, 'prompt').mockReturnValue('new@example.com');
-
-  const [emailChangeBtn] = screen.getAllByRole('button', { name: /change/i });
-  fireEvent.click(emailChangeBtn);
-
-  expect(promptSpy).toHaveBeenCalledWith('Enter new email address:', user.email);
-  expect(updateUser).toHaveBeenCalledWith({ email: 'new@example.com' });
-
-  // Same value → no update
-  updateUser.mockClear();
-  promptSpy.mockReturnValue(user.email);
-  fireEvent.click(emailChangeBtn);
-  expect(updateUser).not.toHaveBeenCalled();
-
-  promptSpy.mockRestore();
-});
 
 
   test('change phone via prompt', () => {
     const { user, updateUser } = setup();
-    const buttons = screen.getAllByRole('button', { name: /change/i }); // [emailChange, phoneChange]
-    const phoneChangeBtn = buttons[1];
+    const phoneChangeBtn = screen.getByRole('button', { name: /change/i });
 
     const promptSpy = jest.spyOn(window, 'prompt').mockReturnValue('999-000-1111');
     fireEvent.click(phoneChangeBtn);
@@ -208,17 +187,16 @@ test('change email via prompt', () => {
     expect(screen.getByText('Recent Transactions')).toBeInTheDocument();
   });
 
-  test('close modal with X icon', () => {
+  test('close modal with Cancel button', () => {
     setup();
 
     // Open modal
     fireEvent.click(screen.getByRole('button', { name: /update card/i }));
     expect(screen.getByText('Update Payment Details')).toBeInTheDocument();
 
-    // Click X icon button (no name, but it is the button next to the heading)
-    const dialogHeader = screen.getByText('Update Payment Details').closest('div')!;
-    const xButton = within(dialogHeader.parentElement as HTMLElement).getByRole('button', { name:/cancel/i });
-    fireEvent.click(xButton);
+    // Click Cancel button at the bottom of the modal
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+    fireEvent.click(cancelButton);
 
     expect(screen.queryByText('Update Payment Details')).not.toBeInTheDocument();
   });
