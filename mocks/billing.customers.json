@@ -1,0 +1,8 @@
+[
+  {
+    "id": "cus_local",
+    "stripe_customer_id": "cus_mock",
+    "email": "user@example.com",
+    "name": "User One"
+  }
+]

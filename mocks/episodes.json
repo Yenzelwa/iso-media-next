@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ep_1",
+    "series_id": "ser_1",
+    "season_id": "sea_1",
+    "episode_number": 1,
+    "title": "The Sacred Journey Within",
+    "description": "Episode desc",
+    "image_path": "https://example.com/ep1.jpg",
+    "video_id": "vid_1",
+    "video_path": null,
+    "likes": 2551,
+    "dislikes": 6,
+    "ratings": 5,
+    "release_date": "2023-05-25T00:00:00Z",
+    "user": {
+      "id": "123",
+      "like": false,
+      "dislike": false,
+      "rating": 0
+    }
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "id": "vid_1",
+      "title": "Mindfulness 101",
+      "description": "Intro",
+      "image_path": "https://example.com/img1.jpg",
+      "video_path": null,
+      "rating": 4.8,
+      "likes": 120,
+      "release_date": "2023-05-25T00:00:00Z",
+      "type": {
+        "id": 1,
+        "name": "Series",
+        "category": {
+          "id": 1,
+          "name": "Wellness"
+        }
+      }
+    }
+  ],
+  "page": 1,
+  "page_size": 24,
+  "total": 1,
+  "next_cursor": null
+}

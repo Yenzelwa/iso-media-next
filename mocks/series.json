@@ -1,0 +1,17 @@
+[
+  {
+    "id": "ser_1",
+    "title": "Consciousness Expansion",
+    "description": "Series desc",
+    "image_path": "https://example.com/series1.jpg",
+    "seasons": [
+      {
+        "id": "sea_1",
+        "seasonNumber": 1,
+        "episodes": [
+          "ep_1"
+        ]
+      }
+    ]
+  }
+]

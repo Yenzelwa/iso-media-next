@@ -1,0 +1,10 @@
+[
+  {
+    "id": "txn_1",
+    "date": "2025-01-15T10:00:00Z",
+    "amount_cents": 1999,
+    "currency": "USD",
+    "status": "paid",
+    "description": "Premium Monthly"
+  }
+]
