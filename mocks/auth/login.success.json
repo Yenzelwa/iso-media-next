@@ -1,0 +1,10 @@
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzEyMzQ1IiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI2MzE2ODAwLCJleHAiOjE3MjYzMjA0MDB9.mock_signature",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzEyMzQ1IiwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3MjYzMTY4MDAsImV4cCI6MTcyNjkyMTYwMH0.mock_refresh_signature",
+  "expires_in": 3600,
+  "user": {
+    "id": "user_12345",
+    "email": "user@example.com", 
+    "name": "John Doe"
+  }
+}

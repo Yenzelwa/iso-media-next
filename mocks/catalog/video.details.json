@@ -1,0 +1,19 @@
+{
+  "id": "video_001",
+  "title": "Introduction to Mindfulness",
+  "description": "A comprehensive guide to mindfulness meditation practices that explores various techniques from different spiritual traditions. This documentary takes viewers on a journey through ancient wisdom and modern scientific understanding of mindfulness.",
+  "image_path": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+  "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  "rating": 4.5,
+  "likes": 234,
+  "dislikes": 12,
+  "release_date": "2024-01-15T10:00:00Z",
+  "type": {
+    "id": 1,
+    "name": "Documentary",
+    "category": {
+      "id": 1,
+      "name": "Spirituality"
+    }
+  }
+}

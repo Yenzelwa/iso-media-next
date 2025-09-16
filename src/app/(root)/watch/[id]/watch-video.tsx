@@ -25,129 +25,32 @@ export function WatchPage({ params }: WatchPageProps) {
   const router = useRouter();
 
   useEffect(() => {
-    // Initialize with mock data (replace with API call)
-    // Using params.id for video identification
-    const currentVideoData: Episode = {
-      episode_detail: '23 October 2023 - Season 2 - Episode 01',
-      next_episode_id: 254,
-      episode_number: 1,
-      episode_short_detail: 'S01E01',
-      series_id: 1,
-      season_id: 1,
-      id: 253,
-      video_id: 125,
-      title: "The Sacred Journey Within",
-      description: `Embark on a transformative exploration of consciousness and spiritual awakening. This episode delves deep into ancient wisdom traditions and modern understanding of human consciousness, offering practical insights for those seeking to expand their awareness and connect with their higher self. Through guided meditations, expert interviews, and powerful testimonials, discover the tools and practices that can lead to profound personal transformation.`,
-      image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-      video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      likes: 2551,
-      dislikes: 5,
-      ratings: 4.2,
-      release_date: new Date('2023-05-25'),
-      user: {
-        id: 1,
-        like: true,
-        dislike: false,
-        rating: 4.9
+    const fetchEpisodeData = async () => {
+      try {
+        // Fetch episode details
+        const episodeResponse = await fetch(`/api/episodes/${params.id}`);
+        if (episodeResponse.ok) {
+          const episodeData = await episodeResponse.json();
+          setCurrentVideo(episodeData);
+
+          // If episode has series_id, fetch series data
+          if (episodeData.series_id) {
+            const seriesResponse = await fetch(`/api/series/${episodeData.series_id}`);
+            if (seriesResponse.ok) {
+              const seriesData = await seriesResponse.json();
+              setSeries(seriesData);
+            }
+          }
+        } else {
+          setError('Episode not found');
+        }
+      } catch (err) {
+        console.error('Error fetching episode data:', err);
+        setError('Failed to load episode');
       }
     };
-    setCurrentVideo(currentVideoData);
 
-    // Initialize series data (replace with API call)
-    const seriesData: Series = {
-      id: 1,
-      title: 'Consciousness Expansion Series',
-      description: 'A comprehensive journey through the realms of consciousness, spirituality, and human potential.',
-      realese_date: new Date('2024/02/12'),
-      image_path: '',
-      seasons: [
-        {
-          id: 1,
-          seasonNumber: 1,
-          episodes: [
-            {
-              episode_detail: '23 October 2023 - Season 1 - Episode 01',
-              next_episode_id: 254,
-              episode_number: 1,
-              episode_short_detail: 'S01E01',
-              series_id: 1,
-              season_id: 1,
-              id: 253,
-              video_id: 125,
-              title: "The Sacred Journey Within",
-              description: `Embark on a transformative exploration of consciousness and spiritual awakening. This episode delves deep into ancient wisdom traditions and modern understanding of human consciousness.`,
-              image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-              likes: 2551,
-              dislikes: 5,
-              ratings: 4.2,
-              release_date: new Date('2023-05-25'),
-              user: {
-                id: 1,
-                like: true,
-                dislike: false,
-                rating: 4.9
-              }
-            },
-            {
-              episode_detail: '30 October 2023 - Season 1 - Episode 02',
-              next_episode_id: 255,
-              episode_number: 2,
-              episode_short_detail: 'S01E02',
-              series_id: 1,
-              season_id: 1,
-              id: 254,
-              video_id: 126,
-              title: "Meditation and Mindfulness Mastery",
-              description: `Learn advanced meditation techniques and mindfulness practices that have been used for centuries to achieve inner peace and spiritual enlightenment.`,
-              image_path: 'https://images.unsplash.com/photo-1512756290469-ec264b7fbf87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2253&q=80',
-              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-              likes: 3421,
-              dislikes: 8,
-              ratings: 4.5,
-              release_date: new Date('2023-05-30'),
-              user: {
-                id: 1,
-                like: false,
-                dislike: false,
-                rating: 4.5
-              }
-            }
-          ]
-        },
-        {
-          id: 2,
-          seasonNumber: 2,
-          episodes: [
-            {
-              episode_detail: '15 November 2023 - Season 2 - Episode 01',
-              next_episode_id: 257,
-              episode_number: 1,
-              episode_short_detail: 'S02E01',
-              series_id: 1,
-              season_id: 2,
-              id: 256,
-              video_id: 127,
-              title: "Energy Healing and Chakra Alignment",
-              description: `Discover the ancient art of energy healing and learn how to balance your chakras for optimal physical, emotional, and spiritual well-being.`,
-              image_path: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-              video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-              likes: 1876,
-              dislikes: 12,
-              ratings: 4.3,
-              release_date: new Date('2023-11-15'),
-              user: {
-                id: 1,
-                like: true,
-                dislike: false,
-                rating: 4.7
-              }
-            }
-          ]
-        }
-      ]
-    };
-    setSeries(seriesData);
+    fetchEpisodeData();
   }, [params.id]);
 
   const playNextVideo = () => {
@@ -187,7 +90,7 @@ const updateLikes = async (like: boolean) => {
     setCurrentVideo(updatedVideo);
 
     // ✅ API call to persist like
-    const response = await fetch(`http://172.24.74.185:4002/videos/${currentVideo.id}/like`, {
+    const response = await fetch(`/api/videos/${currentVideo.id}/like`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -233,7 +136,7 @@ const updateDislikes = async (dislike: boolean) => {
     setCurrentVideo(updatedVideo);
 
     // ✅ API call to persist dislike
-    const response = await fetch(`http://172.24.74.185:4002/videos/${currentVideo.id}/dislike`, {
+    const response = await fetch(`/api/videos/${currentVideo.id}/dislike`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

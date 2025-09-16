@@ -1,0 +1,46 @@
+{
+  "page": 1,
+  "page_size": 10,
+  "total": 25,
+  "next_cursor": "doc_011",
+  "items": [
+    {
+      "id": "doc_001",
+      "title": "Ancient Wisdom: Paths to Enlightenment",
+      "description": "Explore ancient spiritual practices and their relevance in modern times",
+      "image_path": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "rating": 4.8,
+      "likes": 2156,
+      "dislikes": 34,
+      "release_date": "2024-03-15T10:00:00Z",
+      "type": {
+        "id": 1,
+        "name": "Documentary",
+        "category": {
+          "id": 1,
+          "name": "Spirituality"
+        }
+      }
+    },
+    {
+      "id": "doc_002", 
+      "title": "The Science of Meditation",
+      "description": "Scientific insights into the benefits of meditation practices",
+      "image_path": "https://images.unsplash.com/photo-1545389336-cf090694435e",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "rating": 4.6,
+      "likes": 1834,
+      "dislikes": 28,
+      "release_date": "2024-02-20T14:30:00Z",
+      "type": {
+        "id": 1,
+        "name": "Documentary",
+        "category": {
+          "id": 4,
+          "name": "Science"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/auth/RegisterResponse.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["access_token", "refresh_token", "expires_in", "user"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "description": "JWT access token"
+    },
+    "refresh_token": {
+      "type": "string",
+      "description": "JWT refresh token"
+    },
+    "expires_in": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Token expiry in seconds"
+    },
+    "user": {
+      "type": "object",
+      "required": ["id", "email"],
+      "properties": {
+        "id": {
+          "anyOf": [{"type": "string"}, {"type": "number"}],
+          "description": "User ID"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User's email"
+        },
+        "name": {
+          "type": "string",
+          "description": "User's display name"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

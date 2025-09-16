@@ -1,0 +1,24 @@
+{
+  "title": "Latest Documentaries",
+  "items": [
+    {
+      "id": "doc_latest_001",
+      "title": "Modern Spirituality in Digital Age",
+      "description": "How technology is changing spiritual practices worldwide",
+      "image_path": "https://images.unsplash.com/photo-1518709268805-4e9042af2176",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "rating": 4.7,
+      "likes": 1567,
+      "dislikes": 23,
+      "release_date": "2024-08-15T12:00:00Z",
+      "type": {
+        "id": 1,
+        "name": "Documentary", 
+        "category": {
+          "id": 1,
+          "name": "Spirituality"
+        }
+      }
+    }
+  ]
+}

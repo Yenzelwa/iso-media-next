@@ -58,7 +58,7 @@ export const StripeCheckOutForm: React.FC = () => {
         return;
       }
       // Send request to create customer on the backend
-      const customerResponse = await fetch('http://172.24.74.185:4000/customer', {
+      const customerResponse = await fetch('/api/billing/customers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export const StripeCheckOutForm: React.FC = () => {
     const customerId = customerObject.customer; // This will give you the value "cus_S6FTECPO0iJTpB"
   
     // Send request to process payment on the backend
-    const paymentResponse = await fetch('http://172.24.74.185:4000/subscription', {
+    const paymentResponse = await fetch('/api/billing/subscriptions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +94,6 @@ export const StripeCheckOutForm: React.FC = () => {
         customer_id: customerId,  // Use the extracted customer ID here
         plan_id: "price_1QWXBTADdfkz5weOBz0VcbeW",
       }),
-      credentials: 'include', // Equivalent to 'withCredentials: true'
     });
   
     if (!paymentResponse.ok) {

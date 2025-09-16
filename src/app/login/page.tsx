@@ -51,7 +51,7 @@ const Login = () => {
       // In production, replace with actual API call
         try {
 
-          const response = await fetch('http://172.24.74.185:4002/login', {  
+          const response = await fetch('/api/auth/login', {  
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -59,10 +59,10 @@ const Login = () => {
             body: JSON.stringify({ email, password }),
           });
           if(response.ok){
-          const user = await response.json();
-          const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag"; // Simulate token
-            login(token, user);
-          if(user){
+          const authData = await response.json();
+          const token = authData.access_token;
+            login(token, authData.user);
+          if(authData.user){
           router.push('/');
           }    
           }

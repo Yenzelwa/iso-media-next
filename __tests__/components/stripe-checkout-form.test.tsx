@@ -167,7 +167,7 @@ describe('StripeCheckOutForm', () => {
     await waitFor(() => {
       expect(global.fetch).toHaveBeenNthCalledWith(
         1,
-        'http://172.24.74.185:4000/customer',
+        '/api/billing/customers',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({ 'Content-Type': 'application/json' }),
@@ -175,7 +175,7 @@ describe('StripeCheckOutForm', () => {
       );
       expect(global.fetch).toHaveBeenNthCalledWith(
         2,
-        'http://172.24.74.185:4000/subscription',
+        '/api/billing/subscriptions',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({ 'Content-Type': 'application/json' }),

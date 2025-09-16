@@ -1,0 +1,19 @@
+{
+  "id": "doc_featured",
+  "title": "The Journey Within: Ancient Healing Traditions",
+  "description": "A comprehensive exploration of traditional healing practices from around the world and their scientific validation",
+  "image_path": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f",
+  "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+  "rating": 4.9,
+  "likes": 3245,
+  "dislikes": 12,
+  "release_date": "2024-04-01T09:00:00Z",
+  "type": {
+    "id": 1,
+    "name": "Documentary",
+    "category": {
+      "id": 2,
+      "name": "Wellness"
+    }
+  }
+}

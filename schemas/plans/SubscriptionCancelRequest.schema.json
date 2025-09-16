@@ -1,0 +1,13 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/plans/SubscriptionCancelRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "at_period_end": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to cancel at the end of the current period"
+    }
+  },
+  "additionalProperties": false
+}

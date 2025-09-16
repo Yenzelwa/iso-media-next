@@ -1,0 +1,45 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/series/Series.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "title", "image_path"],
+  "properties": {
+    "id": {
+      "anyOf": [{"type": "string"}, {"type": "number"}],
+      "description": "Series ID"
+    },
+    "title": {
+      "type": "string",
+      "description": "Series title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Series description"
+    },
+    "image_path": {
+      "type": "string",
+      "format": "uri",
+      "description": "Series image URL"
+    },
+    "seasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "seasonNumber"],
+        "properties": {
+          "id": {
+            "anyOf": [{"type": "string"}, {"type": "number"}],
+            "description": "Season ID"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Season number"
+          }
+        }
+      },
+      "description": "Array of seasons"
+    }
+  },
+  "additionalProperties": false
+}

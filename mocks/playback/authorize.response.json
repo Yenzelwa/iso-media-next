@@ -1,0 +1,4 @@
+{
+  "signed_url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4?signature=abc123&expires=1234567890",
+  "expires_at": "2024-12-31T23:59:59Z"
+}

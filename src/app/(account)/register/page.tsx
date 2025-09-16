@@ -35,31 +35,21 @@ const Register = () => {
     try {
       // Mock API call structure (commented for demo)
       
-      const response = await fetch(
-        'http://172.24.74.185:4002/profile',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id: null,
-            name: data.first_name,
-            email: data.email,
-            plan_id: 1,
-            status: 'pending',
-            stripe_customer_id: null,
-            currency: "USD",
-            phone: null,
-            payment_method_id: null
-          }),
-          credentials: 'include',
-        }
-      );
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          first_name: data.first_name,
+          email: data.email,
+          password: data.password
+        }),
+      });
       if(response.ok){
-      const user = await response.json();
-      const token = "gdjfgudishfioshg24545ds4gsgsdg_fdag";
-      login(token, user)
+      const authData = await response.json();
+      const token = authData.access_token;
+      login(token, authData.user)
       router.push('plan-selection')
     
       }

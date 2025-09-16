@@ -1,0 +1,29 @@
+{
+  "transactions": [
+    {
+      "id": "txn_1234567890abcdef",
+      "date": "2024-01-15T10:30:00Z",
+      "amount_cents": 2999,
+      "currency": "USD",
+      "status": "succeeded",
+      "description": "Monthly subscription - Premium Plan"
+    },
+    {
+      "id": "txn_0987654321fedcba",
+      "date": "2023-12-15T10:30:00Z",
+      "amount_cents": 2999,
+      "currency": "USD", 
+      "status": "succeeded",
+      "description": "Monthly subscription - Premium Plan"
+    },
+    {
+      "id": "txn_1111222233334444",
+      "date": "2023-11-15T10:30:00Z",
+      "amount_cents": 2999,
+      "currency": "USD",
+      "status": "succeeded",
+      "description": "Monthly subscription - Premium Plan"
+    }
+  ],
+  "has_more": false
+}

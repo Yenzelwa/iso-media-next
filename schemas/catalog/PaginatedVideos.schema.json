@@ -1,0 +1,35 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/catalog/PaginatedVideos.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["items", "page", "page_size", "total"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "https://isolakwamuntu.com/schemas/catalog/Video.schema.json"
+      },
+      "description": "Array of video items"
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Current page number"
+    },
+    "page_size": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of items per page"
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of items"
+    },
+    "next_cursor": {
+      "type": ["string", "null"],
+      "description": "Cursor for next page"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,91 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/profiles/Account.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["profile", "subscription", "billing_address"],
+  "properties": {
+    "profile": {
+      "type": "object",
+      "required": ["id", "email", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique user profile identifier"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User's email address"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User's display name"
+        },
+        "phone": {
+          "type": ["string", "null"],
+          "description": "User's phone number"
+        },
+        "avatar_url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "URL to user's avatar image"
+        }
+      },
+      "additionalProperties": false
+    },
+    "subscription": {
+      "type": ["object", "null"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Subscription identifier"
+        },
+        "plan_id": {
+          "type": "string",
+          "description": "Plan identifier"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive", "cancelled", "expired"],
+          "description": "Subscription status"
+        },
+        "expires_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "Subscription expiration date"
+        }
+      },
+      "required": ["id", "plan_id", "status"],
+      "additionalProperties": false
+    },
+    "billing_address": {
+      "type": ["object", "null"],
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": "Street address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "Postal or zip code"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country code"
+        }
+      },
+      "required": ["street", "city", "state", "postal_code", "country"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

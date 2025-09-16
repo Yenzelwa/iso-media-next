@@ -1,0 +1,44 @@
+[
+  {
+    "id": "episode_001_01_01",
+    "series_id": "series_001",
+    "season_id": "season_001_01",
+    "episode_number": 1,
+    "title": "The Foundation of Wisdom",
+    "description": "Introduction to ancient wisdom traditions and their core principles",
+    "image_path": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+    "video_id": "video_ep_001",
+    "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "likes": 234,
+    "dislikes": 12,
+    "ratings": 4.8,
+    "release_date": "2024-03-01T10:00:00Z",
+    "user": {
+      "id": "user_123",
+      "like": true,
+      "dislike": false,
+      "rating": 5.0
+    }
+  },
+  {
+    "id": "episode_001_01_02",
+    "series_id": "series_001",
+    "season_id": "season_001_01",
+    "episode_number": 2,
+    "title": "Meditation Across Cultures",
+    "description": "Exploring meditation practices from different spiritual traditions",
+    "image_path": "https://images.unsplash.com/photo-1545389336-cf090694435e",
+    "video_id": "video_ep_002",
+    "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    "likes": 198,
+    "dislikes": 8,
+    "ratings": 4.7,
+    "release_date": "2024-03-08T10:00:00Z",
+    "user": {
+      "id": "user_123",
+      "like": false,
+      "dislike": false,
+      "rating": 4.5
+    }
+  }
+]

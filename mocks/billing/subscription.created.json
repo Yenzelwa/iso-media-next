@@ -1,0 +1,8 @@
+{
+  "id": "sub_1234567890abcdef",
+  "status": "active",
+  "current_period_start": "2024-01-01T00:00:00Z",
+  "current_period_end": "2024-02-01T00:00:00Z",
+  "price_id": "price_1234567890abcdef",
+  "cancel_at_period_end": false
+}

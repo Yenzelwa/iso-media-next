@@ -19,6 +19,7 @@ This document describes how to use Claude with the provided playbooks and featur
 ```markdown
 You are to use the **CLAUDE-API-RULE.md** playbook as your strict operating guide for all actions.  
 You are also given a feature list in **API-FEATURE-UI.md** that contains the structure of the api.
+You must use mock data for all api calls, refer to mocks folder for the json data
 
 **Instructions:**
 

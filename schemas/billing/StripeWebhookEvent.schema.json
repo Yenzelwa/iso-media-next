@@ -1,0 +1,25 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/billing/StripeWebhookEvent.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "type", "data"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Event ID"
+    },
+    "type": {
+      "type": "string",
+      "description": "Event type (e.g., invoice.payment_succeeded)"
+    },
+    "data": {
+      "type": "object",
+      "description": "Event data payload"
+    },
+    "created": {
+      "type": "integer",
+      "description": "Event creation timestamp"
+    }
+  },
+  "additionalProperties": true
+}

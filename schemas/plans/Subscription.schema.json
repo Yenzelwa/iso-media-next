@@ -1,0 +1,65 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/plans/Subscription.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "plan", "status", "current_period_start", "current_period_end"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Subscription identifier"
+    },
+    "plan": {
+      "type": "object",
+      "required": ["id", "name", "price_cents", "interval"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Plan identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Plan display name"
+        },
+        "price_cents": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Price in cents"
+        },
+        "interval": {
+          "enum": ["month", "year"],
+          "description": "Billing interval"
+        },
+        "devices": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of devices"
+        },
+        "quality": {
+          "enum": ["HD", "4K"],
+          "description": "Video quality level"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Associated plan"
+    },
+    "status": {
+      "enum": ["active", "canceled", "incomplete", "trialing", "past_due"],
+      "description": "Subscription status"
+    },
+    "current_period_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Start of current billing period"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "End of current billing period"
+    },
+    "cancel_at_period_end": {
+      "type": "boolean",
+      "description": "Whether subscription cancels at period end"
+    }
+  },
+  "additionalProperties": false
+}

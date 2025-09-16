@@ -1,11 +1,20 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import  Link  from 'next/link';
 import { ArrowLeft, CheckCircle, Shield, Play } from 'lucide-react';
 import { useAuth } from '../../context/authContext';
 import { UserMenu } from '@/src/components/UserMenu';
 import { themeClasses } from '@/src/lib/theme';
 import { PricingCard } from '@/src/components/PriceCard';
+
+interface Plan {
+  id: string;
+  name: string;
+  price_cents: number;
+  interval: 'month' | 'year';
+  devices: number;
+  quality: 'HD' | '4K';
+}
 
 interface PricingPlan {
   id: number;
@@ -15,42 +24,79 @@ interface PricingPlan {
   features: string[];
 }
 
-const pricingLists: PricingPlan[] = [
-  {
-    id: 1,
-    title: "Billed Monthly",
-    price: "$7.99",
-    type: "Monthly",
-    features: [
-      "Stream on 1 device",
-      "Instant access to over 1500 unique videos",
-      "Access 30+ years of David Icke's Content",
-      "Watch on your phone and TV",
-      "$1.99 for your first month",
-      "Renews at $7.99",
-    ],
-  },
-  {
-    id: 2,
-    title: "Billed Yearly",
-    price: "$99.99",
-    type: "Yearly",
-    features: [
-      "Stream on 4 devices",
-      "All premium features included",
-      "Save 17% with annual billing",
-      "24/7 customer support",
-      "$1.99 for your first month",
-      "Renews at $7.99",
-      "Instant access to over 1500 unique videos",
-      "Access 30+ years of David Icke's Content",
-    ],
-  },
-];
-
 const PlanSelection: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<number>(1);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [pricingLists, setPricingLists] = useState<PricingPlan[]>([]);
+  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await fetch('/api/plans');
+        if (response.ok) {
+          const plansData = await response.json();
+          setPlans(plansData);
+
+          // Transform API data to UI format
+          const transformedPlans = plansData.map((plan: Plan, index: number) => ({
+            id: index + 1,
+            title: `Billed ${plan.interval === 'month' ? 'Monthly' : 'Yearly'}`,
+            price: `$${(plan.price_cents / 100).toFixed(2)}`,
+            type: plan.interval === 'month' ? 'Monthly' : 'Yearly',
+            features: [
+              `Stream on ${plan.devices} device${plan.devices > 1 ? 's' : ''}`,
+              `${plan.quality} Quality`,
+              "Instant access to premium content",
+              "Watch on your phone, tablet, and TV",
+              "Cancel anytime",
+              "24/7 customer support",
+              ...(plan.interval === 'year' ? ['Save with annual billing'] : [])
+            ],
+          }));
+
+          setPricingLists(transformedPlans);
+        }
+      } catch (error) {
+        console.error('Error fetching plans:', error);
+        // Fallback to default plans
+        setPricingLists([
+          {
+            id: 1,
+            title: "Billed Monthly",
+            price: "$7.99",
+            type: "Monthly",
+            features: [
+              "Stream on 1 device",
+              "HD Quality",
+              "Instant access to premium content",
+              "Watch on your phone and TV",
+              "Cancel anytime",
+            ],
+          },
+          {
+            id: 2,
+            title: "Billed Yearly",
+            price: "$79.99",
+            type: "Yearly",
+            features: [
+              "Stream on 4 devices",
+              "4K Quality",
+              "All premium features included",
+              "Save with annual billing",
+              "24/7 customer support",
+              "Cancel anytime",
+            ],
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
 
   return (
     <div className={`min-h-screen ${themeClasses.pageBackground()} text-white`}>
@@ -170,17 +216,33 @@ const PlanSelection: React.FC = () => {
         </header>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {pricingLists.map((plan) => (
-              <PricingCard
-                key={plan.id}
-                plan={plan}
-                isSelected={selectedPlan === plan.id}
-                onSelect={setSelectedPlan}
-                isPopular={plan.id === 2}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="grid lg:grid-cols-2 gap-8">
+              {[1, 2].map((i) => (
+                <div key={i} className="bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 animate-pulse">
+                  <div className="h-6 bg-gray-700/50 rounded mb-4"></div>
+                  <div className="h-8 bg-gray-700/50 rounded mb-6"></div>
+                  <div className="space-y-3">
+                    {[1, 2, 3, 4].map((j) => (
+                      <div key={j} className="h-4 bg-gray-700/50 rounded"></div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid lg:grid-cols-2 gap-8">
+              {pricingLists.map((plan) => (
+                <PricingCard
+                  key={plan.id}
+                  plan={plan}
+                  isSelected={selectedPlan === plan.id}
+                  onSelect={setSelectedPlan}
+                  isPopular={plan.id === 2}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Selection Indicator */}
           <div className="text-center mt-8">

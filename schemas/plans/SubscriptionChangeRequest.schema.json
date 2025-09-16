@@ -1,0 +1,14 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/plans/SubscriptionChangeRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["plan_id"],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ID of the plan to switch to"
+    }
+  },
+  "additionalProperties": false
+}

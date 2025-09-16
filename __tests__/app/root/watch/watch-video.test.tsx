@@ -37,6 +37,90 @@ global.fetch = mockFetch;
 describe('WatchPage (client)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Mock the episode fetch API call
+    const mockEpisode = {
+      episode_detail: '23 October 2023 - Season 2 - Episode 01',
+      next_episode_id: 254,
+      episode_number: 1,
+      episode_short_detail: 'S01E01',
+      series_id: 1,
+      season_id: 1,
+      id: 253,
+      video_id: 125,
+      title: "The Sacred Journey Within",
+      description: `Embark on a transformative exploration of consciousness and spiritual awakening. This episode delves deep into ancient wisdom traditions and modern understanding of human consciousness, offering practical insights for those seeking to expand their awareness and connect with their higher self.`,
+      image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1',
+      video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      likes: 2551,
+      dislikes: 5,
+      ratings: 4.2,
+      release_date: new Date('2023-05-25'),
+      user: {
+        id: 1,
+        like: true,
+        dislike: false,
+        rating: 4.9
+      }
+    };
+
+    const mockSeries = {
+      id: 1,
+      title: 'Consciousness Expansion Series',
+      description: 'A comprehensive journey through the realms of consciousness, spirituality, and human potential.',
+      realese_date: new Date('2024/02/12'),
+      image_path: '',
+      seasons: [
+        {
+          id: 1,
+          seasonNumber: 1,
+          episodes: [mockEpisode, {
+            episode_detail: '30 October 2023 - Season 1 - Episode 02',
+            next_episode_id: 255,
+            episode_number: 2,
+            episode_short_detail: 'S01E02',
+            series_id: 1,
+            season_id: 1,
+            id: 254,
+            video_id: 126,
+            title: "Meditation and Mindfulness Mastery",
+            description: `Learn advanced meditation techniques and mindfulness practices.`,
+            image_path: 'https://images.unsplash.com/photo-1512756290469-ec264b7fbf87',
+            video_path: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            likes: 3421,
+            dislikes: 8,
+            ratings: 4.5,
+            release_date: new Date('2023-05-30'),
+            user: {
+              id: 1,
+              like: false,
+              dislike: false,
+              rating: 4.5
+            }
+          }]
+        }
+      ]
+    };
+
+    mockFetch.mockImplementation((url) => {
+      if (url.includes('/api/episodes/253')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockEpisode)
+        });
+      }
+      if (url.includes('/api/series/1')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockSeries)
+        });
+      }
+      // Default like/dislike responses
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ likes: 2551, dislikes: 5 })
+      });
+    });
   });
 
   const renderComp = () => render(<WatchPage params={{ id: '253' }} />);
@@ -84,7 +168,7 @@ describe('WatchPage (client)', () => {
 
     // Open
     fireEvent.click(toggle);
-    expect(screen.getByTestId('seasons')).toHaveAttribute('data-count', '2');
+    expect(screen.getByTestId('seasons')).toHaveAttribute('data-count', '1');
 
     // Close
     fireEvent.click(toggle);

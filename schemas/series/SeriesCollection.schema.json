@@ -1,0 +1,20 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/series/SeriesCollection.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["title", "items"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Collection title"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "https://isolakwamuntu.com/schemas/series/Series.schema.json"
+      },
+      "description": "Array of series in the collection"
+    }
+  },
+  "additionalProperties": false
+}

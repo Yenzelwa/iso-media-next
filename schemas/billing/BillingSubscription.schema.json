@@ -1,0 +1,36 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/billing/BillingSubscription.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "status", "current_period_start", "current_period_end", "price_id"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Subscription ID"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "past_due", "canceled", "unpaid", "trialing"],
+      "description": "Subscription status"
+    },
+    "current_period_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current period start date"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current period end date"
+    },
+    "price_id": {
+      "type": "string",
+      "description": "Stripe price ID"
+    },
+    "cancel_at_period_end": {
+      "type": "boolean",
+      "description": "Whether to cancel at period end"
+    }
+  },
+  "additionalProperties": false
+}

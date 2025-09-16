@@ -1,0 +1,21 @@
+{
+  "id": "episode_001",
+  "series_id": "series_001",
+  "season_id": "season_001_01",
+  "episode_number": 1,
+  "title": "The Foundation of Wisdom",
+  "description": "Introduction to ancient wisdom traditions and their core principles. This episode explores the universal teachings found across different spiritual traditions.",
+  "image_path": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+  "video_id": "video_ep_001",
+  "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  "likes": 234,
+  "dislikes": 12,
+  "ratings": 4.8,
+  "release_date": "2024-03-01T10:00:00Z",
+  "user": {
+    "id": "user_123",
+    "like": true,
+    "dislike": false,
+    "rating": 5.0
+  }
+}

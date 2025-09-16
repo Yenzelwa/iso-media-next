@@ -1,0 +1,13 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/auth/LogoutRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional token for server-side logout"
+    }
+  },
+  "additionalProperties": false
+}

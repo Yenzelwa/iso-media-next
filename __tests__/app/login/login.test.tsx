@@ -55,7 +55,8 @@ describe('LoginPage', () => {
 
   it('should login successfully with valid credentials', async () => {
     // Mock the fetch response to simulate a successful login
-    const mockResponse = { ok: true, json: jest.fn().mockResolvedValue(mockUser) };
+    const mockAuthData = { access_token: 'test_token_123', user: mockUser };
+    const mockResponse = { ok: true, json: jest.fn().mockResolvedValue(mockAuthData) };
     (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
 
     render(<LoginPage  />);
@@ -71,7 +72,7 @@ describe('LoginPage', () => {
     await waitFor(() => {
       // Ensure fetch was called with the correct URL and body
       expect(fetch).toHaveBeenCalledWith(
-        'http://172.24.74.185:4002/login',
+        '/api/auth/login',
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ email: 'test@example.com', password: 'password123' }),
@@ -79,7 +80,7 @@ describe('LoginPage', () => {
       );
 
       // Verify that the login function was called with the token and user
-      expect(mockLogin).toHaveBeenCalledWith("gdjfgudishfioshg24545ds4gsgsdg_fdag", mockUser);
+      expect(mockLogin).toHaveBeenCalledWith("test_token_123", mockUser);
 
       // Ensure the user was redirected after login
       expect(mockPush).toHaveBeenCalledWith('/');

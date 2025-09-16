@@ -1,0 +1,36 @@
+{
+  "page": 1,
+  "page_size": 10,
+  "total": 15,
+  "next_cursor": "series_011",
+  "items": [
+    {
+      "id": "series_001",
+      "title": "Ancient Wisdom Chronicles",
+      "description": "A comprehensive exploration of ancient spiritual traditions and their modern applications",
+      "image_path": "https://images.unsplash.com/photo-1518709268805-4e9042af2176",
+      "seasons": [
+        {
+          "id": "season_001_01",
+          "seasonNumber": 1
+        },
+        {
+          "id": "season_001_02", 
+          "seasonNumber": 2
+        }
+      ]
+    },
+    {
+      "id": "series_002",
+      "title": "Healing Arts Mastery",
+      "description": "Learn traditional and modern healing techniques from practitioners around the world",
+      "image_path": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f",
+      "seasons": [
+        {
+          "id": "season_002_01",
+          "seasonNumber": 1
+        }
+      ]
+    }
+  ]
+}

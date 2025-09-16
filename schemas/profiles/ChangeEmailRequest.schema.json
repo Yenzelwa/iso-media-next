@@ -1,0 +1,19 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/profiles/ChangeEmailRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["new_email", "password"],
+  "properties": {
+    "new_email": {
+      "type": "string",
+      "format": "email",
+      "description": "New email address"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Current password for verification"
+    }
+  },
+  "additionalProperties": false
+}

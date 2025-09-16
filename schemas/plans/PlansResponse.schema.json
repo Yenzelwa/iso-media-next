@@ -1,0 +1,39 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/plans/PlansResponse.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "price_cents", "interval"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Plan identifier"
+      },
+      "name": {
+        "type": "string",
+        "description": "Plan display name"
+      },
+      "price_cents": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Price in cents"
+      },
+      "interval": {
+        "enum": ["month", "year"],
+        "description": "Billing interval"
+      },
+      "devices": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of devices"
+      },
+      "quality": {
+        "enum": ["HD", "4K"],
+        "description": "Video quality level"
+      }
+    },
+    "additionalProperties": false
+  },
+  "description": "List of available plans"
+}

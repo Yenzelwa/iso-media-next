@@ -1,0 +1,21 @@
+{
+  "title": "Popular Series",
+  "items": [
+    {
+      "id": "series_popular_001",
+      "title": "Mindfulness Masters",
+      "description": "Learn from world-renowned mindfulness teachers and practitioners",
+      "image_path": "https://images.unsplash.com/photo-1602192509154-0b900ee1f851",
+      "seasons": [
+        {
+          "id": "season_popular_001_01",
+          "seasonNumber": 1
+        },
+        {
+          "id": "season_popular_001_02",
+          "seasonNumber": 2
+        }
+      ]
+    }
+  ]
+}

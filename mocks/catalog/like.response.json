@@ -1,0 +1,8 @@
+{
+  "likes": 235,
+  "dislikes": 12,
+  "user": {
+    "like": true,
+    "dislike": false
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "two_factor_enabled": false,
+  "login_alerts": true,
+  "auto_logout_minutes": 30,
+  "data_collection": true
+}

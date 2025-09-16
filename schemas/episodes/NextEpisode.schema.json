@@ -1,0 +1,17 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/episodes/NextEpisode.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["next_episode_id"],
+  "properties": {
+    "next_episode_id": {
+      "anyOf": [
+        {"type": "string"},
+        {"type": "number"},
+        {"type": "null"}
+      ],
+      "description": "Next episode ID or null if no next episode"
+    }
+  },
+  "additionalProperties": false
+}

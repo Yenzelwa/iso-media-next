@@ -1,0 +1,91 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/series/Episode.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "series_id", "season_id", "episode_number", "title", "image_path", "likes", "dislikes", "ratings", "release_date"],
+  "properties": {
+    "id": {
+      "anyOf": [{"type": "string"}, {"type": "number"}],
+      "description": "Episode ID"
+    },
+    "series_id": {
+      "anyOf": [{"type": "string"}, {"type": "number"}],
+      "description": "Series ID"
+    },
+    "season_id": {
+      "anyOf": [{"type": "string"}, {"type": "number"}],
+      "description": "Season ID"
+    },
+    "episode_number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Episode number"
+    },
+    "title": {
+      "type": "string",
+      "description": "Episode title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Episode description"
+    },
+    "image_path": {
+      "type": "string",
+      "format": "uri",
+      "description": "Episode image URL"
+    },
+    "video_id": {
+      "anyOf": [{"type": "string"}, {"type": "number"}],
+      "description": "Video ID"
+    },
+    "video_path": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Video file URL"
+    },
+    "likes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of likes"
+    },
+    "dislikes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of dislikes"
+    },
+    "ratings": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Episode rating"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Release date in ISO 8601 format"
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "anyOf": [{"type": "string"}, {"type": "number"}],
+          "description": "User ID"
+        },
+        "like": {
+          "type": "boolean",
+          "description": "User liked episode"
+        },
+        "dislike": {
+          "type": "boolean",
+          "description": "User disliked episode"
+        },
+        "rating": {
+          "type": "number",
+          "minimum": 0,
+          "description": "User rating"
+        }
+      },
+      "description": "User interaction data"
+    }
+  },
+  "additionalProperties": false
+}

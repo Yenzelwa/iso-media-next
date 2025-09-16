@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "INVALID_REFRESH_TOKEN",
+    "message": "Invalid or expired refresh token",
+    "details": {}
+  }
+}

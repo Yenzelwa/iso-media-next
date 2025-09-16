@@ -6,10 +6,10 @@ import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 
 if (!global.TextEncoder) {
-  // @ts-expect-error
+  // @ts-ignore
   global.TextEncoder = TextEncoder;
 }
 if (!global.TextDecoder) {
-  // @ts-expect-error
+  // @ts-ignore
   global.TextDecoder = TextDecoder;
 }

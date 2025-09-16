@@ -1,0 +1,19 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/billing/AttachPaymentMethodRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["payment_method_id"],
+  "properties": {
+    "payment_method_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stripe payment method ID"
+    },
+    "set_as_default": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to set as the default payment method"
+    }
+  },
+  "additionalProperties": false
+}

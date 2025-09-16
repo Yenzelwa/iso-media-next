@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "video_001",
+      "title": "Introduction to Mindfulness",
+      "description": "A comprehensive guide to mindfulness meditation practices",
+      "image_path": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "rating": 4.5,
+      "likes": 234,
+      "dislikes": 12,
+      "release_date": "2024-01-15T10:00:00Z",
+      "type": {
+        "id": 1,
+        "name": "Documentary",
+        "category": {
+          "id": 1,
+          "name": "Spirituality"
+        }
+      }
+    },
+    {
+      "id": "video_002", 
+      "title": "African Wisdom Traditions",
+      "description": "Exploring ancient wisdom from African cultures",
+      "image_path": "https://images.unsplash.com/photo-1547036967-23d11aacaee0",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "rating": 4.8,
+      "likes": 456,
+      "dislikes": 8,
+      "release_date": "2024-02-01T14:30:00Z",
+      "type": {
+        "id": 2,
+        "name": "Series",
+        "category": {
+          "id": 2,
+          "name": "Education"
+        }
+      }
+    }
+  ],
+  "page": 1,
+  "page_size": 10,
+  "total": 25,
+  "next_cursor": "eyJpZCI6InZpZGVvXzAwMiJ9"
+}

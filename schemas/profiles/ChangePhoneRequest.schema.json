@@ -1,0 +1,14 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/profiles/ChangePhoneRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["new_phone"],
+  "properties": {
+    "new_phone": {
+      "type": "string",
+      "minLength": 1,
+      "description": "New phone number"
+    }
+  },
+  "additionalProperties": false
+}

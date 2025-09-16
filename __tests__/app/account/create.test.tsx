@@ -99,16 +99,21 @@ describe('CreateAccount Component', () => {
     
   it('should handle form submission', async () => {
   // Arrange - mock useForm before rendering
+  const mockFormData = {
+    first_name: 'John',
+    email: 'email@email.com',
+    password: 'Password123!',
+    t_and_cs: true,
+  };
+
   const mockUseFormReturn = {
     register: jest.fn(),
-    handleSubmit: jest.fn(fn => fn),
+    handleSubmit: jest.fn(fn => (e) => {
+      e.preventDefault();
+      return fn(mockFormData);
+    }),
     setValue: jest.fn(),
-    getValues: jest.fn(() => ({
-      first_name: 'John Doe',
-      email: 'email@email.com',
-      password: 'Password123!',
-      t_and_cs: true,
-    })),
+    getValues: jest.fn(() => mockFormData),
     watch: jest.fn(),
     trigger: jest.fn(),
     control: {},
@@ -119,21 +124,20 @@ describe('CreateAccount Component', () => {
   };
   (useForm as jest.Mock).mockReturnValue(mockUseFormReturn);
 
-  const mockUser = {
-    id: null,
-    name: 'John Doe',
-    email: 'email@email.com',
-    plan_id: 1,
-    status: 'pending',
-     currency: "USD",
-    stripe_customer_id: null,
-     payment_method_id: null,
-    phone: null,
-  }; 
+  const mockAuthSession = {
+    access_token: 'mock-jwt-token',
+    refresh_token: 'mock-refresh-token',
+    expires_in: 3600,
+    user: {
+      id: 1,
+      email: 'email@email.com',
+      name: 'John Doe'
+    }
+  };
 
   const mockResponse = {
     ok: true,
-    json: jest.fn().mockResolvedValue(mockUser),
+    json: jest.fn().mockResolvedValue(mockAuthSession),
   };
   (fetch as jest.Mock).mockResolvedValue(mockResponse);
 
@@ -162,15 +166,11 @@ fireEvent.submit(screen.getByRole('button', { name: /create account/i }).closest
     const callArgs = (fetch as jest.Mock).mock.calls[0];
     const requestBody = JSON.parse(callArgs[1].body);
 
-    expect(callArgs[0]).toBe('http://172.24.74.185:4002/profile');
+    expect(callArgs[0]).toBe('/api/auth/register');
     expect(requestBody).toEqual(expect.objectContaining({
-    id: null,
-        plan_id: 1,
-        status: 'pending',
-        stripe_customer_id: null,
-        currency: 'USD',
-        phone: null,
-        payment_method_id: null
+      first_name: 'John',
+      email: 'email@email.com',
+      password: 'Password123!'
     }));
   });
 });

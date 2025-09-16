@@ -1,0 +1,22 @@
+{
+  "profile": {
+    "id": "prof_123456789",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "phone": "+1234567890",
+    "avatar_url": "https://example.com/avatars/user123.jpg"
+  },
+  "subscription": {
+    "id": "sub_987654321",
+    "plan_id": "plan_premium",
+    "status": "active",
+    "expires_at": "2024-12-31T23:59:59Z"
+  },
+  "billing_address": {
+    "street": "123 Main Street",
+    "city": "New York",
+    "state": "NY",
+    "postal_code": "10001",
+    "country": "US"
+  }
+}

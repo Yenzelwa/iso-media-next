@@ -1,0 +1,19 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/playback/AuthorizePlayback.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["signed_url", "expires_at"],
+  "properties": {
+    "signed_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Signed URL for video playback"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Expiration time in ISO 8601 format"
+    }
+  },
+  "additionalProperties": false
+}

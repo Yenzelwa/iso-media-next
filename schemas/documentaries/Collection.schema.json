@@ -1,0 +1,20 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/documentaries/Collection.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["title", "items"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Collection title"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "https://isolakwamuntu.com/schemas/catalog/Video.schema.json"
+      },
+      "description": "Array of videos in the collection"
+    }
+  },
+  "additionalProperties": false
+}

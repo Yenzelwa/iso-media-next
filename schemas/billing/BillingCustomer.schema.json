@@ -1,0 +1,26 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/billing/BillingCustomer.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "stripe_customer_id", "email", "name"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique customer ID"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Customer's email address"
+    },
+    "name": {
+      "type": "string",
+      "description": "Customer's full name"
+    }
+  },
+  "additionalProperties": false
+}

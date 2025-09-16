@@ -1,0 +1,26 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/security/SecuritySettings.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["two_factor_enabled", "login_alerts", "auto_logout_minutes", "data_collection"],
+  "properties": {
+    "two_factor_enabled": {
+      "type": "boolean",
+      "description": "Whether two-factor authentication is enabled"
+    },
+    "login_alerts": {
+      "type": "boolean",
+      "description": "Whether login alerts are enabled"
+    },
+    "auto_logout_minutes": {
+      "type": "integer",
+      "minimum": 5,
+      "description": "Auto logout time in minutes"
+    },
+    "data_collection": {
+      "type": "boolean",
+      "description": "Whether data collection is enabled"
+    }
+  },
+  "additionalProperties": false
+}

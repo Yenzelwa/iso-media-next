@@ -1,0 +1,42 @@
+{
+  "items": [
+    {
+      "id": "hero_001",
+      "title": "Featured: Journey of Self-Discovery",
+      "description": "An inspiring documentary about personal transformation through spiritual practices",
+      "image_path": "https://images.unsplash.com/photo-1518709268805-4e9042af2176",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "rating": 4.9,
+      "likes": 1024,
+      "dislikes": 15,
+      "release_date": "2024-03-01T09:00:00Z",
+      "type": {
+        "id": 1,
+        "name": "Documentary",
+        "category": {
+          "id": 1,
+          "name": "Spirituality"
+        }
+      }
+    },
+    {
+      "id": "hero_002",
+      "title": "Ancient Healing Wisdom",
+      "description": "Explore traditional healing practices from around the world",
+      "image_path": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f",
+      "video_path": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "rating": 4.7,
+      "likes": 856,
+      "dislikes": 23,
+      "release_date": "2024-02-15T11:30:00Z",
+      "type": {
+        "id": 2,
+        "name": "Series",
+        "category": {
+          "id": 2,
+          "name": "Wellness"
+        }
+      }
+    }
+  ]
+}

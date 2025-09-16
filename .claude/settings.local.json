@@ -10,7 +10,16 @@
       "Bash(npm test)",
       "Bash(npm test:*)",
       "Bash(find:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "Bash(npm run build:*)",
+      "Bash(sed:*)",
+      "Bash(lsof:*)",
+      "Bash(netstat:*)",
+      "Bash(dir:*)",
+      "Bash(npx next build:*)"
     ],
     "deny": [],
     "ask": []

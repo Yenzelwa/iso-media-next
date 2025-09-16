@@ -1,0 +1,19 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/auth/RefreshResponse.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["access_token", "expires_in"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "minLength": 1,
+      "description": "JWT access token"
+    },
+    "expires_in": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Token expiration time in seconds"
+    }
+  },
+  "additionalProperties": false
+}

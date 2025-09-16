@@ -1,0 +1,20 @@
+{
+  "$id": "https://isolakwamuntu.com/schemas/billing/CreateSubscriptionRequest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["price_id"],
+  "properties": {
+    "price_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stripe price ID for the subscription"
+    },
+    "trial_period_days": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 365,
+      "description": "Number of trial days"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "LOGOUT_FAILED",
+    "message": "Failed to logout user",
+    "details": {}
+  }
+}

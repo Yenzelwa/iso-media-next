@@ -1,0 +1,20 @@
+{
+  "id": "series_001",
+  "title": "Ancient Wisdom Chronicles",
+  "description": "A comprehensive exploration of ancient spiritual traditions and their modern applications. This series takes viewers on a journey through different cultures and their sacred practices.",
+  "image_path": "https://images.unsplash.com/photo-1518709268805-4e9042af2176",
+  "seasons": [
+    {
+      "id": "season_001_01",
+      "seasonNumber": 1
+    },
+    {
+      "id": "season_001_02", 
+      "seasonNumber": 2
+    },
+    {
+      "id": "season_001_03",
+      "seasonNumber": 3
+    }
+  ]
+}

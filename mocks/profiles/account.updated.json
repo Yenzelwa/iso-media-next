@@ -1,0 +1,22 @@
+{
+  "profile": {
+    "id": "prof_123456789",
+    "email": "user@example.com",
+    "name": "John Smith",
+    "phone": "+1987654321",
+    "avatar_url": "https://example.com/avatars/user123_updated.jpg"
+  },
+  "subscription": {
+    "id": "sub_987654321",
+    "plan_id": "plan_premium",
+    "status": "active",
+    "expires_at": "2024-12-31T23:59:59Z"
+  },
+  "billing_address": {
+    "street": "456 Oak Avenue",
+    "city": "Los Angeles",
+    "state": "CA",
+    "postal_code": "90210",
+    "country": "US"
+  }
+}
