@@ -5,7 +5,9 @@ import HeroItemsSchema from '@/schemas/catalog/HeroItems.schema.json';
 
 export async function GET(req: Request) {
   try {
+    debugger;
     const data = await getHeroVideosService();
+    debugger;
     validate(HeroItemsSchema, data);
     
     return json(data, 200);
