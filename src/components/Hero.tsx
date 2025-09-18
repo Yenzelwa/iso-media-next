@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { StarRating } from "./StarRating";
 import { Video } from "@/typings";
+import { useAuth } from "../app/context/authContext";
 
 interface HeroProps {
   videos: Video[];
@@ -14,7 +15,7 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
   const [contentVisible, setContentVisible] = useState(true);
   const router = useRouter();
   // Note: Auth context would be added here when needed
-  // const { user } = useAuth();
+  const { user } = useAuth();
 
     const smoothTransition = (newIndex: number) => {
     if (isTransitioning || newIndex === currentIndex) return;
@@ -128,7 +129,7 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
 
           <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
             {/* For now, we'll show the trial button. Auth logic can be added later */}
-            {false ? (
+            {user ? (
               <button
                 onClick={redirectToWatch}
                 type="button"
