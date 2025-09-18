@@ -39,21 +39,24 @@ const ForgotPassword = () => {
     setErrorMessage('');
 
     try {
-      // Simulate API call for password reset
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // For demo purposes, we'll assume success
-      setEmailSent(true);
-      
-      // In production, make actual API call:
-      // const response = await fetch('/api/forgot-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // });
-      
+      const response = await fetch('/api/auth/password/forgot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setEmailSent(true);
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Failed to send reset email. Please check your email address and try again.');
+      }
+
     } catch (error: any) {
-      setErrorMessage('Failed to send reset email. Please try again.');
+      console.error('Password reset error:', error);
+      setErrorMessage('Failed to send reset email. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }

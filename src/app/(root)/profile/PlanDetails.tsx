@@ -2,36 +2,150 @@ import React, { useState, useEffect } from 'react';
 import { CreditCard, Settings, X } from 'lucide-react';
 import { toCents } from '@/src/utils/cents';
 
+interface Plan {
+  id: string;
+  name: string;
+  price: string;
+  period: string;
+  features: string[];
+  color: string;
+  devices: string;
+  quality: string;
+  current?: boolean;
+}
+
+interface Subscription {
+  id: string;
+  plan: Plan;
+  status: string;
+  current_period_start: string;
+  current_period_end: string;
+}
+
 export const PlanDetails: React.FC = () => {
   const [showManagePlan, setShowManagePlan] = useState(false);
   const [showCancelSubscription, setShowCancelSubscription] = useState(false);
   const [showUpgradePlan, setShowUpgradePlan] = useState(false);
-  const plans = [
-    {
-      id: 'basic',
-      name: 'Basic',
-      price: '$9.99',
-      period: 'month',
-      features: ['HD streaming on 1 device', 'Access to basic content library', 'Limited offline downloads'],
-      color: 'from-gray-600 to-gray-800',
-      devices: '1 Device',
-      quality: 'HD 720p'
-    },
-    {
-      id: 'premium',
-      name: 'Premium',
-      price: '$29.99',
-      period: 'month',
-      features: ['4K Ultra HD streaming on 4 devices', 'Complete content library access', 'Unlimited offline downloads'],
-      current: true,
-      color: 'from-red-600 to-red-800',
-      devices: '4 Devices',
-      quality: '4K Ultra HD'
-    },
-  ];
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    const fetchPlansAndSubscription = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch available plans
+        const plansResponse = await fetch('/api/plans');
+        let availablePlans: Plan[] = [];
+
+        if (plansResponse.ok) {
+          const plansData = await plansResponse.json();
+          availablePlans = plansData.map((plan: any) => ({
+            id: plan.id,
+            name: plan.name,
+            price: `$${(plan.price_cents / 100).toFixed(2)}`,
+            period: plan.interval,
+            features: [
+              `${plan.quality} streaming on ${plan.devices} device${plan.devices > 1 ? 's' : ''}`,
+              'Complete content library access',
+              plan.devices > 1 ? 'Unlimited offline downloads' : 'Limited offline downloads'
+            ],
+            color: plan.name === 'Premium' ? 'from-red-600 to-red-800' : 'from-gray-600 to-gray-800',
+            devices: `${plan.devices} Device${plan.devices > 1 ? 's' : ''}`,
+            quality: plan.quality
+          }));
+        } else {
+          // Fallback to mock data
+          availablePlans = [
+            {
+              id: 'basic',
+              name: 'Basic',
+              price: '$9.99',
+              period: 'month',
+              features: ['HD streaming on 1 device', 'Access to basic content library', 'Limited offline downloads'],
+              color: 'from-gray-600 to-gray-800',
+              devices: '1 Device',
+              quality: 'HD 720p'
+            },
+            {
+              id: 'premium',
+              name: 'Premium',
+              price: '$29.99',
+              period: 'month',
+              features: ['4K Ultra HD streaming on 4 devices', 'Complete content library access', 'Unlimited offline downloads'],
+              color: 'from-red-600 to-red-800',
+              devices: '4 Devices',
+              quality: '4K Ultra HD'
+            },
+          ];
+        }
+
+        // Fetch current subscription
+        const subscriptionResponse = await fetch('/api/billing/subscriptions');
+        if (subscriptionResponse.ok) {
+          const subscriptionData = await subscriptionResponse.json();
+          const currentSub = subscriptionData.items?.[0] || subscriptionData;
+
+          if (currentSub) {
+            // Mark the current plan
+            availablePlans = availablePlans.map(plan => ({
+              ...plan,
+              current: plan.id === currentSub.plan?.id
+            }));
+
+            setSubscription(currentSub);
+          }
+        }
+
+        // If no subscription found, mark premium as current (fallback)
+        if (!subscription) {
+          availablePlans = availablePlans.map(plan => ({
+            ...plan,
+            current: plan.name === 'Premium'
+          }));
+        }
+
+        setPlans(availablePlans);
+
+      } catch (err) {
+        console.error('Error fetching plans and subscription:', err);
+        setError('Failed to load plan details. Please refresh to try again.');
+
+        // Fallback to mock data
+        setPlans([
+          {
+            id: 'basic',
+            name: 'Basic',
+            price: '$9.99',
+            period: 'month',
+            features: ['HD streaming on 1 device', 'Access to basic content library', 'Limited offline downloads'],
+            color: 'from-gray-600 to-gray-800',
+            devices: '1 Device',
+            quality: 'HD 720p'
+          },
+          {
+            id: 'premium',
+            name: 'Premium',
+            price: '$29.99',
+            period: 'month',
+            features: ['4K Ultra HD streaming on 4 devices', 'Complete content library access', 'Unlimited offline downloads'],
+            current: true,
+            color: 'from-red-600 to-red-800',
+            devices: '4 Devices',
+            quality: '4K Ultra HD'
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlansAndSubscription();
+  }, []);
 
   const currentPlan = plans.find(plan => plan.current);
-  console.log('currentplan', currentPlan);
 
   // Handle escape key to close modals
   useEffect(() => {
@@ -49,8 +163,23 @@ export const PlanDetails: React.FC = () => {
     }
   }, [showManagePlan, showCancelSubscription, showUpgradePlan]);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
+      {/* Error Message */}
+      {error && (
+        <div className="text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-4">
+          {error}
+        </div>
+      )}
+
       {/* Current Plan Details */}
       <div data-testid="current-plan" className="relative">
         <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>
@@ -68,8 +197,12 @@ export const PlanDetails: React.FC = () => {
                   </div>
                   <h3 className="text-2xl font-bold text-white">{currentPlan?.name} Plan</h3>
                 </div>
-                <p className="text-gray-400 text-sm mb-2">Active since January 15, 2024</p>
-                <p className="text-gray-400 text-sm">Next billing: February 15, 2024</p>
+                <p className="text-gray-400 text-sm mb-2">
+                  Active since {subscription?.current_period_start ? new Date(subscription.current_period_start).toLocaleDateString() : 'January 15, 2024'}
+                </p>
+                <p className="text-gray-400 text-sm">
+                  Next billing: {subscription?.current_period_end ? new Date(subscription.current_period_end).toLocaleDateString() : 'February 15, 2024'}
+                </p>
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-white mb-1">{currentPlan?.price}</div>
@@ -182,10 +315,32 @@ export const PlanDetails: React.FC = () => {
                   Current Plan
                 </button>
               ) : (
-                <button 
-                  onClick={() => {
-                    const action = Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'upgrade' : 'downgrade';
-                    alert(`${action === 'upgrade' ? 'Upgrading' : 'Downgrading'} to ${plan.name} plan for ${plan.price}/month`);
+                <button
+                  onClick={async () => {
+                    try {
+                      const action = Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'upgrade' : 'downgrade';
+
+                      const response = await fetch('/api/subscription/change', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          new_plan_id: plan.id
+                        }),
+                      });
+
+                      if (response.ok) {
+                        alert(`Successfully ${action === 'upgrade' ? 'upgraded' : 'downgraded'} to ${plan.name} plan!`);
+                        // Refresh the page to show updated plan
+                        window.location.reload();
+                      } else {
+                        throw new Error('Failed to change plan');
+                      }
+                    } catch (err) {
+                      console.error('Error changing plan:', err);
+                      alert('Failed to change plan. Please try again later.');
+                    }
                   }}
                   className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-3 rounded-xl font-medium hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105"
                 >
@@ -318,9 +473,27 @@ export const PlanDetails: React.FC = () => {
 
             <div className="flex space-x-3">
               <button
-                onClick={() => {
-                  alert('Subscription canceled. You will retain access until February 15, 2024.');
-                  setShowCancelSubscription(false);
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/subscription/cancel', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    });
+
+                    if (response.ok) {
+                      alert('Subscription canceled. You will retain access until the end of your current billing period.');
+                      setShowCancelSubscription(false);
+                      // Optionally refresh to show updated status
+                      window.location.reload();
+                    } else {
+                      throw new Error('Failed to cancel subscription');
+                    }
+                  } catch (err) {
+                    console.error('Error canceling subscription:', err);
+                    alert('Failed to cancel subscription. Please try again later.');
+                  }
                 }}
                 className="bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors"
               >

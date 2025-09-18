@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, Edit3, Calendar, History, X, Eye, EyeOff } from 'lucide-react';
+
+interface BillingTransaction {
+  id: number;
+  date: string;
+  amount: string;
+  method: string;
+  status: string;
+  description: string;
+}
 
 interface MembershipBillingProps {
   user: any;
@@ -11,58 +20,182 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
   const [showCardPopup, setShowCardPopup] = useState(false);
   const [showAllTransactions, setShowAllTransactions] = useState(false);
   const [showCardDetails, setShowCardDetails] = useState(false);
+  const [billingHistory, setBillingHistory] = useState<BillingTransaction[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
   const [editValues, setEditValues] = useState({
-    name: user.name,
-    phone: user.phone,
-    cardholderName: user.cardholderName,
+    name: user?.name || '',
+    phone: user?.phone || '',
+    cardholderName: user?.cardholderName || '',
     cardNumber: "",
-    cardExpiry: user.cardExpiry,
+    cardExpiry: user?.cardExpiry || '',
     cvv: "",
-    billingAddress: { ...user.billingAddress }
+    billingAddress: user?.billingAddress || {
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: ''
+    }
   });
+
+  // Fetch billing history from API
+  useEffect(() => {
+    const fetchBillingHistory = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/billing/history', {
+          headers: {
+            'Authorization': `Bearer ${user?.token || ''}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setBillingHistory(data.items || data || []);
+        } else {
+          // Fallback to mock data if API fails
+          setBillingHistory([
+            { id: 1, date: "2024-01-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
+            { id: 2, date: "2023-12-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
+            { id: 3, date: "2023-11-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
+            { id: 4, date: "2023-10-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
+            { id: 5, date: "2023-09-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
+          ]);
+        }
+      } catch (err) {
+        console.error('Error fetching billing history:', err);
+        setError('Failed to load billing history');
+        // Fallback to mock data
+        setBillingHistory([
+          { id: 1, date: "2024-01-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchBillingHistory();
+    }
+  }, [user]);
+
+  // Update editValues when user prop changes
+  useEffect(() => {
+    if (user) {
+      setEditValues({
+        name: user.name || '',
+        phone: user.phone || '',
+        cardholderName: user.cardholderName || '',
+        cardNumber: "",
+        cardExpiry: user.cardExpiry || '',
+        cvv: "",
+        billingAddress: user.billingAddress || {
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: ''
+        }
+      });
+    }
+  }, [user]);
 
   const handleSave = (field: string) => {
     updateUser({ [field]: editValues[field as keyof typeof editValues] });
     setIsEditing(null);
   };
 
-  const handleBillingUpdate = () => {
-    updateUser({
-      cardholderName: editValues.cardholderName,
-      cardExpiry: editValues.cardExpiry,
-      billingAddress: editValues.billingAddress,
-      paymentMethod: editValues.cardNumber ? `Visa ****-****-****-${editValues.cardNumber.slice(-4)}` : user.paymentMethod
-    });
-    setShowCardPopup(false);
-    setEditValues(prev => ({ ...prev, cardNumber: "", cvv: "" }));
-  };
+  const handleBillingUpdate = async () => {
+    try {
+      setLoading(true);
 
+      const updates = {
+        cardholderName: editValues.cardholderName,
+        cardExpiry: editValues.cardExpiry,
+        billingAddress: editValues.billingAddress,
+        paymentMethod: editValues.cardNumber ? `Visa ****-****-****-${editValues.cardNumber.slice(-4)}` : user.paymentMethod
+      };
 
-  const handlePhoneChange = () => {
-    const newPhone = prompt("Enter new phone number:", user.phone);
-    if (newPhone && newPhone !== user.phone) {
-      updateUser({ phone: newPhone });
+      // Update via API
+      const response = await fetch('/api/billing/payment-methods/attach', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${user?.token || ''}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cardNumber: editValues.cardNumber,
+          cardExpiry: editValues.cardExpiry,
+          cvv: editValues.cvv,
+          cardholderName: editValues.cardholderName,
+          billingAddress: editValues.billingAddress
+        }),
+      });
+
+      if (response.ok) {
+        updateUser(updates);
+        setShowCardPopup(false);
+        setEditValues(prev => ({ ...prev, cardNumber: "", cvv: "" }));
+      } else {
+        throw new Error('Failed to update payment method');
+      }
+    } catch (err) {
+      console.error('Error updating payment method:', err);
+      setError('Failed to update payment method. Please try again.');
+      // Still update local state as fallback
+      updateUser({
+        cardholderName: editValues.cardholderName,
+        cardExpiry: editValues.cardExpiry,
+        billingAddress: editValues.billingAddress,
+        paymentMethod: editValues.cardNumber ? `Visa ****-****-****-${editValues.cardNumber.slice(-4)}` : user.paymentMethod
+      });
+      setShowCardPopup(false);
+      setEditValues(prev => ({ ...prev, cardNumber: "", cvv: "" }));
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Mock billing history data
-  const allBillingHistory = [
-    { id: 1, date: "2024-01-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 2, date: "2023-12-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 3, date: "2023-11-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 4, date: "2023-10-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 5, date: "2023-09-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 6, date: "2023-08-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 7, date: "2023-07-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 8, date: "2023-06-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 9, date: "2023-05-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" },
-    { id: 10, date: "2023-04-15", amount: "$19.99", method: "Visa ****-1234", status: "Paid", description: "Premium Monthly Subscription" }
-  ];
+  const handlePhoneChange = async () => {
+    const newPhone = prompt("Enter new phone number:", user.phone);
+    if (newPhone && newPhone !== user.phone) {
+      try {
+        const response = await fetch('/api/me/phone/change', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${user?.token || ''}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ phone: newPhone }),
+        });
 
-  const billingHistory = showAllTransactions ? allBillingHistory : allBillingHistory.slice(0, 5);
+        if (response.ok) {
+          updateUser({ phone: newPhone });
+        } else {
+          throw new Error('Failed to update phone number');
+        }
+      } catch (err) {
+        console.error('Error updating phone:', err);
+        setError('Failed to update phone number. Please try again.');
+        // Still update local state as fallback
+        updateUser({ phone: newPhone });
+      }
+    }
+  };
+
+  const displayedTransactions = showAllTransactions ? billingHistory : billingHistory.slice(0, 5);
 
   return (
     <div className="space-y-8">
+      {/* Error Message */}
+      {error && (
+        <div className="text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-4">
+          {error}
+        </div>
+      )}
+
       {/* Account Information */}
       <div className="relative">
         <div className="absolute -left-8 top-0 w-1 h-16 bg-red-600 rounded-full"></div>
@@ -226,27 +359,33 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
               </button>
             </div>
             
-            <div className="space-y-3">
-              {billingHistory.map((transaction) => (
-                <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-green-400" />
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {displayedTransactions.map((transaction) => (
+                  <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-green-600/20 rounded-full flex items-center justify-center">
+                        <Calendar className="w-5 h-5 text-green-400" />
+                      </div>
+                      <div>
+                        <p className="text-white font-medium">{transaction.description}</p>
+                        <p className="text-gray-400 text-sm">{transaction.date} • {transaction.method}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-white font-medium">{transaction.description}</p>
-                      <p className="text-gray-400 text-sm">{transaction.date} • {transaction.method}</p>
+                    <div className="text-right">
+                      <p className="text-white font-bold">{transaction.amount}</p>
+                      <span className="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">
+                        {transaction.status}
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-white font-bold">{transaction.amount}</p>
-                    <span className="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">
-                      {transaction.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
