@@ -123,9 +123,6 @@ const Login = () => {
       <div className="relative z-10 bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-gray-700/50 max-w-lg w-full mx-4 transform transition-all duration-700 hover:shadow-[0_25px_50px_rgba(239,68,68,0.15)] hover:border-red-500/30">
         {/* Welcome Section */}
         <div className="text-center mb-6">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-3 bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent drop-shadow-lg">
-            Welcome Back
-          </h1>
           <div className="mb-3 flex justify-center">
             <div className="w-16 h-16 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-red-500/20 backdrop-blur-sm border border-red-500/30 hover:ring-red-500/40 transition-all duration-500 hover:scale-110">
               <CheckCircle className="w-10 h-10 text-red-400 drop-shadow-lg" />

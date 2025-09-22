@@ -185,9 +185,6 @@ const PlanSelection: React.FC = () => {
         </div>
 
         <header className="text-center relative mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-full mb-8 backdrop-blur-sm border border-red-500/20">
-            <Play className="w-10 h-10 text-red-400" />
-          </div>
 
           <div className="space-y-4">
             <h1 className="text-5xl lg:text-6xl font-black text-white mb-6">
