@@ -5,6 +5,7 @@ import { ChevronDown } from 'lucide-react';
 import { Video } from '@/typings';
 import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 import { useRouter } from 'next/navigation';
+import { yearFrom } from '@/src/lib/date';
 
 
 
@@ -203,7 +204,7 @@ const SeriesPage = () => {
                             ★ {series.rating}
                           </span>
                           <span className="text-gray-400 text-sm">
-                            {new Date(series.release_date).getFullYear()}
+                            {yearFrom(series.release_date)}
                           </span>
                         </div>
                         <span className="text-gray-400 text-xs">

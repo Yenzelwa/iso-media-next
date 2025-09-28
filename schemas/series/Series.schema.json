@@ -39,7 +39,24 @@
         }
       },
       "description": "Array of seasons"
+    },
+    "type": {
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "id": { "type": ["integer", "string"] },
+    "name": { "enum": ["Series", "Documentary", "Movie"] },
+    "category": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": ["integer", "string"] },
+        "name": { "type": "string" }
+      }
     }
+  }
+}
+
   },
   "additionalProperties": false
 }

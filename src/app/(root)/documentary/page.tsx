@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Grid, List, Play } from 'lucide-react';
+import { Search, Grid, List, Play } from 'lucide-react';
 import { Video } from '@/typings';
 import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 
@@ -102,7 +102,7 @@ const DocumentaryPage = () => {
   const [sortBy, setSortBy] = useState('Latest');
   const [hoveredDoc, setHoveredDoc] = useState<number | null>(null);
   const [documentaryVideos, setDocumentaryVideos] = useState<Video[]>([]);
-  const [featuredDocumentaries, setFeaturedDocumentaries] = useState<Video[]>([]);
+  const [featuredDocumentaries, setFeaturedDocumentaries] = useState<Video>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
@@ -194,9 +194,9 @@ const DocumentaryPage = () => {
 
 
       {/* Featured Documentary */}
-      {featuredDocumentaries.length > 0 && (
+      {featuredDocumentaries && (
         <div className="px-6 lg:px-16 py-16 pt-24">
-          <FeaturedDocumentary documentary={featuredDocumentaries[0]} />
+          <FeaturedDocumentary documentary={featuredDocumentaries} />
         </div>
       )}
 

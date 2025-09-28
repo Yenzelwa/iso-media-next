@@ -3,6 +3,7 @@ import React from "react";
 import { Video } from "@/typings";
 import { ChevronLeft, ChevronRight, Play, Plus, Info, Star } from "lucide-react";
 import { useState, useEffect } from "react";
+import { yearFrom } from "../lib/date";
 
 interface EnhancedCarouselProps {
   title: string;
@@ -13,6 +14,7 @@ interface EnhancedCarouselProps {
 export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCarouselProps) => {
   const [scrollPositions, setScrollPositions] = useState<{[key: string]: number}>({});
   const [isHovered, setIsHovered] = useState(false);
+  console.log(movies)
 
   const scrollContent = (direction: "left" | "right") => {
     const container = document.getElementById(`scroll-${title.replace(/\s+/g, '-')}`);
@@ -259,7 +261,7 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                     <div className="flex items-center space-x-3">
                       {variant !== 'home' && (
                         <span className="text-gray-400">
-                          {new Date(movie.release_date).getFullYear()}
+                          {yearFrom(movie.release_date)}
                         </span>
                       )}
                     </div>

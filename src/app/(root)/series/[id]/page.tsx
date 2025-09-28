@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Heart, Share2, Download, Star, Clock, Calendar, ChevronLeft } from 'lucide-react';
 import { Video } from '@/typings';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 interface Episode {
   id: number;
@@ -27,8 +27,9 @@ interface SeriesData extends Video {
   duration?: string;
 }
 
-const SeriesDetail = ({ params }: { params: { id: string } }) => {
+const SeriesDetail = () => {
   const router = useRouter();
+  const {id} = useParams<{id : string}>()
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [isLiked, setIsLiked] = useState(false);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
@@ -38,12 +39,13 @@ const SeriesDetail = ({ params }: { params: { id: string } }) => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
+    if(!id) return;
     const fetchSeriesData = async () => {
       try {
         setLoading(true);
 
         // Fetch series details
-        const seriesResponse = await fetch(`/api/series/${params.id}`);
+        const seriesResponse = await fetch(`/api/series/${id}`);
         if (seriesResponse.ok) {
           const seriesData = await seriesResponse.json();
           setSeries(seriesData);
@@ -52,7 +54,7 @@ const SeriesDetail = ({ params }: { params: { id: string } }) => {
         }
 
         // Fetch episodes for the first season
-        const episodesResponse = await fetch(`/api/series/${params.id}/seasons/${selectedSeason}/episodes`);
+        const episodesResponse = await fetch(`/api/series/${id}/seasons/${selectedSeason}/episodes`);
         if (episodesResponse.ok) {
           const episodesData = await episodesResponse.json();
           setEpisodes(episodesData.items || episodesData || []);
@@ -67,7 +69,7 @@ const SeriesDetail = ({ params }: { params: { id: string } }) => {
     };
 
     fetchSeriesData();
-  }, [params.id, selectedSeason]);
+  }, [id, selectedSeason]);
 
   useEffect(() => {
     if (episodes.length > 0) {
@@ -152,8 +154,10 @@ const SeriesDetail = ({ params }: { params: { id: string } }) => {
                   SERIES
                 </span>
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-                  {series.seasons || 1} Season{(series.seasons || 1) > 1 ? 's' : ''}
-                </span>
+  {series.seasons ? series.seasons.length : 1} Season
+  {(series.seasons && series.seasons.length > 1) ? 's' : ''}
+</span>
+
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
                   {series.totalEpisodes || episodes.length} Episodes
                 </span>

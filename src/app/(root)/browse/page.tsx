@@ -15,6 +15,7 @@ const BrowsePage = () => {
       try {
         // Fetch hero items
         const heroResponse = await fetch('/api/catalog/hero');
+        // eslint-disable-next-line no-debugger
         debugger;
         if (heroResponse.ok) {
           const heroData = await heroResponse.json();
