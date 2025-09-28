@@ -1,119 +1,8 @@
 'use client'
-import React, { useState } from 'react';
-import { Search, Filter, Grid, List, Play } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Grid, List, Play } from 'lucide-react';
 import { Video } from '@/typings';
 import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
-
-const documentaryVideos: Video[] = [
-  {
-    id: 13,
-    title: 'The Hidden History of Consciousness',
-    rating: 4.9,
-    type: {
-      id: 9,
-      name: 'Documentary',
-      category: {
-        id: 1,
-        name: 'Education'
-      }
-    },
-    description: 'Explore the forgotten wisdom of ancient civilizations and their understanding of human consciousness through archaeological discoveries and spiritual practices.',
-    image_path: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-09-15'),
-    video_path: '',
-    likes: 412,
-  },
-  {
-    id: 14,
-    title: 'Quantum Reality: Beyond the Veil',
-    rating: 4.8,
-    type: {
-      id: 10,
-      name: 'Documentary',
-      category: {
-        id: 4,
-        name: 'Science'
-      }
-    },
-    description: 'A deep dive into quantum physics and its implications for understanding reality, consciousness, and the nature of existence itself.',
-    image_path: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-10-01'),
-    video_path: '',
-    likes: 387,
-  },
-  {
-    id: 15,
-    title: 'Sacred Geometry in Nature',
-    rating: 4.7,
-    type: {
-      id: 11,
-      name: 'Documentary',
-      category: {
-        id: 1,
-        name: 'Education'
-      }
-    },
-    description: 'Discover the mathematical patterns that govern the natural world and their significance in ancient and modern spiritual practices.',
-    image_path: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-08-20'),
-    video_path: '',
-    likes: 298,
-  },
-  {
-    id: 16,
-    title: 'The Healing Power of Sound',
-    rating: 4.6,
-    type: {
-      id: 12,
-      name: 'Documentary',
-      category: {
-        id: 3,
-        name: 'Wellness'
-      }
-    },
-    description: 'An exploration of sound healing practices across cultures and the scientific research behind vibrational medicine.',
-    image_path: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-07-10'),
-    video_path: '',
-    likes: 356,
-  },
-  {
-    id: 17,
-    title: 'Mystics and Visionaries',
-    rating: 4.8,
-    type: {
-      id: 13,
-      name: 'Documentary',
-      category: {
-        id: 2,
-        name: 'Spirituality'
-      }
-    },
-    description: 'Profiles of modern-day mystics and visionaries who are changing our understanding of consciousness and spiritual awakening.',
-    image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-    release_date: new Date('2023-11-05'),
-    video_path: '',
-    likes: 445,
-  },
-  {
-    id: 18,
-    title: 'Digital Consciousness',
-    rating: 4.5,
-    type: {
-      id: 14,
-      name: 'Documentary',
-      category: {
-        id: 4,
-        name: 'Science'
-      }
-    },
-    description: 'Examining the impact of technology on human consciousness and the future of artificial intelligence and digital awareness.',
-    image_path: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80',
-    release_date: new Date('2023-09-30'),
-    video_path: '',
-    likes: 234,
-  }
-];
 
 
 
@@ -212,23 +101,59 @@ const DocumentaryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Latest');
   const [hoveredDoc, setHoveredDoc] = useState<number | null>(null);
+  const [documentaryVideos, setDocumentaryVideos] = useState<Video[]>([]);
+  const [featuredDocumentaries, setFeaturedDocumentaries] = useState<Video>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   const categories = ['All', 'Education', 'Science', 'Spirituality', 'Wellness'];
   const sortOptions = ['Latest', 'Most Popular', 'Highest Rated', 'A-Z'];
 
+  useEffect(() => {
+    const fetchDocumentaries = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch all documentaries
+        const response = await fetch('/api/documentaries?sort=latest');
+        if (response.ok) {
+          const data = await response.json();
+          setDocumentaryVideos(data.items || data || []);
+        } else {
+          throw new Error('Failed to fetch documentaries');
+        }
+
+        // Fetch featured documentaries
+        const featuredResponse = await fetch('/api/documentaries/featured');
+        if (featuredResponse.ok) {
+          const featuredData = await featuredResponse.json();
+          setFeaturedDocumentaries(featuredData.items || featuredData || []);
+        }
+
+      } catch (err) {
+        console.error('Error fetching documentaries:', err);
+        setError('Failed to load documentaries. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDocumentaries();
+  }, []);
+
   const filteredDocs = documentaryVideos.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || doc.type.category.name === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || doc.type?.category?.name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const sortedDocs = [...filteredDocs].sort((a, b) => {
     switch (sortBy) {
       case 'Most Popular':
-        return b.likes - a.likes;
+        return (b.likes || 0) - (a.likes || 0);
       case 'Highest Rated':
-        return b.rating - a.rating;
+        return (b.rating || 0) - (a.rating || 0);
       case 'A-Z':
         return a.title.localeCompare(b.title);
       case 'Latest':
@@ -237,14 +162,43 @@ const DocumentaryPage = () => {
     }
   });
 
+  if (loading) {
+    return (
+      <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white min-h-screen flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-lg text-gray-300">Loading documentaries...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">{error}</div>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white">
 
 
       {/* Featured Documentary */}
-      <div className="px-6 lg:px-16 py-16 pt-24">
-        <FeaturedDocumentary documentary={documentaryVideos[0]} />
-      </div>
+      {featuredDocumentaries && (
+        <div className="px-6 lg:px-16 py-16 pt-24">
+          <FeaturedDocumentary documentary={featuredDocumentaries} />
+        </div>
+      )}
 
       {/* Search and Filter Section */}
       <div className="px-6 lg:px-16 py-12">
@@ -442,10 +396,26 @@ const DocumentaryPage = () => {
 
       {/* Documentary Collections */}
       <div className="py-6">
-        <EnhancedCarousel title="Latest Documentaries" movies={documentaryVideos.filter(d => d.release_date >= new Date('2023-09-01'))} variant="documentary" />
-        <EnhancedCarousel title="Top Rated Collection" movies={[...documentaryVideos].sort((a, b) => b.rating - a.rating).slice(0, 6)} variant="documentary" />
-        <EnhancedCarousel title="Science & Consciousness" movies={documentaryVideos.filter(d => d.type.category.name === 'Science')} variant="documentary" />
-        <EnhancedCarousel title="Educational Insights" movies={documentaryVideos.filter(d => d.type.category.name === 'Education')} variant="documentary" />
+        <EnhancedCarousel
+          title="Latest Documentaries"
+          movies={documentaryVideos.filter(d => new Date(d.release_date) >= new Date('2023-09-01'))}
+          variant="documentary"
+        />
+        <EnhancedCarousel
+          title="Top Rated Collection"
+          movies={[...documentaryVideos].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 6)}
+          variant="documentary"
+        />
+        <EnhancedCarousel
+          title="Science & Consciousness"
+          movies={documentaryVideos.filter(d => d.type?.category?.name === 'Science')}
+          variant="documentary"
+        />
+        <EnhancedCarousel
+          title="Educational Insights"
+          movies={documentaryVideos.filter(d => d.type?.category?.name === 'Education')}
+          variant="documentary"
+        />
       </div>
 
     </div>

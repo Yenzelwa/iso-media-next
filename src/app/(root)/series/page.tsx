@@ -1,123 +1,11 @@
 
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Video } from '@/typings';
 import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 import { useRouter } from 'next/navigation';
-
-const seriesVideos: Video[] = [
-  {
-    id: 7,
-    title: 'Consciousness Expansion',
-    rating: 4.9,
-    type: {
-      id: 6,
-      name: 'Series',
-      category: {
-        id: 2,
-        name: 'Spirituality'
-      }
-    },
-    description: 'Expand your awareness and explore the depths of human consciousness through guided practices and teachings.',
-    image_path: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-06-01'),
-    video_path: '',
-    likes: 267,
-  },
-  {
-    id: 8,
-    title: 'Personal Development',
-    rating: 4.5,
-    type: {
-      id: 2,
-      name: 'Series',
-      category: {
-        id: 2,
-        name: 'Spirituality'
-      }
-    },
-    description: 'Journey into the world of conscious living and spiritual awakening. Discover ancient wisdom and modern practices that transform your daily experience.',
-    image_path: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-    release_date: new Date('2023-02-01'),
-    video_path: '',
-    likes: 189,
-  },
-  {
-    id: 9,
-    title: 'Mindful Living',
-    rating: 4.8,
-    type: {
-      id: 4,
-      name: 'Series',
-      category: {
-        id: 2,
-        name: 'Spirituality'
-      }
-    },
-    description: 'Transform your daily routine into a mindful practice. Learn techniques for present-moment awareness and inner peace.',
-    image_path: 'https://images.unsplash.com/photo-1512756290469-ec264b7fbf87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2253&q=80',
-    release_date: new Date('2023-04-01'),
-    video_path: '',
-    likes: 203,
-  },
-  {
-    id: 10,
-    title: 'Ancient Wisdom',
-    rating: 4.7,
-    type: {
-      id: 5,
-      name: 'Series',
-      category: {
-        id: 1,
-        name: 'Education'
-      }
-    },
-    description: 'Explore timeless teachings from ancient civilizations and how they apply to modern life.',
-    image_path: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-05-01'),
-    video_path: '',
-    likes: 145,
-  },
-  {
-    id: 11,
-    title: 'Digital Detox',
-    rating: 4.6,
-    type: {
-      id: 7,
-      name: 'Series',
-      category: {
-        id: 3,
-        name: 'Wellness'
-      }
-    },
-    description: 'Learn to disconnect from digital distractions and reconnect with yourself and nature.',
-    image_path: 'https://images.unsplash.com/photo-1506629905592-5b5d8a2ec57c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-    release_date: new Date('2023-07-01'),
-    video_path: '',
-    likes: 98,
-  },
-  {
-    id: 12,
-    title: 'Energy Healing Mastery',
-    rating: 4.4,
-    type: {
-      id: 8,
-      name: 'Series',
-      category: {
-        id: 3,
-        name: 'Wellness'
-      }
-    },
-    description: 'Master the art of energy healing through comprehensive techniques and practices.',
-    image_path: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2620&q=80',
-    release_date: new Date('2023-08-01'),
-    video_path: '',
-    likes: 76,
-  }
-];
-
-const allSeries = [...seriesVideos];
+import { yearFrom } from '@/src/lib/date';
 
 
 
@@ -125,20 +13,48 @@ const SeriesPage = () => {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Latest');
+  const [allSeries, setAllSeries] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   const categories = ['All', 'Spirituality', 'Education', 'Wellness'];
   const sortOptions = ['Latest', 'Most Popular', 'Highest Rated', 'A-Z'];
 
-  const filteredSeries = allSeries.filter(series => 
-    selectedCategory === 'All' || series.type.category.name === selectedCategory
+  useEffect(() => {
+    const fetchSeries = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch all series
+        const response = await fetch('/api/series?sort=latest');
+        if (response.ok) {
+          const data = await response.json();
+          setAllSeries(data.items || data || []);
+        } else {
+          throw new Error('Failed to fetch series');
+        }
+
+      } catch (err) {
+        console.error('Error fetching series:', err);
+        setError('Failed to load series. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSeries();
+  }, []);
+
+  const filteredSeries = allSeries.filter(series =>
+    selectedCategory === 'All' || series.type?.category?.name === selectedCategory
   );
 
   const sortedSeries = [...filteredSeries].sort((a, b) => {
     switch (sortBy) {
       case 'Most Popular':
-        return b.likes - a.likes;
+        return (b.likes || 0) - (a.likes || 0);
       case 'Highest Rated':
-        return b.rating - a.rating;
+        return (b.rating || 0) - (a.rating || 0);
       case 'A-Z':
         return a.title.localeCompare(b.title);
       case 'Latest':
@@ -146,6 +62,33 @@ const SeriesPage = () => {
         return new Date(b.release_date).getTime() - new Date(a.release_date).getTime();
     }
   });
+
+  if (loading) {
+    return (
+      <div className="bg-background text-foreground min-h-screen flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-lg text-gray-300">Loading series...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-background text-foreground min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">{error}</div>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background text-foreground">
@@ -261,11 +204,11 @@ const SeriesPage = () => {
                             ★ {series.rating}
                           </span>
                           <span className="text-gray-400 text-sm">
-                            {new Date(series.release_date).getFullYear()}
+                            {yearFrom(series.release_date)}
                           </span>
                         </div>
                         <span className="text-gray-400 text-xs">
-                          {series.type.category.name}
+                          {series.type?.category?.name}
                         </span>
                       </div>
                     </div>
@@ -276,10 +219,26 @@ const SeriesPage = () => {
           </div>
 
           {/* Featured Series Slider */}
-          <EnhancedCarousel title="New Releases" movies={sortedSeries.filter(s => s.release_date >= new Date('2023-06-01'))} variant="series" />
-          <EnhancedCarousel title="Most Popular Series" movies={[...sortedSeries].sort((a, b) => b.likes - a.likes).slice(0, 8)} variant="series" />
-          <EnhancedCarousel title="Spirituality Collection" movies={sortedSeries.filter(s => s.type.category.name === 'Spirituality')} variant="series" />
-          <EnhancedCarousel title="Wellness Journey" movies={sortedSeries.filter(s => s.type.category.name === 'Wellness')} variant="series" />
+          <EnhancedCarousel
+            title="New Releases"
+            movies={sortedSeries.filter(s => new Date(s.release_date) >= new Date('2023-06-01'))}
+            variant="series"
+          />
+          <EnhancedCarousel
+            title="Most Popular Series"
+            movies={[...sortedSeries].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 8)}
+            variant="series"
+          />
+          <EnhancedCarousel
+            title="Spirituality Collection"
+            movies={sortedSeries.filter(s => s.type?.category?.name === 'Spirituality')}
+            variant="series"
+          />
+          <EnhancedCarousel
+            title="Wellness Journey"
+            movies={sortedSeries.filter(s => s.type?.category?.name === 'Wellness')}
+            variant="series"
+          />
         </div>
       </main>
 

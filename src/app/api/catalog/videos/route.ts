@@ -6,6 +6,8 @@ import PaginatedVideosSchema from '@/schemas/catalog/PaginatedVideos.schema.json
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
+    // eslint-disable-next-line no-debugger
+    debugger;
     const query = {
       q: url.searchParams.get('q') || undefined,
       page: Number(url.searchParams.get('page')) || 1,
@@ -13,8 +15,11 @@ export async function GET(req: Request) {
       category: url.searchParams.get('category') || undefined,
       type: url.searchParams.get('type') || undefined,
     };
-    
+    // eslint-disable-next-line no-debugger
+    debugger;
     const data = await getVideosService(query);
+    // eslint-disable-next-line no-debugger
+    debugger;
     validate(PaginatedVideosSchema, data);
     
     return json(data, 200);

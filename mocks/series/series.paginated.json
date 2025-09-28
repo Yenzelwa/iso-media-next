@@ -18,7 +18,12 @@
           "id": "season_001_02", 
           "seasonNumber": 2
         }
-      ]
+      ],
+      "type": {
+    "id": 2,
+    "name": "Series",
+    "category": { "id": 2, "name": "Education" }
+  }
     },
     {
       "id": "series_002",
@@ -30,7 +35,12 @@
           "id": "season_002_01",
           "seasonNumber": 1
         }
-      ]
+      ],
+      "type": {
+    "id": 2,
+    "name": "Series",
+    "category": { "id": 2, "name": "Education" }
+  }
     }
   ]
 }

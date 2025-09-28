@@ -16,5 +16,10 @@
       "id": "season_001_03",
       "seasonNumber": 3
     }
-  ]
+  ],
+  "type": {
+    "id": 2,
+    "name": "Series",
+    "category": { "id": 2, "name": "Education" }
+  }
 }

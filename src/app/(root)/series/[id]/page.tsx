@@ -1,10 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Play, Heart, Share2, Download, Star, Clock, Calendar, ChevronLeft } from 'lucide-react';
 import { Video } from '@/typings';
-import { useRouter } from 'next/navigation';
-
+import { useParams, useRouter } from 'next/navigation';
 
 interface Episode {
   id: number;
@@ -18,126 +16,95 @@ interface Episode {
   video_path: string;
 }
 
-const mockSeriesData: Video & { 
-  episodes: Episode[]; 
-  seasons: number;
-  totalEpisodes: number;
-  director: string;
-  cast: string[];
-  genre: string[];
-  year: number;
-  duration: string;
-} = {
-  id: 2,
-  title: 'Consciousness Expansion',
-  rating: 4.9,
-  type: {
-    id: 6,
-    name: 'Series',
-    category: {
-      id: 2,
-      name: 'Spirituality'
-    }
-  },
-  description: 'Embark on a transformative journey through the depths of human consciousness. This groundbreaking series combines ancient wisdom with modern neuroscience to guide you through expanded states of awareness, meditation practices, and spiritual awakening techniques that will fundamentally shift your perspective on reality.',
-  image_path: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
-  release_date: new Date('2023-06-01'),
-  video_path: '',
-  likes: 267,
-  seasons: 3,
-  totalEpisodes: 24,
-  director: 'Dr. Elena Vasquez',
-  cast: ['Dr. Elena Vasquez', 'Master Li Wei', 'Dr. Sarah Mitchell'],
-  genre: ['Spirituality', 'Documentary', 'Self-Development'],
-  year: 2023,
-  duration: '45-60 min per episode',
-  episodes: [
-    {
-      id: 1,
-      title: 'The Gateway to Consciousness',
-      description: 'Introduction to expanded consciousness and the fundamental principles that govern our awareness.',
-      duration: '52:30',
-      image_path: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      episode_number: 1,
-      season_number: 1,
-      release_date: new Date('2023-06-01'),
-      video_path: '/video/episode1.mp4'
-    },
-    {
-      id: 2,
-      title: 'Meditation and the Mind',
-      description: 'Explore ancient meditation techniques and their profound effects on brain structure and function.',
-      duration: '48:15',
-      image_path: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      episode_number: 2,
-      season_number: 1,
-      release_date: new Date('2023-06-08'),
-      video_path: '/video/episode2.mp4'
-    },
-    {
-      id: 3,
-      title: 'Quantum Consciousness',
-      description: 'Dive into the intersection of quantum physics and consciousness theory.',
-      duration: '55:42',
-      image_path: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      episode_number: 3,
-      season_number: 1,
-      release_date: new Date('2023-06-15'),
-      video_path: '/video/episode3.mp4'
-    },
-    {
-      id: 4,
-      title: 'The Power of Breathwork',
-      description: 'Learn how controlled breathing can access altered states of consciousness.',
-      duration: '46:28',
-      image_path: 'https://images.unsplash.com/photo-1506629905592-5b5d8a2ec57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      episode_number: 4,
-      season_number: 1,
-      release_date: new Date('2023-06-22'),
-      video_path: '/video/episode4.mp4'
-    },
-    {
-      id: 5,
-      title: 'Sacred Plant Medicine',
-      description: 'Explore the role of plant medicine in spiritual practices and consciousness expansion.',
-      duration: '58:12',
-      image_path: 'https://images.unsplash.com/photo-1574482620302-1958d1aa3272?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      episode_number: 5,
-      season_number: 1,
-      release_date: new Date('2023-06-29'),
-      video_path: '/video/episode5.mp4'
-    },
-    {
-      id: 6,
-      title: 'Energy Fields and Auras',
-      description: 'Understanding the human energy field and its relationship to consciousness.',
-      duration: '44:35',
-      image_path: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      episode_number: 6,
-      season_number: 1,
-      release_date: new Date('2023-07-06'),
-      video_path: '/video/episode6.mp4'
-    }
-  ]
-};
+interface SeriesData extends Video {
+  episodes?: Episode[];
+  seasons?: number;
+  totalEpisodes?: number;
+  director?: string;
+  cast?: string[];
+  genre?: string[];
+  year?: number;
+  duration?: string;
+}
 
 const SeriesDetail = () => {
-  useParams<{ id: string; }>();
   const router = useRouter();
+  const {id} = useParams<{id : string}>()
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [isLiked, setIsLiked] = useState(false);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
-
-  // In a real app, this would fetch data based on the ID
-  const series = mockSeriesData;
-
-  const seasonEpisodes = series.episodes.filter(ep => ep.season_number === selectedSeason);
+  const [series, setSeries] = useState<SeriesData | null>(null);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    if (seasonEpisodes.length > 0 ) {
-      setCurrentEpisode(seasonEpisodes[0]);
+    if(!id) return;
+    const fetchSeriesData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch series details
+        const seriesResponse = await fetch(`/api/series/${id}`);
+        if (seriesResponse.ok) {
+          const seriesData = await seriesResponse.json();
+          setSeries(seriesData);
+        } else {
+          throw new Error('Failed to fetch series details');
+        }
+
+        // Fetch episodes for the first season
+        const episodesResponse = await fetch(`/api/series/${id}/seasons/${selectedSeason}/episodes`);
+        if (episodesResponse.ok) {
+          const episodesData = await episodesResponse.json();
+          setEpisodes(episodesData.items || episodesData || []);
+        }
+
+      } catch (err) {
+        console.error('Error fetching series data:', err);
+        setError('Failed to load series details. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSeriesData();
+  }, [id, selectedSeason]);
+
+  useEffect(() => {
+    if (episodes.length > 0) {
+      setCurrentEpisode(episodes[0]);
     }
-  }, [selectedSeason]);
+  }, [episodes]);
+
+  const seasonEpisodes = episodes.filter(ep => ep.season_number === selectedSeason);
+
+  if (loading) {
+    return (
+      <div className="bg-background text-foreground min-h-screen flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-lg text-gray-300">Loading series details...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !series) {
+    return (
+      <div className="bg-background text-foreground min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">{error || 'Series not found'}</div>
+          <button
+            onClick={() => router.push('/series')}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+          >
+            Back to Series
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handlePlayEpisode = (episode: Episode) => {
     setCurrentEpisode(episode);
@@ -187,10 +154,12 @@ const SeriesDetail = () => {
                   SERIES
                 </span>
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-                  {series.seasons} Season{series.seasons > 1 ? 's' : ''}
-                </span>
+  {series.seasons ? series.seasons.length : 1} Season
+  {(series.seasons && series.seasons.length > 1) ? 's' : ''}
+</span>
+
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-                  {series.totalEpisodes} Episodes
+                  {series.totalEpisodes || episodes.length} Episodes
                 </span>
               </div>
 
@@ -211,17 +180,17 @@ const SeriesDetail = () => {
                 </div>
                 <div className="flex items-center space-x-1">
                   <Calendar className="w-5 h-5" />
-                  <span>{series.year}</span>
+                  <span>{series.year || new Date(series.release_date).getFullYear()}</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Clock className="w-5 h-5" />
-                  <span>{series.duration}</span>
+                  <span>{series.duration || '45-60 min per episode'}</span>
                 </div>
               </div>
 
               {/* Genre Tags */}
               <div className="flex flex-wrap gap-2 mb-8">
-                {series.genre.map((g, index) => (
+                {(series.genre || [series.type?.category?.name].filter(Boolean)).map((g, index) => (
                   <span
                     key={index}
                     className="px-3 py-1 bg-gray-800/70 backdrop-blur-sm text-gray-200 rounded-full text-sm border border-gray-600/30"
@@ -285,7 +254,7 @@ const SeriesDetail = () => {
               <div className="flex items-center space-x-2">
                 <span className="text-gray-400">Season:</span>
                 <div className="flex space-x-1">
-                  {Array.from({ length: series.seasons }, (_, i) => i + 1).map((season) => (
+                  {Array.from({ length: series.seasons || 1 }, (_, i) => i + 1).map((season) => (
                     <button
                       key={season}
                       onClick={() => setSelectedSeason(season)}

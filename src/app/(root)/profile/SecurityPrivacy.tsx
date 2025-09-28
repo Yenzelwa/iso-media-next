@@ -1,55 +1,116 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shield, Calendar, User, Settings, Play, History } from 'lucide-react';
 
+interface Device {
+  id: number;
+  device: string;
+  browser: string;
+  location: string;
+  lastActive: string;
+  current: boolean;
+  ip: string;
+}
+
+interface SecuritySettings {
+  twoFactorEnabled: boolean;
+  emailNotifications: boolean;
+  autoLogout: string;
+}
+
 export const SecurityPrivacy: React.FC = () => {
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<SecuritySettings>({
     twoFactorEnabled: false,
     emailNotifications: true,
     autoLogout: "30"
   });
 
   const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false);
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
-  const [devices, setDevices] = useState([
-    {
-      id: 1,
-      device: "MacBook Pro",
-      browser: "Chrome",
-      location: "Los Angeles, CA",
-      lastActive: "Active now",
-      current: true,
-      ip: "192.168.1.100"
-    },
-    {
-      id: 2,
-      device: "iPhone 14 Pro",
-      browser: "Safari",
-      location: "Los Angeles, CA",
-      lastActive: "2 hours ago",
-      current: false,
-      ip: "192.168.1.101"
-    },
-    {
-      id: 3,
-      device: "Samsung TV",
-      browser: "Smart TV App",
-      location: "Los Angeles, CA",
-      lastActive: "1 day ago",
-      current: false,
-      ip: "192.168.1.102"
-    },
-    {
-      id: 4,
-      device: "Windows PC",
-      browser: "Edge",
-      location: "New York, NY",
-      lastActive: "3 days ago",
-      current: false,
-      ip: "203.45.67.89"
-    }
-  ]);
+  // Fetch security settings and devices
+  useEffect(() => {
+    const fetchSecurityData = async () => {
+      try {
+        setLoading(true);
 
-  const handleToggle = (setting: keyof typeof settings) => {
+        // Fetch security settings
+        const settingsResponse = await fetch('/api/security', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (settingsResponse.ok) {
+          const settingsData = await settingsResponse.json();
+          setSettings({
+            twoFactorEnabled: settingsData.twoFactorEnabled || false,
+            emailNotifications: settingsData.emailNotifications ?? true,
+            autoLogout: settingsData.autoLogout || "30"
+          });
+        }
+
+        // Fetch active devices
+        const devicesResponse = await fetch('/api/security/devices', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (devicesResponse.ok) {
+          const devicesData = await devicesResponse.json();
+          setDevices(devicesData.items || devicesData || []);
+        } else {
+          // Fallback to mock data
+          setDevices([
+            {
+              id: 1,
+              device: "MacBook Pro",
+              browser: "Chrome",
+              location: "Los Angeles, CA",
+              lastActive: "Active now",
+              current: true,
+              ip: "192.168.1.100"
+            },
+            {
+              id: 2,
+              device: "iPhone 14 Pro",
+              browser: "Safari",
+              location: "Los Angeles, CA",
+              lastActive: "2 hours ago",
+              current: false,
+              ip: "192.168.1.101"
+            },
+          ]);
+        }
+
+      } catch (err) {
+        console.error('Error fetching security data:', err);
+        setError('Failed to load security settings.');
+        // Fallback to mock data
+        setDevices([
+          {
+            id: 1,
+            device: "MacBook Pro",
+            browser: "Chrome",
+            location: "Los Angeles, CA",
+            lastActive: "Active now",
+            current: true,
+            ip: "192.168.1.100"
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSecurityData();
+  }, []);
+
+  const handleToggle = async (setting: keyof typeof settings) => {
     if (setting === 'twoFactorEnabled') {
       if (!settings.twoFactorEnabled) {
         // Show setup process
@@ -57,25 +118,101 @@ export const SecurityPrivacy: React.FC = () => {
       } else {
         // Disable 2FA with confirmation
         if (confirm('Are you sure you want to disable two-factor authentication? This will make your account less secure.')) {
-          setSettings(prev => ({ ...prev, twoFactorEnabled: false }));
+          try {
+            const response = await fetch('/api/security', {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ twoFactorEnabled: false }),
+            });
+
+            if (response.ok) {
+              setSettings(prev => ({ ...prev, twoFactorEnabled: false }));
+            } else {
+              throw new Error('Failed to update setting');
+            }
+          } catch (err) {
+            console.error('Error updating 2FA setting:', err);
+            setError('Failed to update two-factor authentication setting.');
+          }
         }
       }
     } else {
-      setSettings(prev => ({
-        ...prev,
-        [setting]: typeof prev[setting] === 'boolean' ? !prev[setting] : prev[setting]
-      }));
+      const newValue = typeof settings[setting] === 'boolean' ? !settings[setting] : settings[setting];
+
+      try {
+        const response = await fetch('/api/security', {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ [setting]: newValue }),
+        });
+
+        if (response.ok) {
+          setSettings(prev => ({
+            ...prev,
+            [setting]: newValue
+          }));
+        } else {
+          throw new Error('Failed to update setting');
+        }
+      } catch (err) {
+        console.error('Error updating setting:', err);
+        setError('Failed to update security setting.');
+      }
     }
   };
 
-  const completeTwoFactorSetup = () => {
-    setSettings(prev => ({ ...prev, twoFactorEnabled: true }));
-    setShowTwoFactorSetup(false);
-    alert('Two-factor authentication has been enabled successfully!');
+  const completeTwoFactorSetup = async () => {
+    try {
+      const response = await fetch('/api/security', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ twoFactorEnabled: true }),
+      });
+
+      if (response.ok) {
+        setSettings(prev => ({ ...prev, twoFactorEnabled: true }));
+        setShowTwoFactorSetup(false);
+        alert('Two-factor authentication has been enabled successfully!');
+      } else {
+        throw new Error('Failed to enable 2FA');
+      }
+    } catch (err) {
+      console.error('Error enabling 2FA:', err);
+      setError('Failed to enable two-factor authentication.');
+    }
   };
 
-  const handleAutoLogoutChange = (value: string) => {
-    setSettings(prev => ({ ...prev, autoLogout: value }));
+  const handleAutoLogoutChange = async (value: string) => {
+    try {
+      const response = await fetch('/api/security', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ autoLogout: value }),
+      });
+
+      if (response.ok) {
+        setSettings(prev => ({ ...prev, autoLogout: value }));
+      } else {
+        throw new Error('Failed to update auto logout setting');
+      }
+    } catch (err) {
+      console.error('Error updating auto logout:', err);
+      setError('Failed to update auto logout setting.');
+      // Still update UI for better UX
+      setSettings(prev => ({ ...prev, autoLogout: value }));
+    }
   };
 
   const getDeviceIcon = (deviceName: string) => {
@@ -89,28 +226,77 @@ export const SecurityPrivacy: React.FC = () => {
     }
   };
 
-  const logoutDevice = (deviceId: number) => {
+  const logoutDevice = async (deviceId: number) => {
     const deviceToLogout = devices.find(d => d.id === deviceId);
     if (deviceToLogout && !deviceToLogout.current) {
-      setDevices(prevDevices => prevDevices.filter(d => d.id !== deviceId));
-      alert(`Successfully logged out ${deviceToLogout.device}`);
+      try {
+        const response = await fetch(`/api/security/devices/${deviceId}/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          setDevices(prevDevices => prevDevices.filter(d => d.id !== deviceId));
+          alert(`Successfully logged out ${deviceToLogout.device}`);
+        } else {
+          throw new Error('Failed to logout device');
+        }
+      } catch (err) {
+        console.error('Error logging out device:', err);
+        setError('Failed to logout device. Please try again.');
+      }
     }
   };
 
-  const logoutAllDevices = () => {
+  const logoutAllDevices = async () => {
     const nonCurrentDevices = devices.filter(d => !d.current);
     if (nonCurrentDevices.length > 0) {
       if (confirm(`Are you sure you want to log out all ${nonCurrentDevices.length} other devices?`)) {
-        setDevices(prevDevices => prevDevices.filter(d => d.current));
-        alert(`Successfully logged out ${nonCurrentDevices.length} devices`);
+        try {
+          const response = await fetch('/api/security/devices/logout-all-others', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            setDevices(prevDevices => prevDevices.filter(d => d.current));
+            alert(`Successfully logged out ${nonCurrentDevices.length} devices`);
+          } else {
+            throw new Error('Failed to logout all devices');
+          }
+        } catch (err) {
+          console.error('Error logging out all devices:', err);
+          setError('Failed to logout all devices. Please try again.');
+        }
       }
     } else {
       alert('No other devices to log out');
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
+      {/* Error Message */}
+      {error && (
+        <div className="text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-4">
+          {error}
+        </div>
+      )}
+
       {/* Security Settings */}
       <div className="relative">
         <div className="absolute -left-8 top-0 w-1 h-20 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></div>

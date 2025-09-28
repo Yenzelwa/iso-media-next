@@ -1,0 +1,7 @@
+// utils/date.ts (or inline)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function yearFrom(dateLike: unknown, fallback = '—') {
+  if (typeof dateLike !== 'string' || !dateLike) return fallback;
+  const d = new Date(dateLike);
+  return Number.isNaN(d.getTime()) ? fallback : String(d.getFullYear());
+}

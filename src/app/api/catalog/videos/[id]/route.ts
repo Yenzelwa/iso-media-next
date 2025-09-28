@@ -6,6 +6,8 @@ import VideoSchema from '@/schemas/catalog/Video.schema.json';
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const data = await getVideoByIdService(params.id);
+    // eslint-disable-next-line no-debugger
+    debugger;
     validate(VideoSchema, data);
     
     return json(data, 200);
