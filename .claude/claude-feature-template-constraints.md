@@ -52,14 +52,6 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 ---
 
-## 1) Repository Understanding (Context Map)
-
-- Modules to **extend** vs **create new**.  
-- Current **state management** and how this feature integrates.  
-- Reuse potential for **components/hooks/utils** (e.g., shared `Modal`, `Button`, `Hero`).
-
----
-
 ## 2) Feature Design & Specification
 
 **Tasks**
@@ -272,3 +264,5 @@ Epic: <link to Jira/epic>
 7. Validate (§5).  
 8. Document & PR (§6).  
 9. Ship & update release notes.   -->
+
+<!-- Using the claude-feature-template-constraints.md provided  , start at Step 1 by importing a Task  from UI_todo_list.md, then produce §0 Assumptions & Open Questions . -->
