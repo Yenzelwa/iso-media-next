@@ -292,7 +292,8 @@ Epic: <link to Jira/epic>
 
 ## Kickoff Flow (Dynamic per Epic — Ask Before Execute)
 
-For each step, **pause and ask the user to confirm before executing the task**.
+- Before Step 0, identify the active epic/task by scanning `.claude/UI_todo_list.md` for the first unchecked `[ ]` item and record it in planning artifacts.
+- When starting a new epic, execute Steps 1 through 7 sequentially before implementation.
 
 0. Ensure the feature branch (`feat/<epic-slug>`) exists and is checked out; create it if missing before continuing.
 1. Read Epic tasks from `UI_todo_list.md`.  
@@ -308,6 +309,10 @@ For each step, **pause and ask the user to confirm before executing the task**.
    - [ ] Push committed branch to remote and open PR using the latest draft.  
    - [ ] Attach required artifacts (checklist, release plan) to the PR before merge.  
    - [ ] Merge to master once approvals complete and update release notes.  
+
+
+
+
 
 
 
