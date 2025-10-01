@@ -305,6 +305,11 @@ For each step, **pause and ask the user to confirm before executing the task**.
    - [ ] Fold checklist TODOs and visuals into PR description, request review.
    - [ ] Push PR merge into master after approval and attach required artifacts.
 9. Ship & update release notes (ask to proceed).  
+   - [ ] Push committed branch to remote and open PR using the latest draft.  
+   - [ ] Attach required artifacts (checklist, release plan) to the PR before merge.  
+   - [ ] Merge to master once approvals complete and update release notes.  
+
+
 
 
 
