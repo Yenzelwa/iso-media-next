@@ -1,4 +1,4 @@
-
+﻿
 # Context-First Feature Playbook (Next.js)
 
 **Role:** Senior Next.js engineer UI frontend, tightly integrated with external APIs.  
@@ -15,7 +15,7 @@
 
 **Principles:**
 - Incremental delivery
-- Minimal diffs per commit (aim ≤ 300 LOC net change)
+- Minimal diffs per commit (aim â‰¤ 300 LOC net change)
 - Tests-first (TDD where possible)
 - Observability-first (logs, metrics, traces)
 - Document assumptions & risks early
@@ -23,7 +23,7 @@
 - Prompt engineering principle: break problems into smaller steps, use **Task Triple (Input + Expected Outcome + Validation)**, reference constraints explicitly
 
 **Context Reference:**  
-Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic tasks**. Each Epic’s **Task Triple** must be copied here before planning.  
+Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic tasks**. Each Epicâ€™s **Task Triple** must be copied here before planning.  
 
 ---
 
@@ -41,7 +41,7 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 ## Performance & Accessibility Budgets
 
-- **Performance:** Lighthouse ≥ 90; LCP ≤ 2.5s; TTFB ≤ 200ms (edge) / 500ms (node).  
+- **Performance:** Lighthouse â‰¥ 90; LCP â‰¤ 2.5s; TTFB â‰¤ 200ms (edge) / 500ms (node).  
 - **Accessibility:** WCAG AA; 0 critical axe issues; full keyboard nav path verified.  
 - **Bundle size:** New routes < 200KB gz client JS; attach bundle analyzer diff.  
 - **i18n:** No hardcoded strings; use translation keys.  
@@ -54,7 +54,7 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 - **Approvers:** At least 2 named reviewers.  
 - **PR policy (Single PR per Epic):** Create **one PR** per Epic. Branch name: `feat/<epic-slug>`. Push **small, atomic commits** for each task and sub-task; keep the PR open and incremental until the Epic is complete. Use feature flag(s) to keep unfinished slices dark.  
 - **Review cadence:** Continuous review on the open Epic PR; reviewers requested after each significant task completes.  
-- **Epic workflow timebox:** Spec ≤ 2h, Plan ≤ 2h, First commit ≤ 1 day per task slice.  
+- **Epic workflow timebox:** Spec â‰¤ 2h, Plan â‰¤ 2h, First commit â‰¤ 1 day per task slice.  
 - **Non-Goals:** Each feature spec must declare what is *explicitly not being delivered*.
 
 ---
@@ -73,7 +73,7 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 - **Retries:** Exponential backoff + jitter (max 3).  
 - **Idempotency:** Required for payments (Stripe).  
-- **Rate limiting:** Client throttling (≥ 250ms), handle server 429.  
+- **Rate limiting:** Client throttling (â‰¥ 250ms), handle server 429.  
 - **Fallbacks:** Cached content or skeleton states if API unavailable.  
 - **Secrets:** All secrets in env vars; never in source.  
 
@@ -83,7 +83,7 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 - **Feature flag as experiment key.**  
 - Must define: sample %, primary success metric, stop criteria, and decision date.  
-- Default rollout: 0% → canary → staged deploy.  
+- Default rollout: 0% â†’ canary â†’ staged deploy.  
 
 ---
 
@@ -101,19 +101,19 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
   - **Design:** theme tokens, responsive breakpoints, accessibility (WCAG AA).  
   - **Operational:** release must be behind feature flag, rollback ready.  
   - **Security/Privacy:** no PII/PCI in logs, secrets in env vars only.  
-  - **Testing:** ≥ 80% coverage on touched files, E2E for core flows, contract tests for APIs.  
+  - **Testing:** â‰¥ 80% coverage on touched files, E2E for core flows, contract tests for APIs.  
   - **Prompt-engineering:** capture the Task Triple up front and outline the TCRTE scaffold (Task, Context, References, Testing, Enhancement).  
-  - **Performance budgets:** Lighthouse ≥ 90; LCP ≤ 2.5s; TTFB ≤ 200ms (edge).  
+  - **Performance budgets:** Lighthouse â‰¥ 90; LCP â‰¤ 2.5s; TTFB â‰¤ 200ms (edge).  
 
 - **Testing & prompting focus:** Define the unit/integration/E2E scope, required observability hooks, and how success evidence (tests, screenshots, payload diffs, telemetry) will be captured and shared.  
 
 **Output now:**  
 ### Check-out to the collect branch  
 ### Assumptions & Open Questions  
-1. …  
-2. …  
-3. …  
-(5–8 bullets) — include prompt-oriented clarifications (missing context, data contracts, evaluation criteria) before advancing.  
+1. â€¦  
+2. â€¦  
+3. â€¦  
+(5â€“8 bullets) â€” include prompt-oriented clarifications (missing context, data contracts, evaluation criteria) before advancing.  
 
 ---
 
@@ -128,15 +128,15 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 ## 3) Implementation Plan (Single PR per Epic + Per-Task Loop)
 
 **Approach: TDD-first + Small Batches**
-- Follow **TDD (Red → Green → Refactor)** for each **Task** inside the Epic.  
+- Follow **TDD (Red â†’ Green â†’ Refactor)** for each **Task** inside the Epic.  
 - Keep **one long-lived PR** open for the Epic on branch `feat/<epic-slug>`.  
 - After each task or sub-task completes, push commits and request incremental review.  
 - **Confirmation gate:** Before executing *any* sub-step, **ask the user to proceed**.
 
 **Per-Task Execution Loop (repeat for every Task in the Epic)**
-For each Task (use your Task Triple), perform **3.1 → 3.11**, asking for confirmation before executing each numbered step:
+For each Task (use your Task Triple), perform **3.1 â†’ 3.11**, asking for confirmation before executing each numbered step:
 
-### 3.1 Map Task → list files/components to **modify** vs **create**
+### 3.1 Map Task â†’ list files/components to **modify** vs **create**
 - Create/update branch `feat/<epic-slug>`; sync with `master`.  
 - Derive impacted routes/components/libs; confirm RSC/Client boundaries.  
 - Produce a table of modify/create with notes.  
@@ -186,7 +186,7 @@ For each Task (use your Task Triple), perform **3.1 → 3.11**, asking for confi
 - Update **Implementation Checklist**, **Test Plan** (appendix per task), **Observability Plan** (fields/spans/metrics), **Release Plan** (exposure/rollback for this slice), and **Screenshot Pack**.
 
 **CI Gates (must stay green on the single Epic PR)**
-- Unit ≥ 80% on touched files, E2E passing, visual diffs approved, lint/typecheck clean, 0 high vulns, a11y budgets met.
+- Unit â‰¥ 80% on touched files, E2E passing, visual diffs approved, lint/typecheck clean, 0 high vulns, a11y budgets met.
 
 ---
 
@@ -250,9 +250,9 @@ Business problem: <summary>
 Epic: <link to Jira/epic>  
 
 ## How (Task-by-Task)
-- Task 1 — <name>: <key changes>
-- Task 2 — <name>: <key changes>
-- Task n — <name>: <key changes>
+- Task 1 â€” <name>: <key changes>
+- Task 2 â€” <name>: <key changes>
+- Task n â€” <name>: <key changes>
 
 ## Screenshots
 <per-task before/after table or links>
@@ -274,7 +274,7 @@ Epic: <link to Jira/epic>
 
 ## Risk & Rollback
 - Risk: <low/med/high>
-- Rollback: toggle <flags> → revert PR if needed
+- Rollback: toggle <flags> â†’ revert PR if needed
 
 ## Notes for Reviewers
 - <assumptions, open questions, special considerations>
@@ -291,24 +291,25 @@ Epic: <link to Jira/epic>
 
 ---
 
-## Kickoff Flow (Dynamic per Epic — Ask Before Execute)
+## Kickoff Flow (Dynamic per Epic â€” Ask Before Execute)
 
 - Before Step 0, identify the active epic/task by scanning `.claude/UI_todo_list.md` for the first unchecked `[ ]` item and record it in planning artifacts.
 - When starting a new epic, execute Steps 1 through 7 sequentially before implementation.
 
 0. Ensure the feature branch (`feat/<epic-slug>`) exists and is checked out; create it if missing before continuing.
 1. Read Epic tasks from `UI_todo_list.md`.  
-2. Inputs (§1).  
-3. Map repo context (§2) (ask to proceed).  
-5. Plan with TDD, observability, SDL (§3) (ask to proceed).  
-6. Implement minimal diffs (§4) (ask to proceed).  
-7. Validate (§5) (ask to proceed).  
-8. Document & PR (§6) (ask to proceed).  
+2. Inputs (Â§1).  
+3. Map repo context (Â§2) (ask to proceed).  
+5. Plan with TDD, observability, SDL (Â§3) (ask to proceed).  
+6. Implement minimal diffs (Â§4) (ask to proceed).  
+7. Validate (Â§5) (ask to proceed).  
+8. Document & PR (Â§6) (ask to proceed).  
    - [ ] Ensure branch is pushed to remote and open PR using the latest draft content.
    - [ ] Attach required artifacts (checklist, release plan, etc.) to the PR and request review.
 9. Ship & update release notes (ask to proceed).  
    - [ ] Merge the approved PR into master.
    - [ ] Update release notes/changelog to reflect the shipped tasks.
+
 
 
 

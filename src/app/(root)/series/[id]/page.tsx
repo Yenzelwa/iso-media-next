@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Play, Heart, Share2, Download, Star, Clock, Calendar, ChevronLeft } from 'lucide-react';
+import { Play, Star, Calendar, ChevronLeft } from 'lucide-react';
 import { Video } from '@/typings';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -31,7 +31,6 @@ const SeriesDetail = () => {
   const router = useRouter();
   const {id} = useParams<{id : string}>()
   const [selectedSeason, setSelectedSeason] = useState(1);
-  const [isLiked, setIsLiked] = useState(false);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
   const [series, setSeries] = useState<SeriesData | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -106,6 +105,21 @@ const SeriesDetail = () => {
     );
   }
 
+  const seasonCount = Array.isArray(series.seasons)
+    ? series.seasons.length
+    : typeof series.seasons === 'number'
+      ? series.seasons
+      : Number(series.seasons) || 1;
+
+  const episodeCount =
+    typeof series.totalEpisodes === 'number' && series.totalEpisodes > 0
+      ? series.totalEpisodes
+      : episodes.length;
+
+  const releaseYear =
+    series.year ??
+    (series.release_date ? new Date(series.release_date).getFullYear() : undefined);
+
   const handlePlayEpisode = (episode: Episode) => {
     setCurrentEpisode(episode);
     // Navigate to watch page or open video player
@@ -148,18 +162,14 @@ const SeriesDetail = () => {
                 <span className="text-white">{series.title}</span>
               </div>
 
-              {/* Series Badge */}
+              {/* Series Badges */}
               <div className="flex items-center space-x-3 mb-4">
-                <span  className="bg-red-600 text-white text-sm px-4 py-2 rounded-lg font-bold tracking-wide">
-                  SERIES
-                </span>
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-  {series.seasons ? series.seasons.length : 1} Season
-  {(series.seasons && series.seasons.length > 1) ? 's' : ''}
-</span>
+                  {seasonCount} Season{seasonCount !== 1 ? 's' : ''}
+                </span>
 
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-                  {series.totalEpisodes || episodes.length} Episodes
+                  {episodeCount} Episode{episodeCount !== 1 ? 's' : ''}
                 </span>
               </div>
 
@@ -169,23 +179,19 @@ const SeriesDetail = () => {
               </h1>
 
               {/* Rating and Meta */}
-              <div className="flex items-center space-x-6 mb-6 text-white">
-                <div className="flex items-center space-x-1">
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="font-semibold text-lg">{series.rating}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Heart className="w-5 h-5 text-red-500" />
-                  <span>{series.likes}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Calendar className="w-5 h-5" />
-                  <span>{series.year || new Date(series.release_date).getFullYear()}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="w-5 h-5" />
-                  <span>{series.duration || '45-60 min per episode'}</span>
-                </div>
+              <div className="flex flex-wrap items-center gap-6 mb-6 text-white">
+                {series.rating ? (
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <span className="font-semibold text-lg">{series.rating}</span>
+                  </div>
+                ) : null}
+                {releaseYear ? (
+                  <div className="flex items-center space-x-1">
+                    <Calendar className="w-5 h-5" />
+                    <span>{releaseYear}</span>
+                  </div>
+                ) : null}
               </div>
 
               {/* Genre Tags */}
@@ -214,26 +220,9 @@ const SeriesDetail = () => {
                   <Play className="w-5 h-5" />
                   <span>Play Series</span>
                 </button>
-                
-                <button
-                  onClick={() => setIsLiked(!isLiked)}
-                  className={`p-4 rounded-lg border-2 transition-all duration-300 ${
-                    isLiked
-                      ? 'bg-red-600 border-red-600 text-white'
-                      : 'border-gray-600 text-gray-300 hover:border-red-600 hover:text-red-600'
-                  }`}
-                >
-                  <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
-                </button>
-
-                <button className="p-4 rounded-lg border-2 border-gray-600 text-gray-300 hover:border-white hover:text-white transition-all duration-300">
-                  <Share2 className="w-5 h-5" />
-                </button>
-
-                <button className="p-4 rounded-lg border-2 border-gray-600 text-gray-300 hover:border-white hover:text-white transition-all duration-300">
-                  <Download className="w-5 h-5" />
-                </button>
               </div>
+
+
             </div>
           </div>
         </div>
@@ -284,7 +273,7 @@ const SeriesDetail = () => {
                     <img
                       src={episode.image_path}
                       alt={episode.title}
-                      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     
                     {/* Gradient Overlay */}
@@ -304,12 +293,6 @@ const SeriesDetail = () => {
                       </span>
                     </div>
 
-                    {/* Play Button */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                      <div className="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300">
-                        <Play className="w-6 h-6 fill-current" />
-                      </div>
-                    </div>
 
                     {/* Episode Info */}
                     <div className="absolute bottom-0 left-0 right-0 p-4">
