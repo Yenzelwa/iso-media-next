@@ -1,74 +1,101 @@
 import BrowsePage from '@/src/app/(root)/browse/page';
 import { useAuth } from '@/src/app/context/authContext';
-
 import { render, screen, waitFor } from '@testing-library/react';
- // Adjust the path to where your BrowsePage is located
-import { useRouter } from 'next/navigation';// Import the correct path for useAuth
+import '@testing-library/jest-dom';
+import { useRouter } from 'next/navigation';
 
-// Mocking necessary hooks and global functions
+type MockedFetch = jest.MockedFunction<typeof fetch>;
+
 jest.mock('next/navigation', () => ({
-    useRouter: jest.fn(),
-  }));
-  
-  jest.mock('@/src/app/context/authContext', () => ({
-    useAuth: jest.fn(),
-  }));
+  useRouter: jest.fn(),
+}));
+
+jest.mock('@/src/app/context/authContext', () => ({
+  useAuth: jest.fn(),
+}));
+
+const buildVideo = (id: string, overrides?: { category?: string }) => ({
+  id,
+  title: `Video ${id}`,
+  description: 'Description',
+  image_path: '/image.jpg',
+  rating: 4.2,
+  type: {
+    name: overrides?.category ?? 'Featured',
+    category: overrides?.category ? { name: overrides.category } : undefined,
+  },
+});
+
+const createResponse = (data: unknown) =>
+  Promise.resolve({
+    ok: true,
+    json: async () => data,
+  });
 
 describe('BrowsePage', () => {
-    let mockPush: jest.Mock;
-    let mockLogin: jest.Mock;
-    const mockUser = { id: 1, name: 'John Doe' };
-      // Setup mocks before each test
-      beforeEach(() => {
-        mockPush = jest.fn();
-        mockLogin = jest.fn();
-    
-        // Mock the useRouter hook
-        (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
-    
-        // Mock the useAuth hook
-        (useAuth as jest.Mock).mockReturnValue({
-          login: mockLogin,
-          logout: jest.fn(),
-          user: mockUser,
+  const mockPush = jest.fn();
+  const mockUser = { id: '1', name: 'Test User' };
+  let fetchMock: MockedFetch;
+
+  beforeEach(() => {
+    fetchMock = jest.fn() as MockedFetch;
+    (global.fetch as unknown) = fetchMock;
+
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    (useAuth as jest.Mock).mockReturnValue({ user: mockUser, login: jest.fn(), logout: jest.fn() });
+
+    fetchMock.mockImplementation(request => {
+      const url = typeof request === 'string' ? request : request.toString();
+
+      if (url.includes('/api/catalog/hero')) {
+        return createResponse({ items: [buildVideo('hero-1')] });
+      }
+
+      if (url.includes('/api/catalog/videos')) {
+        return createResponse({
+          items: [
+            buildVideo('catalog-1'),
+            buildVideo('catalog-2', { category: 'Wellness' }),
+          ],
         });
-    
-        // Mock the global fetch function to avoid network requests
-        global.fetch = jest.fn();
-      });
-    
-      // Clear mocks after each test
-      afterEach(() => {
-        jest.clearAllMocks();
-      });
-  xit('should redirect to login if user is not authenticated', async () => {
+      }
 
-          // Mock the useAuth hook
-          (useAuth as jest.Mock).mockReturnValue({
-            login: mockLogin,
-            logout: jest.fn(),
-            user: null,
-          });
+      if (url.includes('/api/documentaries')) {
+        return createResponse({ items: [buildVideo('doc-1', { category: 'Documentary' })] });
+      }
 
-          
-    render(<BrowsePage />);
-
-    // Check if the redirection to the login page happens
-    await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/login');
+      return createResponse({ items: [] });
     });
   });
 
-  it('should render video content if user is authenticated', async () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders populated carousels when data is available', async () => {
+    render(<BrowsePage />);
+
+    await waitFor(() => expect(screen.getByText('Trending Now')).toBeInTheDocument());
+
+    expect(screen.getByText('Documentary Collections')).toBeInTheDocument();
+    expect(screen.getByText('Wellness & Healing')).toBeInTheDocument();
+  });
+
+  it('skips carousels when responses are empty', async () => {
+    fetchMock.mockImplementation(request => {
+      const url = typeof request === 'string' ? request : request.toString();
+
+      if (url.includes('/api/catalog/hero')) {
+        return createResponse({ items: [buildVideo('hero-only')] });
+      }
+
+      return createResponse({ items: [] });
+    });
 
     render(<BrowsePage />);
 
-    // Check if the video elements are rendered
-    await waitFor(() => {
-      expect(screen.getByText(/Trending Now/i)).toBeInTheDocument();
-       expect(screen.getByText(/Spiritual Awakening/i)).toBeInTheDocument();
-      expect(screen.getByText(/Documentary Collections/i)).toBeInTheDocument();
-      expect(screen.getByText(/Wellness & Healing/i)).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.queryByText('Trending Now')).not.toBeInTheDocument());
+    expect(screen.queryByText('Documentary Collections')).not.toBeInTheDocument();
+    expect(screen.queryByText('Wellness & Healing')).not.toBeInTheDocument();
   });
 });

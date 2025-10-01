@@ -1,3 +1,4 @@
+
 # Context-First Feature Playbook (Next.js)
 
 **Role:** Senior Next.js engineer UI frontend, tightly integrated with external APIs.  
@@ -33,7 +34,8 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 - **Runtime Targets:** Use **Edge** runtime for low-latency read-only flows; fallback to **Node.js runtime** for SDKs needing Node APIs.  
 - **Data & Caching:** Explicit `fetch` caching/revalidation; document ISR tags and invalidation.  
 - **Error & Loading UI:** Require `error.tsx`, `loading.tsx`, and skeletons for routes.  
-- **Naming:** New routes/components must follow folder/file naming convention (`/app/<feature>`).
+- **Naming:** New routes/components must follow folder/file naming convention (`/app/<feature>`).  
+- **Layout Constraint:** Never use Tailwind `min-h-screen`; preserve footer layout with alternative spacing primitives.
 
 ---
 
@@ -85,7 +87,7 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 ---
 
-## 0) Inputs
+## 1) Inputs
 
 - **Repo URL/branch:** `https://github.com/Yenzelwa/iso-media-next.git` (branch: `master`)  
   - **Working branch:** `feat/<epic-slug>` (create this branch once per Epic; before starting each Task confirm the branch exists and create it if missing).  
@@ -115,107 +117,13 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 ---
 
-## 1) Repository Understanding (Context Map)
+## 2) Repository Understanding (Context Map)
 
 - Which modules will be extended vs newly created.  
 - Current **state management** and how this feature integrates.  
 - Reuse potential for **components/hooks/utils** (e.g., shared `Modal`, `Button`, `Hero`).  
 
 ---
-
-## 2) Feature Design & Specification
-
-**Tasks**
-- [ ] **Use the Component SSD template** to either update the existing SSD or create a new one for the relevant module. Every feature task must be linked to an SSD.  
-- [ ] Restate the business problem in 2–3 lines and show the link to the **Task Triple** (Input → Expected Outcome → Validation).  
-- [ ] Derive **acceptance criteria** with measurable outcomes.  
-- [ ] Define **UI contracts** (mocks, component props/states, responsive behavior) and reference design tokens/breakpoints.  
-- [ ] Document **security/privacy and data-handling considerations.**  
-- [ ] Decide **observability/evaluation plan** with metrics/logs/tests.  
-
----
-
-**Artifacts (Output)**
-- **Component/System SSD (must follow this template):**
-
-### [Component / System Name] SSD
-
-1. **Purpose**  
-Describe the primary purpose of the component/system.  
-Example: Provide the discovery surface for users, featuring hero content, curated carousels, and navigation touchpoints introducing catalog items.
-
-2. **Ownership & Stakeholders**  
-- Product: [Product owner or squad]  
-- Design: [Design/UX team]  
-- Engineering: [Engineering team(s)]  
-- QA: [Quality assurance team]  
-
-3. **Component Map**  
-[List main file paths and structures.]  
-- [Entry file path]  
-- [Core component files]  
-- [Supporting shared components/assets]  
-- [API integration paths]  
-
-4. **Responsibilities**  
-[Summarize what the component/system does:]  
-- [Responsibility 1]  
-- [Responsibility 2]  
-- [Responsibility 3]  
-
-5. **Data Flow**  
-[Outline how data moves through the system.]  
-- [Trigger → Fetch/Load process]  
-- [Normalization/State handling]  
-- [Data passed to subcomponents]  
-- [Transformations/Filters/Styling applied]  
-
-6. **Dependencies**  
-- [Core APIs/libraries used]  
-- [Shared components and utilities]  
-- [Styling/theme dependencies]  
-- [State management or framework specifics]  
-
-7. **Theming & Styling**  
-[Describe theming rules, tokens, and styling consistency:]  
-- [Background styles/tokens]  
-- [Overlay/gradient rules]  
-- [Contrast/WCAG validation requirements]  
-- [Typography and spacing alignment]  
-
-8. **Accessibility & UX**  
-[Accessibility and user experience requirements:]  
-- [Keyboard navigation]  
-- [Alt text / descriptive labels]  
-- [ARIA and live messaging]  
-
-9. **Testing Strategy**  
-- Automated Tests: [Unit/integration test coverage]  
-- Component Tests: [Specific component test files]  
-- Manual QA: [Cross-browser/device checks, visual QA]  
-
-10. **Observability**  
-- [Error handling strategy]  
-- [Logging and monitoring tools]  
-- [Future observability enhancements]  
-
-11. **Roadmap & To-Do**  
-- [Upcoming refactors]  
-- [Feature enhancements]  
-- [Performance/UX improvements]  
-- [Analytics instrumentation]  
-
-12. **Related Documentation**  
-- [Link to high-level SSD]  
-- [Link to API contracts/specs]  
-- [Links to related component/module SSDs]  
-
----
-
-- **Feature Spec Doc:** goals, non-goals, TCRTE frame, UI contracts, acceptance criteria, validation plan.  
-- **Risks & Tradeoffs Doc:** caching, SEO, accessibility, performance, payments, API resilience, AI/prompt-related risks.  
-
-
 
 ## 3) Implementation Plan (Single PR per Epic + Per-Task Loop)
 
@@ -325,7 +233,7 @@ For each Task (use your Task Triple), perform **3.1 → 3.11**, asking for confi
 - PR Title: `feat(<epic-slug>): <Epic title>` (single PR).  
 - Link Epic ticket (`ISO-###`).  
 - Self-contained description with **Task-by-Task changelog**.  
-- Screenshots/GIFs for UI changes (before/after per task).  
+- Screenshots/GIFs for UI changes (assistant captures before/after per task unless user explicitly opts to skip; "before" prior to code changes, "after" post-implementation).  
 - Coverage & E2E reports attached.  
 - Observability hooks confirmed.  
 - Security notes if relevant.  
@@ -384,18 +292,40 @@ Epic: <link to Jira/epic>
 
 ## Kickoff Flow (Dynamic per Epic — Ask Before Execute)
 
-For each step, **pause and ask the user to confirm before executing the task**.
+- Before Step 0, identify the active epic/task by scanning `.claude/UI_todo_list.md` for the first unchecked `[ ]` item and record it in planning artifacts.
+- When starting a new epic, execute Steps 1 through 7 sequentially before implementation.
 
 0. Ensure the feature branch (`feat/<epic-slug>`) exists and is checked out; create it if missing before continuing.
 1. Read Epic tasks from `UI_todo_list.md`.  
-2. Inputs (§0) (ask to proceed).  
-3. Map repo context (§1) (ask to proceed).  
-4. Write Feature Spec (§2) (ask to proceed).  
+2. Inputs (§1).  
+3. Map repo context (§2) (ask to proceed).  
 5. Plan with TDD, observability, SDL (§3) (ask to proceed).  
 6. Implement minimal diffs (§4) (ask to proceed).  
 7. Validate (§5) (ask to proceed).  
 8. Document & PR (§6) (ask to proceed).  
+   - [ ] Ensure branch is pushed to remote and open PR using the latest draft content.
+   - [ ] Attach required artifacts (checklist, release plan, etc.) to the PR and request review.
 9. Ship & update release notes (ask to proceed).  
+   - [ ] Merge the approved PR into master.
+   - [ ] Update release notes/changelog to reflect the shipped tasks.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
