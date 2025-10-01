@@ -16,7 +16,7 @@ exports[`SeriesDetail page matches snapshot 1`] = `
         <img
           alt="Consciousness Expansion"
           class="w-full h-full object-cover scale-105 blur-sm"
-          src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
+          src="https://example.com/series-hero.jpg"
         />
         <div
           class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent"
@@ -44,6 +44,7 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="w-4 h-4"
+                data-test-icon="true"
               />
               <span>
                 Series
@@ -62,11 +63,6 @@ exports[`SeriesDetail page matches snapshot 1`] = `
             class="flex items-center space-x-3 mb-4"
           >
             <span
-              class="bg-red-600 text-white text-sm px-4 py-2 rounded-lg font-bold tracking-wide"
-            >
-              SERIES
-            </span>
-            <span
               class="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg"
             >
               3
@@ -77,7 +73,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg"
             >
               24
-               Episodes
+               Episode
+              s
             </span>
           </div>
           <h1
@@ -86,7 +83,7 @@ exports[`SeriesDetail page matches snapshot 1`] = `
             Consciousness Expansion
           </h1>
           <div
-            class="flex items-center space-x-6 mb-6 text-white"
+            class="flex flex-wrap items-center gap-6 mb-6 text-white"
           >
             <div
               class="flex items-center space-x-1"
@@ -94,6 +91,7 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="w-5 h-5 text-yellow-400 fill-current"
+                data-test-icon="true"
               />
               <span
                 class="font-semibold text-lg"
@@ -106,32 +104,11 @@ exports[`SeriesDetail page matches snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-red-500"
-              />
-              <span>
-                267
-              </span>
-            </div>
-            <div
-              class="flex items-center space-x-1"
-            >
-              <svg
-                aria-hidden="true"
                 class="w-5 h-5"
+                data-test-icon="true"
               />
               <span>
                 2023
-              </span>
-            </div>
-            <div
-              class="flex items-center space-x-1"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-              />
-              <span>
-                45-60 min per episode
               </span>
             </div>
           </div>
@@ -157,7 +134,7 @@ exports[`SeriesDetail page matches snapshot 1`] = `
           <p
             class="text-gray-200 text-lg leading-relaxed mb-8 max-w-3xl"
           >
-            Embark on a transformative journey through the depths of human consciousness. This groundbreaking series combines ancient wisdom with modern neuroscience to guide you through expanded states of awareness, meditation practices, and spiritual awakening techniques that will fundamentally shift your perspective on reality.
+            A transformative journey through the depths of human consciousness and self-discovery.
           </p>
           <div
             class="flex flex-wrap items-center gap-4"
@@ -168,34 +145,11 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="w-5 h-5"
+                data-test-icon="true"
               />
               <span>
                 Play Series
               </span>
-            </button>
-            <button
-              class="p-4 rounded-lg border-2 transition-all duration-300 border-gray-600 text-gray-300 hover:border-red-600 hover:text-red-600"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5 "
-              />
-            </button>
-            <button
-              class="p-4 rounded-lg border-2 border-gray-600 text-gray-300 hover:border-white hover:text-white transition-all duration-300"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-              />
-            </button>
-            <button
-              class="p-4 rounded-lg border-2 border-gray-600 text-gray-300 hover:border-white hover:text-white transition-all duration-300"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-              />
             </button>
           </div>
         </div>
@@ -258,9 +212,9 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="relative overflow-hidden rounded-xl transition-all duration-500 group-hover:scale-105 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50"
             >
               <img
-                alt="The Gateway to Consciousness"
-                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Episode 1"
+                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
+                src="https://example.com/episode-1.jpg"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-all duration-500"
@@ -281,20 +235,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <span
                   class="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium"
                 >
-                  52:30
+                  45m
                 </span>
-              </div>
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              >
-                <div
-                  class="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-6 h-6 fill-current"
-                  />
-                </div>
               </div>
               <div
                 class="absolute bottom-0 left-0 right-0 p-4"
@@ -302,18 +244,18 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <h3
                   class="text-white font-bold text-lg mb-1"
                 >
-                  The Gateway to Consciousness
+                  Episode 1
                 </h3>
                 <p
                   class="text-gray-200 text-sm line-clamp-2 mb-2"
                 >
-                  Introduction to expanded consciousness and the fundamental principles that govern our awareness.
+                  Exploring consciousness frontiers.
                 </p>
                 <p
                   class="text-gray-400 text-xs"
                 >
                   Released 
-                  2023/06/01
+                  2023/01/01
                 </p>
               </div>
             </div>
@@ -326,9 +268,9 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="relative overflow-hidden rounded-xl transition-all duration-500 group-hover:scale-105 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50"
             >
               <img
-                alt="Meditation and the Mind"
-                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Episode 2"
+                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
+                src="https://example.com/episode-2.jpg"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-all duration-500"
@@ -349,20 +291,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <span
                   class="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium"
                 >
-                  48:15
+                  45m
                 </span>
-              </div>
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              >
-                <div
-                  class="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-6 h-6 fill-current"
-                  />
-                </div>
               </div>
               <div
                 class="absolute bottom-0 left-0 right-0 p-4"
@@ -370,18 +300,18 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <h3
                   class="text-white font-bold text-lg mb-1"
                 >
-                  Meditation and the Mind
+                  Episode 2
                 </h3>
                 <p
                   class="text-gray-200 text-sm line-clamp-2 mb-2"
                 >
-                  Explore ancient meditation techniques and their profound effects on brain structure and function.
+                  Exploring consciousness frontiers.
                 </p>
                 <p
                   class="text-gray-400 text-xs"
                 >
                   Released 
-                  2023/06/08
+                  2023/01/02
                 </p>
               </div>
             </div>
@@ -394,9 +324,9 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="relative overflow-hidden rounded-xl transition-all duration-500 group-hover:scale-105 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50"
             >
               <img
-                alt="Quantum Consciousness"
-                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Episode 3"
+                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
+                src="https://example.com/episode-3.jpg"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-all duration-500"
@@ -417,20 +347,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <span
                   class="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium"
                 >
-                  55:42
+                  45m
                 </span>
-              </div>
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              >
-                <div
-                  class="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-6 h-6 fill-current"
-                  />
-                </div>
               </div>
               <div
                 class="absolute bottom-0 left-0 right-0 p-4"
@@ -438,18 +356,18 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <h3
                   class="text-white font-bold text-lg mb-1"
                 >
-                  Quantum Consciousness
+                  Episode 3
                 </h3>
                 <p
                   class="text-gray-200 text-sm line-clamp-2 mb-2"
                 >
-                  Dive into the intersection of quantum physics and consciousness theory.
+                  Exploring consciousness frontiers.
                 </p>
                 <p
                   class="text-gray-400 text-xs"
                 >
                   Released 
-                  2023/06/15
+                  2023/01/03
                 </p>
               </div>
             </div>
@@ -462,9 +380,9 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="relative overflow-hidden rounded-xl transition-all duration-500 group-hover:scale-105 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50"
             >
               <img
-                alt="The Power of Breathwork"
-                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                src="https://images.unsplash.com/photo-1506629905592-5b5d8a2ec57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Episode 4"
+                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
+                src="https://example.com/episode-4.jpg"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-all duration-500"
@@ -485,20 +403,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <span
                   class="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium"
                 >
-                  46:28
+                  45m
                 </span>
-              </div>
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              >
-                <div
-                  class="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-6 h-6 fill-current"
-                  />
-                </div>
               </div>
               <div
                 class="absolute bottom-0 left-0 right-0 p-4"
@@ -506,18 +412,18 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <h3
                   class="text-white font-bold text-lg mb-1"
                 >
-                  The Power of Breathwork
+                  Episode 4
                 </h3>
                 <p
                   class="text-gray-200 text-sm line-clamp-2 mb-2"
                 >
-                  Learn how controlled breathing can access altered states of consciousness.
+                  Exploring consciousness frontiers.
                 </p>
                 <p
                   class="text-gray-400 text-xs"
                 >
                   Released 
-                  2023/06/22
+                  2023/01/04
                 </p>
               </div>
             </div>
@@ -530,9 +436,9 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="relative overflow-hidden rounded-xl transition-all duration-500 group-hover:scale-105 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50"
             >
               <img
-                alt="Sacred Plant Medicine"
-                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                src="https://images.unsplash.com/photo-1574482620302-1958d1aa3272?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Episode 5"
+                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
+                src="https://example.com/episode-5.jpg"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-all duration-500"
@@ -553,20 +459,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <span
                   class="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium"
                 >
-                  58:12
+                  45m
                 </span>
-              </div>
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              >
-                <div
-                  class="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-6 h-6 fill-current"
-                  />
-                </div>
               </div>
               <div
                 class="absolute bottom-0 left-0 right-0 p-4"
@@ -574,18 +468,18 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <h3
                   class="text-white font-bold text-lg mb-1"
                 >
-                  Sacred Plant Medicine
+                  Episode 5
                 </h3>
                 <p
                   class="text-gray-200 text-sm line-clamp-2 mb-2"
                 >
-                  Explore the role of plant medicine in spiritual practices and consciousness expansion.
+                  Exploring consciousness frontiers.
                 </p>
                 <p
                   class="text-gray-400 text-xs"
                 >
                   Released 
-                  2023/06/29
+                  2023/01/05
                 </p>
               </div>
             </div>
@@ -598,9 +492,9 @@ exports[`SeriesDetail page matches snapshot 1`] = `
               class="relative overflow-hidden rounded-xl transition-all duration-500 group-hover:scale-105 shadow-xl ring-1 ring-gray-800/20 group-hover:ring-red-600/50"
             >
               <img
-                alt="Energy Fields and Auras"
-                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                alt="Episode 6"
+                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110"
+                src="https://example.com/episode-6.jpg"
               />
               <div
                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-all duration-500"
@@ -621,20 +515,8 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <span
                   class="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium"
                 >
-                  44:35
+                  45m
                 </span>
-              </div>
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-              >
-                <div
-                  class="bg-red-600 text-white p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-300"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="w-6 h-6 fill-current"
-                  />
-                </div>
               </div>
               <div
                 class="absolute bottom-0 left-0 right-0 p-4"
@@ -642,18 +524,18 @@ exports[`SeriesDetail page matches snapshot 1`] = `
                 <h3
                   class="text-white font-bold text-lg mb-1"
                 >
-                  Energy Fields and Auras
+                  Episode 6
                 </h3>
                 <p
                   class="text-gray-200 text-sm line-clamp-2 mb-2"
                 >
-                  Understanding the human energy field and its relationship to consciousness.
+                  Exploring consciousness frontiers.
                 </p>
                 <p
                   class="text-gray-400 text-xs"
                 >
                   Released 
-                  2023/07/06
+                  2023/01/06
                 </p>
               </div>
             </div>
