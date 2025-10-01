@@ -15,7 +15,7 @@
 - [x] **Task 3: Hero component layout update**
   - **Input:** Load Browse page hero section.
   - **Expected Outcome:** Hero matches layout of Series hero.
-  - **Validation:** Compare Browse Hero with Series Hero — must be identical.
+  - **Validation:** Compare Browse Hero with Series Hero ï¿½ must be identical.
 - [x] **Task 4: Remove empty EnhancedCarousel**
   - **Input:** Browse page with no videos in carousel.
   - **Expected Outcome:** EnhancedCarousel is hidden/removed.
@@ -25,14 +25,14 @@
 
 ### Epic: Series Page
 
-- [ ] **Task 1: Background blending issue**
+- [x] **Task 1: Background blending issue**
   - **Input:** Load Series page.
   - **Expected Outcome:** Background color blends with menu background.
   - **Validation:** Visual consistency check.
-- [ ] **Task 2: Remove "Series" label on carousel images**
+- [x] **Task 2: Remove "Series" label on carousel images**
   - **Input:** Series page with EnhancedCarousel.
   - **Expected Outcome:** No "Series" label on images.
-  - **Validation:** Check images — label removed.
+  - **Validation:** Check images ï¿½ label removed.
 
 ---
 
@@ -78,7 +78,7 @@
 
 ---
 
-### Epic: Profile – Account Details
+### Epic: Profile ï¿½ Account Details
 
 - [ ] **Task 1: Update phone number flow**
   - **Input:** Edit phone number.
@@ -95,7 +95,7 @@
 
 ---
 
-### Epic: Profile – Plan Details
+### Epic: Profile ï¿½ Plan Details
 
 - [ ] **Task 1: Manage Plan modal fix**
   - **Input:** Click Manage Plan.
@@ -116,7 +116,7 @@
 
 ---
 
-### Epic: Profile – Settings & Privacy
+### Epic: Profile ï¿½ Settings & Privacy
 
 - [ ] **Task 1: 2FA modal visibility fix**
   - **Input:** Toggle 2FA.

@@ -222,11 +222,13 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                   </div>
 
                   {/* Category Badge */}
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className={styles.badge}>
-                      {movie.type.name}
-                    </span>
-                  </div>
+                  {variant !== 'series' && (
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className={styles.badge}>
+                        {movie.type?.name}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Rating Badge */}
                   {variant !== 'home' && (

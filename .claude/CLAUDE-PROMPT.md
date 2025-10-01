@@ -234,6 +234,7 @@ For each Task (use your Task Triple), perform **3.1 → 3.11**, asking for confi
 - Link Epic ticket (`ISO-###`).  
 - Self-contained description with **Task-by-Task changelog**.  
 - Screenshots/GIFs for UI changes (assistant captures before/after per task unless user explicitly opts to skip; "before" prior to code changes, "after" post-implementation).  
+- Commit captured assets and push the feature branch immediately after screenshots are added to the repo.  
 - Coverage & E2E reports attached.  
 - Observability hooks confirmed.  
 - Security notes if relevant.  
