@@ -38,19 +38,19 @@
 
 ### Epic: Series/[id] Page
 
-- [ ] **Task 1: Episode image sizing**
+- [x] **Task 1: Episode image sizing**
   - **Input:** Load Series detail page.
   - **Expected Outcome:** Episode images are normal width.
   - **Validation:** Compare dimensions with design.
-- [ ] **Task 2: Remove hover play icon**
+- [x] **Task 2: Remove hover play icon**
   - **Input:** Hover over episode image.
   - **Expected Outcome:** No play icon appears.
   - **Validation:** Hover test.
-- [ ] **Task 3: Simplify Hero section**
+- [x] **Task 3: Simplify Hero section**
   - **Input:** Load Hero section.
   - **Expected Outcome:** SERIES label, likes, time average removed.
   - **Validation:** Check Hero displays without these elements.
-- [ ] **Task 4: Remove engagement actions**
+- [x] **Task 4: Remove engagement actions**
   - **Input:** Series detail page.
   - **Expected Outcome:** No love/likes, share, or download options.
   - **Validation:** Confirm UI elements are absent.
