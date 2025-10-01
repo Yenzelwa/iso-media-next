@@ -303,12 +303,12 @@ Epic: <link to Jira/epic>
 6. Implement minimal diffs (§4) (ask to proceed).  
 7. Validate (§5) (ask to proceed).  
 8. Document & PR (§6) (ask to proceed).  
-   - [ ] Fold checklist TODOs and visuals into PR description, request review.
-   - [ ] Push PR merge into master after approval and attach required artifacts.
+   - [ ] Ensure branch is pushed to remote and open PR using the latest draft content.
+   - [ ] Attach required artifacts (checklist, release plan, etc.) to the PR and request review.
 9. Ship & update release notes (ask to proceed).  
-   - [ ] Push committed branch to remote and open PR using the latest draft.  
-   - [ ] Attach required artifacts (checklist, release plan) to the PR before merge.  
-   - [ ] Merge to master once approvals complete and update release notes.  
+   - [ ] Merge the approved PR into master.
+   - [ ] Update release notes/changelog to reflect the shipped tasks.
+
 
 
 
