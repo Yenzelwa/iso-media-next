@@ -107,3 +107,8 @@ test('renders cards and scroll buttons update position / disabled state', () => 
   rerender(<EnhancedCarousel title="My List" movies={movies} variant="series" />);
   expect(screen.getByText(movies[2].title)).toBeInTheDocument();
 });
+
+test('does not render when movies array empty', () => {
+  const { container } = render(<EnhancedCarousel title="Empty Section" movies={[]} variant="home" />);
+  expect(container.firstChild).toBeNull();
+});

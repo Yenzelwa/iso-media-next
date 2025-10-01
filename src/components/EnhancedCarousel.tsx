@@ -14,7 +14,10 @@ interface EnhancedCarouselProps {
 export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCarouselProps) => {
   const [scrollPositions, setScrollPositions] = useState<{[key: string]: number}>({});
   const [isHovered, setIsHovered] = useState(false);
-  console.log(movies)
+
+  if (!movies?.length) {
+    return null;
+  }
 
   const scrollContent = (direction: "left" | "right") => {
     const container = document.getElementById(`scroll-${title.replace(/\s+/g, '-')}`);
@@ -303,3 +306,4 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
     </div>
   );
 };
+
