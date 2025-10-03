@@ -71,7 +71,7 @@
   - **Input:** Documentary page with no videos.
   - **Expected Outcome:** Carousel removed.
   - **Validation:** Confirm no empty carousel renders.
-- [ ] **Task 4: Style EnhancedCarousel**
+- [x] **Task 4: Style EnhancedCarousel**
   - **Input:** Load page.
   - **Expected Outcome:** Carousel styled consistently.
   - **Validation:** Visual design check.

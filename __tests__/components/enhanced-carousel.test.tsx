@@ -91,13 +91,23 @@ test('renders cards and scroll buttons update position / disabled state', () => 
 
 test('variant-specific rendering across home / documentary / series', () => {
   const { rerender } = render(<EnhancedCarousel title="My List" movies={movies} variant="home" />);
+  const homeContainer = document.querySelector('[data-variant="home"]');
+  expect(homeContainer).toBeInTheDocument();
   expect(screen.getByText(movies[0].title)).toBeInTheDocument();
   expect(screen.getAllByText(/4\.2/)[0]).toBeInTheDocument();
   expect(screen.getAllByText('Action').length).toBeGreaterThan(0);
 
   rerender(<EnhancedCarousel title="My List" movies={movies} variant="documentary" />);
-  expect(screen.getByText(movies[1].title)).toBeInTheDocument();
-  expect(screen.getAllByText('Action').length).toBeGreaterThan(0);
+  const docContainer = document.querySelector('[data-variant="documentary"]') as HTMLElement | null;
+  expect(docContainer).toBeInTheDocument();
+  expect(docContainer?.className).toContain('enhanced-carousel-documentary');
+  expect(docContainer?.getAttribute('data-section-title')).toBe('My List');
+
+  const docPlay = docContainer?.querySelector('button[title="Play video"]') as HTMLElement | null;
+  expect(docPlay?.className).toContain('bg-red-500/90');
+
+  const docAdd = docContainer?.querySelector('button[title="Add to My List"]') as HTMLElement | null;
+  expect(docAdd?.className).toContain('border-red-400/60');
 
   rerender(<EnhancedCarousel title="My List" movies={movies} variant="series" />);
   expect(screen.getByText(movies[2].title)).toBeInTheDocument();
