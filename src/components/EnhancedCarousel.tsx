@@ -75,22 +75,26 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
           additionalOverlay: "absolute inset-0 bg-black/40 opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controls: "absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300 z-20",
           controlsContent: "flex items-center space-x-3 bg-black/30 backdrop-blur-md rounded-2xl p-4 shadow-2xl",
-          badge: "absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs px-3 py-2 rounded-full font-bold shadow-2xl backdrop-blur-md border border-red-400/30"
+          badge: "absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs px-3 py-2 rounded-full font-bold shadow-2xl backdrop-blur-md border border-red-400/30",
+          baseOverlay: "absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent",
+          bottomShadow: "absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/95 via-black/60 to-transparent"
         };
       case 'documentary':
         return {
-          container: "relative group bg-gradient-to-br from-slate-900/50 to-gray-900/50 rounded-3xl p-10 backdrop-blur-lg border border-gray-700/40",
-          header: "flex items-center space-x-6 mb-10",
-          headerAccent: "w-2 h-12 bg-gradient-to-b from-red-500 to-red-700 rounded-lg shadow-lg",
-          title: "text-4xl lg:text-5xl font-bold text-white tracking-tight",
-          cardContainer: "flex-none w-80 group/item cursor-pointer",
-          card: "relative overflow-hidden rounded-3xl transition-all duration-700 group-hover/item:scale-105 shadow-2xl ring-2 ring-gray-700/50 hover:ring-red-500/50",
-          image: "w-full h-56 object-cover rounded-xl transition-all duration-700 group-hover/item:scale-110 group-hover/item:brightness-75",
-          overlay: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent opacity-0 group-hover/item:opacity-100 transition-all duration-500",
-          additionalOverlay: "absolute inset-0 bg-black/30 opacity-0 group-hover/item:opacity-100 transition-all duration-300",
-          controls: "absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300 z-20",
-          controlsContent: "flex items-center space-x-4 bg-white/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl border border-white/20",
-          badge: "absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600/90 to-red-700/90 backdrop-blur-sm text-white text-xs px-4 py-3 rounded-2xl font-bold shadow-2xl border border-red-400/50"
+          container: "relative group overflow-hidden rounded-[28px] bg-gradient-to-br from-slate-950/85 via-slate-900/70 to-black/60 p-8 md:p-10 shadow-[0_25px_55px_-30px_rgba(248,113,113,0.65)] border border-red-500/15 transition-shadow duration-300",
+          header: "flex items-center gap-4 mb-10",
+          headerAccent: "inline-flex h-10 w-1.5 rounded-full bg-gradient-to-b from-red-400 via-red-500 to-red-600 shadow-[0_0_28px_rgba(248,113,113,0.65)]",
+          title: "text-3xl md:text-4xl font-semibold text-white tracking-tight",
+          cardContainer: "flex-none w-80 min-w-[19rem] group/item cursor-pointer",
+          card: "relative overflow-hidden rounded-3xl border border-red-500/20 bg-slate-950/65 transition-all duration-500 group-hover/item:-translate-y-1 group-hover/item:shadow-[0_35px_60px_-35px_rgba(248,113,113,0.75)]",
+          image: "w-full h-56 object-cover rounded-2xl transition-all duration-500 group-hover/item:scale-105 group-hover/item:brightness-[0.85]",
+          overlay: "absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-transparent opacity-70 group-hover/item:opacity-85 transition-opacity duration-500",
+          additionalOverlay: "absolute inset-0 bg-red-500/15 opacity-0 group-hover/item:opacity-40 transition-opacity duration-500",
+          controls: "absolute inset-x-0 bottom-6 flex justify-center opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 z-20",
+          controlsContent: "flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/20 px-5 py-2.5 text-white backdrop-blur-md shadow-[0_22px_40px_-30px_rgba(248,113,113,0.75)]",
+          badge: "inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/15 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-red-100",
+          baseOverlay: "absolute inset-0 bg-gradient-to-t from-black/78 via-black/35 to-transparent",
+          bottomShadow: "absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-black/88 via-black/45 to-transparent"
         };
       default: // home
         return {
@@ -105,13 +109,25 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
           additionalOverlay: "absolute inset-0 bg-black/20 opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controls: "absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300",
           controlsContent: "flex items-center space-x-4 bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-2xl border border-white/20",
-          badge: "absolute top-3 left-3 bg-gradient-to-r from-red-600/90 to-red-700/90 backdrop-blur-sm text-white text-xs px-3 py-2 rounded-xl font-semibold shadow-xl border border-red-400/40"
+          badge: "absolute top-3 left-3 bg-gradient-to-r from-red-600/90 to-red-700/90 backdrop-blur-sm text-white text-xs px-3 py-2 rounded-xl font-semibold shadow-xl border border-red-400/40",
+          baseOverlay: "absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent",
+          bottomShadow: "absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
         };
     }
   };
 
   const styles = getVariantStyles();
   const currentScrollPos = scrollPositions[title] || 0;
+  const variantClassName = `enhanced-carousel-${variant}`;
+  const playButtonClass =
+    variant === 'documentary'
+      ? 'bg-red-500/90 text-white hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 rounded-full p-3 shadow-[0_18px_30px_-18px_rgba(248,113,113,0.8)] transition-all duration-300 hover:scale-110'
+      : 'bg-white/95 backdrop-blur-sm text-black hover:bg-white rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:shadow-white/20';
+  const secondaryButtonClass =
+    variant === 'documentary'
+      ? 'border border-red-400/60 text-red-100 hover:bg-red-500/20 backdrop-blur-md rounded-full p-3 shadow-[0_14px_28px_-20px_rgba(248,113,113,0.75)] hover:scale-110 transition-all duration-300'
+      : 'border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white';
+  const secondaryIconClass = variant === 'documentary' ? 'w-6 h-6 text-red-100' : 'w-6 h-6';
   
   // Check if there's content to scroll right
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -126,14 +142,16 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
 
   return (
     <div className="px-4 lg:px-16 mb-12">
-      <div 
-        className={styles.container}
+      <div
+        className={`${styles.container} enhanced-carousel ${variantClassName}`}
+        data-variant={variant}
+        data-section-title={title}
+        aria-label={`${title} carousel`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Section Header */}
         <div className={styles.header}>
-          <div className={styles.headerAccent}></div>
           <h2 className={styles.title}>
             {title}
           </h2>
@@ -178,10 +196,11 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                   {styles.additionalOverlay && <div className={styles.additionalOverlay}></div>}
                   
                   {/* Always visible text readability overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                  
+                  {/* Always visible text readability overlay */}
+                  {styles.baseOverlay && <div className={styles.baseOverlay}></div>}
+
                   {/* Bottom text area shadow */}
-                  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                  {styles.bottomShadow && <div className={styles.bottomShadow}></div>}
                   
                   {/* Hover Controls */}
                   <div className={styles.controls}>
@@ -191,7 +210,7 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                           // Navigate to watch page
                           window.location.href = `/watch/${movie.id}`;
                         }}
-                        className="bg-white/95 backdrop-blur-sm text-black hover:bg-white rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:shadow-white/20"
+                        className={playButtonClass}
                         title="Play video"
                       >
                         <Play className="w-6 h-6 fill-current" />
@@ -201,10 +220,10 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                           // Add to watchlist functionality
                           alert('Added to My List!');
                         }}
-                        className="border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white"
+                        className={secondaryButtonClass}
                         title="Add to My List"
                       >
-                        <Plus className="w-6 h-6" />
+                        <Plus className={secondaryIconClass} />
                       </button>
                       {variant === 'documentary' && (
                         <button 
@@ -212,10 +231,10 @@ export const EnhancedCarousel = ({ title, movies, variant = 'home' }: EnhancedCa
                             // Show more info functionality  
                             alert(`More info about: ${movie.title}`);
                           }}
-                          className="border-2 border-white/90 text-white hover:bg-white/30 backdrop-blur-sm rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 hover:border-white"
+                          className={secondaryButtonClass}
                           title="More Info"
                         >
-                          <Info className="w-6 h-6" />
+                          <Info className={secondaryIconClass} />
                         </button>
                       )}
                     </div>

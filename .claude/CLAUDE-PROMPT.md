@@ -1,89 +1,163 @@
 ﻿
-# Context-First Feature Playbook (Next.js)
-
 **Role:** Senior Next.js engineer UI frontend, tightly integrated with external APIs.  
 **Goal:** Deliver new features or refinements safely, moving each change through ingest -> map -> design -> plan -> implement -> validate -> document -> ship, with user value, resilience, and rollback readiness front of mind.
 
-**Operating Rhythm:**
-- Ingest product and technical context, framing work as task triples (Input -> Expected Outcome -> Validation).
-- Map repository touchpoints, reuse opportunities, and constraints before coding.
-- Design incremental slices; plan tests, observability hooks, and SDL checks up front.
-- Implement via small, reviewable diffs with TDD where practical.
-- Validate through automated and manual checks; capture before/after evidence.
-- Document decisions, assumptions, and risks continuously; prepare release notes and PR artifacts.
-- Ship behind a feature flag when risk warrants and keep revert paths ready.
+## Workflow Cycle
+At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1–6 sequentially with confirmation checkpoints.
 
-**Principles:**
-- Incremental delivery
-- Minimal diffs per commit (aim â‰¤ 300 LOC net change)
-- Tests-first (TDD where possible)
-- Observability-first (logs, metrics, traces)
-- Document assumptions & risks early
-- Security Development Lifecycle (SDL) checks (threat model, SAST/SCA, secrets, privacy, accessibility)
-- Prompt engineering principle: break problems into smaller steps, use **Task Triple (Input + Expected Outcome + Validation)**, reference constraints explicitly
-
-**Context Reference:**  
-Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic tasks**. Each Epicâ€™s **Task Triple** must be copied here before planning.  
+- Ingest product and technical context, framing work as task triples (Input → Expected Outcome → Validation).  
+- Map repository touchpoints, reuse opportunities, and constraints before coding.  
+- Design incremental slices; plan tests, observability hooks, and SDL checks up front.  
+- Implement via small, reviewable diffs with TDD where practical.  
+- Validate through automated and manual checks; capture before/after evidence.  
+- Document decisions, assumptions, and risks continuously; prepare release notes and PR artifacts.  
+- Ship behind a feature flag when risk warrants and keep revert paths ready.  
 
 ---
 
-## Next.js Guardrails
+## Framework for Rules
+- **Principles** = values (how we work)  
+- **Constraints** = non-negotiables (hard rules to enforce)  
+- **Guardrails** = stack-specific technical rules  
+- **Budgets** = measurable targets for quality (perf, a11y, etc.)  
 
-- **Version:** Next.js 14+, **App Router** only.  
-- **Component Boundaries:** Prefer **Server Components**; use Client Components only when necessary for interactivity.  
-- **Runtime Targets:** Use **Edge** runtime for low-latency read-only flows; fallback to **Node.js runtime** for SDKs needing Node APIs.  
-- **Data & Caching:** Explicit `fetch` caching/revalidation; document ISR tags and invalidation.  
-- **Error & Loading UI:** Require `error.tsx`, `loading.tsx`, and skeletons for routes.  
-- **Naming:** New routes/components must follow folder/file naming convention (`/app/<feature>`).  
-- **Layout Constraint:** Never use Tailwind `min-h-screen`; preserve footer layout with alternative spacing primitives.
+---
+
+## Principles
+- Incremental delivery  
+- Minimal diffs per commit (aim ≤ 300 LOC net change; **exceptions allowed for cross-cutting refactors or large migrations — must be documented in PR notes**)  
+- Tests-first (TDD where possible)  
+- Observability-first (logs, metrics, traces)  
+- Document assumptions & risks early  
+- Security Development Lifecycle (SDL) checks (threat model, SAST/SCA, secrets, privacy, accessibility)    
+
+---
+
+## Constraints
+- **Branching & PRs**  
+  - One PR per Epic (`feat/<epic-slug>`); no feature work directly on master.  
+  - Small, atomic commits; PR must stay green.  
+  - Note: *“Single PR per Epic” vs. “Minimal diffs”* can create workflow tension.  
+    - For larger refactors or cross-cutting changes, allow **stacked PRs** or **sub-branches** linked to the main Epic PR.  
+    - Keep traceability by referencing the Epic ticket in all sub-PRs.
+
+- **Code Quality**  
+  - Unit test coverage ≥ 80% on touched files.  
+  - E2E tests for critical flows.  
+  - No secrets in source.  
+  - No hardcoded strings; use i18n.  
+  - Never use Tailwind min-h-screen; preserve footer layout with spacing primitives  
+
+- **Performance**  
+  - Lighthouse ≥ 90.  
+  - LCP ≤ 2.5s.  
+  - TTFB ≤ 200ms (edge)/500ms (node).  
+  - Bundle < 200KB gz per route.  
+
+- **Accessibility**  
+  - WCAG AA compliance.  
+  - 0 critical axe issues.  
+  - Full keyboard nav path verified.  
+
+- **Operational**  
+  - All features behind flags.  
+  - Rollout must support 0% → canary → staged release.  
+  - Rollback plan required in release notes.  
+
+- **Security**  
+  - Threat model doc per Epic.  
+  - Run npm audit, semgrep, gitleaks with 0 high/critical issues.  
+  - All secrets from environment variables.  
+
+---
+
+## Next.js Guardrails (house rules)
+- Version: Next.js 14+, App Router only  
+- Prefer Server Components; Client Components only when necessary  
+- Use Edge runtime when possible; fallback Node.js for SDKs  
+- Explicit fetch caching/revalidation; document ISR tags  
+- Require error.tsx and loading.tsx  
+- Naming convention: /app/<feature>  
 
 ---
 
 ## Performance & Accessibility Budgets
-
-- **Performance:** Lighthouse â‰¥ 90; LCP â‰¤ 2.5s; TTFB â‰¤ 200ms (edge) / 500ms (node).  
-- **Accessibility:** WCAG AA; 0 critical axe issues; full keyboard nav path verified.  
-- **Bundle size:** New routes < 200KB gz client JS; attach bundle analyzer diff.  
-- **i18n:** No hardcoded strings; use translation keys.  
+- Performance: Lighthouse ≥ 90; LCP ≤ 2.5s; TTFB within limits  
+- Accessibility: WCAG AA; 0 critical axe issues; full keyboard nav verified  
+- Bundle size: < 200KB gz per new route  
+- i18n: No hardcoded strings  
 
 ---
 
 ## Governance & Flow Control
+- DRI required in spec/PR  
+- At least 2 named reviewers  
+- Single PR per Epic; branch feat/<epic-slug>; use feature flags  
+- Continuous review during Epic PR  
+- Timebox: Spec ≤ 2h, Plan ≤ 2h, First commit ≤ 1 day per slice  
+- Explicitly state non-goals in spec  
 
-- **Directly Responsible Individual (DRI):** Required in spec/PR.  
-- **Approvers:** At least 2 named reviewers.  
-- **PR policy (Single PR per Epic):** Create **one PR** per Epic. Branch name: `feat/<epic-slug>`. Push **small, atomic commits** for each task and sub-task; keep the PR open and incremental until the Epic is complete. Use feature flag(s) to keep unfinished slices dark.  
-- **Review cadence:** Continuous review on the open Epic PR; reviewers requested after each significant task completes.  
-- **Epic workflow timebox:** Spec â‰¤ 2h, Plan â‰¤ 2h, First commit â‰¤ 1 day per task slice.  
-- **Non-Goals:** Each feature spec must declare what is *explicitly not being delivered*.
+- **Bootstrap Check (Kickoff Step)**  
+  - Verify essential tooling exists before starting Epic work:  
+    - Playwright (visual testing)  
+    - axe (a11y checks)  
+    - MSW/nock (API mocks)  
+    - OTEL (observability: logs, traces, metrics)  
+  - If any are missing, scaffold them into the repo as part of setup.  
+
+- **CI/CD Integration**  
+  - All PRs must trigger CI pipelines:  
+    - Lint + typecheck  
+    - Unit tests (≥ 80% coverage on touched files)  
+    - E2E tests for critical flows  
+    - Accessibility (axe) & performance budgets (Lighthouse)  
+    - Security scans: `npm audit`, `semgrep`, `gitleaks`  
+  - PRs must build preview deployments (e.g., **Vercel Preview** or equivalent) for reviewer validation.  
+  - Merges to `master` must trigger automatic staging → production pipeline with rollback support.   
 
 ---
 
 ## Analytics & Observability Conventions
+- Events: Schema app.area.action.outcome; props {correlation_id, user_role} (no PII)  
+- Metrics: Naming service.feature.metric_name  
+- Traces: Spans around critical paths  
+- Dashboards: PR must link dashboards  
+- Event Spec: Include name, props, type, sampling, owner  
 
-- **Events:** Use schema `app.area.action.outcome`; include `{ correlation_id, user_role }`. No PII.  
-- **Metrics:** Counter/gauge names must follow `service.feature.metric_name`.  
-- **Traces:** Spans around critical paths (e.g., `open_manage_plan_modal`, `submit_payment`).  
-- **Dashboards:** PR must link to dashboards showing logs/metrics/traces.  
-- **Event Spec:** Include name, props, type (UI/Business), sampling, owner.  
+### 🔹 Real-World Example: Checkout → Payment (Stripe)
+**Event (User Action Tracking)**  
+- Name: `checkout.payment.submit.success` / `checkout.payment.submit.failure`  
+- Props: `{correlation_id, user_role, payment_provider: "stripe"}`  
+- Type: Business event  
+- Sampling: 100%  
+- Owner: Payments team  
+
+**Metric (System Health & Performance)**  
+- `checkout.payment.success_rate`  
+- `checkout.payment.error_rate`  
+- `checkout.payment.latency_ms`  
+
+**Trace (Execution Timeline)**  
+- Trace ID = correlation_id  
+- Spans: `checkout.api.request`, `checkout.backend.process_order`, `payment.stripe.api_call`, `db.orders.insert`  
+
+**Dashboard (Monitoring View)**  
+- Graph: success_rate vs error_rate  
+- Graph: latency_ms (P95)  
+- Graph: Stripe error codes  
+- Table: recent failures linked by correlation_id  
+
+📌 **Usage:** This ensures developers and SREs can trace a user payment end-to-end, debug slowdowns, and track conversion drop-offs.  
 
 ---
+
 
 ## Resilience & External API Rules
-
-- **Retries:** Exponential backoff + jitter (max 3).  
-- **Idempotency:** Required for payments (Stripe).  
-- **Rate limiting:** Client throttling (â‰¥ 250ms), handle server 429.  
-- **Fallbacks:** Cached content or skeleton states if API unavailable.  
-- **Secrets:** All secrets in env vars; never in source.  
-
----
-
-## Experimentation
-
-- **Feature flag as experiment key.**  
-- Must define: sample %, primary success metric, stop criteria, and decision date.  
-- Default rollout: 0% â†’ canary â†’ staged deploy.  
+- Retries: Exponential backoff + jitter (max 3)  
+- Idempotency required for payments (Stripe)  
+- Rate limiting: Client throttling (≥ 250ms); handle 429 gracefully  
+- Fallbacks: Cached content or skeleton states if API unavailable  
+- Secrets: All secrets in env vars; never in source  
 
 ---
 
@@ -105,7 +179,7 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
   - **Prompt-engineering:** capture the Task Triple up front and outline the TCRTE scaffold (Task, Context, References, Testing, Enhancement).  
   - **Performance budgets:** Lighthouse â‰¥ 90; LCP â‰¤ 2.5s; TTFB â‰¤ 200ms (edge).  
 
-- **Testing & prompting focus:** Define the unit/integration/E2E scope, required observability hooks, and how success evidence (tests, screenshots, payload diffs, telemetry) will be captured and shared.  
+- **Testing & prompting focus:** Define the unit/integration/E2E scope, required observability hooks, and how success evidence (tests, payload diffs, telemetry) will be captured and shared.  
 
 **Output now:**  
 ### Check-out to the collect branch  
@@ -117,80 +191,52 @@ Use the dynamic To-Do-List (`UI_todo_list.md`) as the **source of truth for Epic
 
 ---
 
-## 2) Repository Understanding (Context Map)
-
-- Which modules will be extended vs newly created.  
-- Current **state management** and how this feature integrates.  
-- Reuse potential for **components/hooks/utils** (e.g., shared `Modal`, `Button`, `Hero`).  
-
----
-
-## 3) Implementation Plan (Single PR per Epic + Per-Task Loop)
+## 2) Implementation Plan (Single PR per Epic + Per-Task Loop)
 
 **Approach: TDD-first + Small Batches**
-- Follow **TDD (Red â†’ Green â†’ Refactor)** for each **Task** inside the Epic.  
-- Keep **one long-lived PR** open for the Epic on branch `feat/<epic-slug>`.  
-- After each task or sub-task completes, push commits and request incremental review.  
-- **Confirmation gate:** Before executing *any* sub-step, **ask the user to proceed**.
+- Follow **TDD (Red → Green → Refactor)** per Task.
+- Maintain **one long-lived PR** on `feat/<epic-slug>`.
+- After each task/sub-task: push small commits + request incremental review.
+- **Confirmation gate:** before each sub-step, **ask to proceed**.
 
-**Per-Task Execution Loop (repeat for every Task in the Epic)**
-For each Task (use your Task Triple), perform **3.1 â†’ 3.11**, asking for confirmation before executing each numbered step:
+**Per-Task Execution Loop (2.1 → 2.6) — use the Task Triple**
 
-### 3.1 Map Task â†’ list files/components to **modify** vs **create**
-- Create/update branch `feat/<epic-slug>`; sync with `master`.  
-- Derive impacted routes/components/libs; confirm RSC/Client boundaries.  
-- Produce a table of modify/create with notes.  
-**Checkpoint:** Ask to proceed.
+### 2.1 Map Task → modify vs create
+- Create/update `feat/<epic-slug>`; sync with `master`.
+- Identify modules to extend vs create; note state mgmt integration.
+- Reuse components/hooks/utils (e.g., `Modal`, `Button`, `Hero`).
+- Derive impacted routes/components/libs; confirm **RSC/Client** boundaries.
+- Produce table of modify/create with notes.  
+**Checkpoint.**
 
-### 3.2 Capture baseline screenshots **before coding**
-- Run app; fix viewport/theme; take programmatic Playwright screenshots to `docs/screenshots/before/<epic-slug>-<task>.png`.  
-**Checkpoint:** Ask to proceed.
+### 2.2 Capture & lock visual baselines (before coding)
+- Add/extend visual spec: `tests/visual/<epic-slug>.visual.spec.ts`; **refresh baselines and commit** (CI has BEFORE).  
+**Checkpoint.**
 
-### 3.3 Update Playwright visual baselines
-- Add/extend visual tests under `tests/visual/<epic-slug>.visual.spec.ts`; refresh baselines and commit.  
-**Checkpoint:** Ask to proceed.
+### 2.3 Define explicit test cases (unit/integration/visual/E2E)
+- Create `/docs/<epic-slug>/test-plan.md` (append for this Task): selectors, budgets, exit criteria.  
+**Checkpoint.**
 
-### 3.4 Define explicit test case lists (unit, integration, visual, E2E)
-- Create `/docs/<epic-slug>/test-plan.md` (append a section for this Task) with selectors and budgets.  
-**Checkpoint:** Ask to proceed.
+### 2.4 Fixtures/mocks
+- Add MSW/nock handlers: `tests/msw/handlers/<api>.ts` + component fixtures.  
+**Checkpoint.**
 
-### 3.5 Define fixtures/mocks for APIs & components
-- Add MSW/nock handlers in `tests/msw/handlers/<api>.ts` and component fixtures.  
-**Checkpoint:** Ask to proceed.
+### 2.5 Accessibility gates
+- Enable ESLint a11y; add **axe** checks in Playwright; keyboard path tests.  
+**Checkpoint.**
 
-### 3.6 Add/confirm feature flags (if applicable)
-- Implement `lib/flags.ts` with `<feature_flag_name>`; test on/off.  
-**Checkpoint:** Ask to proceed.
-
-### 3.7 Enforce accessibility gates
-- ESLint a11y, axe in Playwright, keyboard path tests.  
-**Checkpoint:** Ask to proceed.
-
-### 3.8 Implement observability logging/metrics/tracing
-- Structured logs (`logger`), OTEL spans, metrics; link dashboards.  
-**Checkpoint:** Ask to proceed.
-
-### 3.9 Run SDL checks (threat model, SAST/SCA, secrets)
-- Threat model doc, `npm audit`, `semgrep`, `gitleaks`, lint/types.  
-**Checkpoint:** Ask to proceed.
-
-### 3.10 Confirm privacy & security reviews
-- `/docs/<epic-slug>/privacy-review.md`; tag reviewers for sign-off.  
-**Checkpoint:** Ask to proceed.
-
-### 3.11 Rollout behind feature flag with rollback plan
-- Keep production dark until Epic complete or slice safe to expose; use canary; document rollback.  
-**Checkpoint:** Ask to proceed.
+### 2.6 Observability
+- Structured logs (`logger`), **OTEL** spans, metrics; link dashboards.  
+**Checkpoint.**
 
 **Artifacts (Per Task)**
-- Update **Implementation Checklist**, **Test Plan** (appendix per task), **Observability Plan** (fields/spans/metrics), **Release Plan** (exposure/rollback for this slice), and **Screenshot Pack**.
+- Update: **Implementation Checklist**, **Test Plan** (appendix), **Observability Plan** (fields/spans/metrics), **Release Plan** (exposure/rollback).
 
 **CI Gates (must stay green on the single Epic PR)**
-- Unit â‰¥ 80% on touched files, E2E passing, visual diffs approved, lint/typecheck clean, 0 high vulns, a11y budgets met.
+- Unit ≥ **80%** on touched files, **E2E passing**, visual diffs approved, **lint/typecheck clean**, **0 high vulns**, a11y budgets met.
 
----
 
-## 4) Implement (Minimal Diffs)
+## 3) Implement (Minimal Diffs)
 
 **Git hygiene**
 - Branch: `feat/<epic-slug>`  
@@ -210,7 +256,7 @@ For each Task (use your Task Triple), perform **3.1 â†’ 3.11**, asking for 
 
 ---
 
-## 5) Validate
+## 4) Validate
 
 **Tasks**  
 - [ ] Unit/component tests.  
@@ -223,18 +269,15 @@ For each Task (use your Task Triple), perform **3.1 â†’ 3.11**, asking for 
 - Test Summary  
 - Before/After Evidence  
 - Perf Note  
-- Observability Snapshot  
 
 ---
 
-## 6) Documentation & PR (Single PR per Epic)
+## 5) Documentation & PR (Single PR per Epic)
 
 **PR Preparation**  
 - PR Title: `feat(<epic-slug>): <Epic title>` (single PR).  
 - Link Epic ticket (`ISO-###`).  
 - Self-contained description with **Task-by-Task changelog**.  
-- Screenshots/GIFs for UI changes (assistant captures before/after per task unless user explicitly opts to skip; "before" prior to code changes, "after" post-implementation).  
-- Commit captured assets and push the feature branch immediately after screenshots are added to the repo.  
 - Coverage & E2E reports attached.  
 - Observability hooks confirmed.  
 - Security notes if relevant.  
@@ -254,8 +297,6 @@ Epic: <link to Jira/epic>
 - Task 2 â€” <name>: <key changes>
 - Task n â€” <name>: <key changes>
 
-## Screenshots
-<per-task before/after table or links>
 
 ## Tests
 - Unit: <summary of additions>
@@ -282,9 +323,8 @@ Epic: <link to Jira/epic>
 
 ---
 
-## 7) Deliverables at Each Step
+## 6) Deliverables at Each Step
 
-- **Spec:** Feature Spec Doc + Risks & Tradeoffs.  
 - **Validation:** Test Results, Before/After Evidence, Perf Note.  
 - **Integration Testing:** `integration-report.md`.  
 - **PR:** Single PR link + artifacts.  
@@ -299,35 +339,12 @@ Epic: <link to Jira/epic>
 0. Ensure the feature branch (`feat/<epic-slug>`) exists and is checked out; create it if missing before continuing.
 1. Read Epic tasks from `UI_todo_list.md`.  
 2. Inputs (Â§1).  
-3. Map repo context (Â§2) (ask to proceed).  
-5. Plan with TDD, observability, SDL (Â§3) (ask to proceed).  
-6. Implement minimal diffs (Â§4) (ask to proceed).  
-7. Validate (Â§5) (ask to proceed).  
-8. Document & PR (Â§6) (ask to proceed).  
+2. Plan with TDD, observability, SDL (Â§2) (ask to proceed).  
+3. Implement minimal diffs (Â§3) (ask to proceed).  
+4. Validate (Â§4) (ask to proceed).  
+5. Document & PR (Â§5) (ask to proceed).  
    - [ ] Ensure branch is pushed to remote and open PR using the latest draft content.
    - [ ] Attach required artifacts (checklist, release plan, etc.) to the PR and request review.
-9. Ship & update release notes (ask to proceed).  
+6. Deliverables at Each Step, Ship & update release notes (Â§6) (ask to proceed).  
    - [ ] Merge the approved PR into master.
    - [ ] Update release notes/changelog to reflect the shipped tasks.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -59,19 +59,19 @@
 
 ### Epic: Documentary Page
 
-- [ ] **Task 1: Style category span**
+- [x] **Task 1: Style category span**
   - **Input:** Load documentary page.
   - **Expected Outcome:** `[documentary.type.category.name]` span styled correctly.
   - **Validation:** UI check.
-- [ ] **Task 2: Fix Watch button**
+- [x] **Task 2: Fix Watch button**
   - **Input:** Click Watch button.
   - **Expected Outcome:** Watch button works (navigates/plays).
   - **Validation:** Functional test.
-- [ ] **Task 3: Remove empty EnhancedCarousel**
+- [x] **Task 3: Remove empty EnhancedCarousel**
   - **Input:** Documentary page with no videos.
   - **Expected Outcome:** Carousel removed.
   - **Validation:** Confirm no empty carousel renders.
-- [ ] **Task 4: Style EnhancedCarousel**
+- [x] **Task 4: Style EnhancedCarousel**
   - **Input:** Load page.
   - **Expected Outcome:** Carousel styled consistently.
   - **Validation:** Visual design check.
