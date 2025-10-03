@@ -1,12 +1,13 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Grid, List, Play } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Video } from '@/typings';
 import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 
 
 
-const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) => {
+const FeaturedDocumentary: React.FC<{ documentary: Video; onWatch: (id: Video['id']) => void }> = ({ documentary, onWatch }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -18,7 +19,12 @@ const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) 
               <span className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs px-4 py-2 rounded-full font-bold">
                 FEATURED
               </span>
-              <span className="text-gray-400 text-sm">
+              <span
+                data-testid="featured-category-chip"
+                tabIndex={0}
+                aria-label={`${documentary.type.category.name} category`}
+                className="inline-flex items-center rounded-full border border-red-500/50 bg-red-600/80 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition-colors duration-200 hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              >
                 {documentary.type.category.name}
               </span>
             </div>
@@ -47,7 +53,7 @@ const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) 
           </div>
 
           <div className="flex items-center space-x-4">
-            <button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
+            <button type="button" onClick={() => onWatch(documentary.id)} className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
               <Play className="w-6 h-6 mr-3 inline fill-current" />
               Watch Now
             </button>
@@ -96,15 +102,55 @@ const FeaturedDocumentary: React.FC<{ documentary: Video }> = ({ documentary }) 
 };
 
 const DocumentaryPage = () => {
+  const router = useRouter();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Latest');
   const [hoveredDoc, setHoveredDoc] = useState<number | null>(null);
   const [documentaryVideos, setDocumentaryVideos] = useState<Video[]>([]);
-  const [featuredDocumentaries, setFeaturedDocumentaries] = useState<Video>();
+  const [featuredDocumentaries, setFeaturedDocumentaries] = useState<Video | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
+
+
+  const latestDocs = useMemo(
+    () => documentaryVideos.filter((d) => new Date(d.release_date) >= new Date('2023-09-01')),
+    [documentaryVideos],
+  );
+
+  const topRatedDocs = useMemo(
+    () => [...documentaryVideos].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 6),
+    [documentaryVideos],
+  );
+
+  const scienceDocs = useMemo(
+    () => documentaryVideos.filter((d) => d.type?.category?.name === 'Science'),
+    [documentaryVideos],
+  );
+
+  const educationDocs = useMemo(
+    () => documentaryVideos.filter((d) => d.type?.category?.name === 'Education'),
+    [documentaryVideos],
+  );
+
+  const carouselSections = useMemo(
+    () =>
+      [
+        { title: 'Latest Documentaries', movies: latestDocs },
+        { title: 'Top Rated Collection', movies: topRatedDocs },
+        { title: 'Science & Consciousness', movies: scienceDocs },
+        { title: 'Educational Insights', movies: educationDocs },
+      ].filter((section) => section.movies?.length),
+    [latestDocs, topRatedDocs, scienceDocs, educationDocs],
+  );
+
+  const handleWatch = (id: Video['id']) => {
+    if (id === undefined || id === null) {
+      return;
+    }
+    router.push(`/watch/${String(id)}`);
+  };
 
   const categories = ['All', 'Education', 'Science', 'Spirituality', 'Wellness'];
   const sortOptions = ['Latest', 'Most Popular', 'Highest Rated', 'A-Z'];
@@ -127,7 +173,8 @@ const DocumentaryPage = () => {
         const featuredResponse = await fetch('/api/documentaries/featured');
         if (featuredResponse.ok) {
           const featuredData = await featuredResponse.json();
-          setFeaturedDocumentaries(featuredData.items || featuredData || []);
+          const featured = featuredData?.items ?? featuredData;
+          setFeaturedDocumentaries(Array.isArray(featured) ? featured[0] ?? null : featured ?? null);
         }
 
       } catch (err) {
@@ -196,7 +243,7 @@ const DocumentaryPage = () => {
       {/* Featured Documentary */}
       {featuredDocumentaries && (
         <div className="px-6 lg:px-16 py-16 pt-24">
-          <FeaturedDocumentary documentary={featuredDocumentaries} />
+          <FeaturedDocumentary documentary={featuredDocumentaries} onWatch={handleWatch} />
         </div>
       )}
 
@@ -382,7 +429,7 @@ const DocumentaryPage = () => {
                   </div>
                   
                   <div className="flex justify-end">
-                    <button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105">
+                    <button type="button" onClick={() => handleWatch(doc.id)} className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105">
                       <Play className="w-5 h-5 mr-2 inline fill-current" />
                       Watch
                     </button>
@@ -395,28 +442,18 @@ const DocumentaryPage = () => {
       </div>
 
       {/* Documentary Collections */}
-      <div className="py-6">
-        <EnhancedCarousel
-          title="Latest Documentaries"
-          movies={documentaryVideos.filter(d => new Date(d.release_date) >= new Date('2023-09-01'))}
-          variant="documentary"
-        />
-        <EnhancedCarousel
-          title="Top Rated Collection"
-          movies={[...documentaryVideos].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 6)}
-          variant="documentary"
-        />
-        <EnhancedCarousel
-          title="Science & Consciousness"
-          movies={documentaryVideos.filter(d => d.type?.category?.name === 'Science')}
-          variant="documentary"
-        />
-        <EnhancedCarousel
-          title="Educational Insights"
-          movies={documentaryVideos.filter(d => d.type?.category?.name === 'Education')}
-          variant="documentary"
-        />
-      </div>
+      {carouselSections.length > 0 && (
+        <div className="py-6 space-y-12">
+          {carouselSections.map((section) => (
+            <EnhancedCarousel
+              key={section.title}
+              title={section.title}
+              movies={section.movies}
+              variant="documentary"
+            />
+          ))}
+        </div>
+      )}
 
     </div>
   );

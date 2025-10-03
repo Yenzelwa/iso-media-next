@@ -1,8 +1,15 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import DocumentaryPage from '@/src/app/(root)/documentary/page';
+import { useRouter } from 'next/navigation';
+
+type MockedFetch = jest.MockedFunction<typeof fetch>;
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 // Mock EnhancedCarousel (named export)
 jest.mock('@/src/components/EnhancedCarousel', () => ({
@@ -14,19 +21,155 @@ jest.mock('@/src/components/EnhancedCarousel', () => ({
   ),
 }));
 
+const createResponse = (data: unknown) =>
+  Promise.resolve({
+    ok: true,
+    json: async () => data,
+  });
+
+const createDocumentary = (overrides: Partial<Record<string, any>>) => ({
+  id: overrides.id ?? 'doc-unknown',
+  title: overrides.title ?? 'Untitled Documentary',
+  description: overrides.description ?? 'Description',
+  image_path: overrides.image_path ?? '/doc.jpg',
+  video_path: overrides.video_path ?? '/doc.mp4',
+  rating: overrides.rating ?? 4.5,
+  likes: overrides.likes ?? 1200,
+  dislikes: overrides.dislikes ?? 12,
+  release_date: overrides.release_date ?? '2023-01-01T00:00:00Z',
+  type: overrides.type ?? {
+    id: 1,
+    name: 'Documentary',
+    category: {
+      id: 1,
+      name: overrides.category_name ?? 'Science',
+    },
+  },
+});
+
+const mockDocumentaries = [
+  createDocumentary({
+    id: 'doc-1',
+    title: 'The Hidden History of Consciousness',
+    description: 'Exploring hidden aspects of human awareness.',
+    rating: 4.9,
+    release_date: '2024-01-15T00:00:00Z',
+    type: {
+      id: 1,
+      name: 'Documentary',
+      category: { id: 1, name: 'Spirituality' },
+    },
+  }),
+  createDocumentary({
+    id: 'doc-2',
+    title: 'Quantum Realities Explained',
+    description: 'A deep dive into quantum phenomena.',
+    rating: 4.7,
+    release_date: '2024-03-20T00:00:00Z',
+    type: {
+      id: 1,
+      name: 'Documentary',
+      category: { id: 2, name: 'Science' },
+    },
+  }),
+  createDocumentary({
+    id: 'doc-3',
+    title: 'Digital Consciousness',
+    description: 'Technology and the evolution of consciousness.',
+    rating: 4.6,
+    release_date: '2023-11-10T00:00:00Z',
+    type: {
+      id: 1,
+      name: 'Documentary',
+      category: { id: 3, name: 'Science' },
+    },
+  }),
+  createDocumentary({
+    id: 'doc-4',
+    title: 'Mindful Classrooms',
+    description: 'Meditation techniques for modern education.',
+    rating: 4.4,
+    release_date: '2023-10-05T00:00:00Z',
+    type: {
+      id: 1,
+      name: 'Documentary',
+      category: { id: 4, name: 'Education' },
+    },
+  }),
+  createDocumentary({
+    id: 'doc-5',
+    title: 'Teaching Presence',
+    description: 'Elevating teaching with mindfulness.',
+    rating: 4.3,
+    release_date: '2023-08-20T00:00:00Z',
+    type: {
+      id: 1,
+      name: 'Documentary',
+      category: { id: 5, name: 'Education' },
+    },
+  }),
+  createDocumentary({
+    id: 'doc-6',
+    title: 'Holistic Wellness Rituals',
+    description: 'Time-tested rituals for modern balance.',
+    rating: 4.2,
+    release_date: '2023-05-12T00:00:00Z',
+    type: {
+      id: 1,
+      name: 'Documentary',
+      category: { id: 6, name: 'Wellness' },
+    },
+  }),
+];
+
 describe('DocumentaryPage', () => {
-  it('renders Featured documentary title and initial results count', () => {
+  let fetchMock: MockedFetch;
+  let mockPush: jest.Mock;
+
+  beforeEach(() => {
+    fetchMock = jest.fn() as MockedFetch;
+    (global.fetch as unknown) = fetchMock;
+
+    mockPush = jest.fn();
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+
+    fetchMock.mockImplementation(request => {
+      const url = typeof request === 'string' ? request : request.toString();
+
+      if (url.includes('/api/documentaries/featured')) {
+        return createResponse({ items: mockDocumentaries[0] });
+      }
+
+      if (url.includes('/api/documentaries')) {
+        return createResponse({ items: mockDocumentaries });
+      }
+
+      return createResponse({ items: [] });
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders Featured documentary title and initial results count', async () => {
     render(<DocumentaryPage />);
 
-    // FeaturedDocumentary uses an h2 with the first item's title
+    await screen.findByText(/6 documentaries found/i);
+
     expect(
-      screen.getByRole('heading', {
+      await screen.findByRole('heading', {
         level: 2,
         name: /The Hidden History of Consciousness/i,
       })
     ).toBeInTheDocument();
 
-    // Initial count (all 6)
+    const categoryChip = await screen.findByTestId('featured-category-chip');
+    expect(categoryChip).toHaveClass('bg-red-600/80');
+    expect(categoryChip).toHaveClass('rounded-full');
+    expect(categoryChip).toHaveAttribute('tabindex', '0');
+    expect(categoryChip).toHaveAttribute('aria-label', expect.stringContaining('category'));
+
     expect(screen.getByText(/6 documentaries found/i)).toBeInTheDocument();
   });
 
@@ -34,102 +177,114 @@ describe('DocumentaryPage', () => {
     const user = userEvent.setup();
     render(<DocumentaryPage />);
 
+    await screen.findByText(/6 documentaries found/i);
+
     const searchBox = screen.getByPlaceholderText(/search documentaries/i);
 
-    // Narrow to a single known title
     await user.clear(searchBox);
     await user.type(searchBox, 'Quantum');
-    expect(screen.getByText(/1 documentaries found/i)).toBeInTheDocument();
+    expect(await screen.findByText(/1 documentaries found/i)).toBeInTheDocument();
 
-    // No matches
     await user.clear(searchBox);
     await user.type(searchBox, 'no match at all');
-    expect(screen.getByText(/0 documentaries found/i)).toBeInTheDocument();
+    expect(await screen.findByText(/0 documentaries found/i)).toBeInTheDocument();
 
-    // Reset to all
     await user.clear(searchBox);
-    expect(screen.getByText(/6 documentaries found/i)).toBeInTheDocument();
+    expect(await screen.findByText(/6 documentaries found/i)).toBeInTheDocument();
   });
 
   it('filters by category and updates the count', async () => {
     const user = userEvent.setup();
     render(<DocumentaryPage />);
 
-    // Select "Science" (should be 2)
-    const categorySelect = screen.getAllByRole('combobox')[0]; // first select is category
+    await screen.findByText(/6 documentaries found/i);
+
+    const categorySelect = screen.getAllByRole('combobox')[0];
     await user.selectOptions(categorySelect, 'Science');
-    expect(screen.getByText(/2 documentaries found/i)).toBeInTheDocument();
+    expect(await screen.findByText(/2 documentaries found/i)).toBeInTheDocument();
 
-    // Back to All
     await user.selectOptions(categorySelect, 'All');
-    expect(screen.getByText(/6 documentaries found/i)).toBeInTheDocument();
-  });
-
-  xit('changes sort to A-Z and shows titles in alphabetical order (check first item)', async () => {
-    const user = userEvent.setup();
-    render(<DocumentaryPage />);
-
-    // Switch to list view so titles are clearly visible
-    const listBtn = screen.getByRole('button', { name: '' }); // first empty-name button might be grid; safer to pick all and choose the second
-    const viewButtons = screen.getAllByRole('button', { name: '' });
-    // Buttons are [Grid, List] in a toggle; click List
-    await user.click(viewButtons[1]);
-
-    // Set sort to A-Z
-    const sortSelect = screen.getAllByRole('combobox')[1]; // second select is sort
-    await user.selectOptions(sortSelect, 'A-Z');
-
-    // In A-Z, the first title should be "Digital Consciousness"
-    // Grab all h3 headings in the list view and check the first one
-    const allLevel3 = screen.getAllByRole('heading', { level: 3 });
-    expect(allLevel3[0]).toHaveTextContent(/^Digital Consciousness$/i);
+    expect(await screen.findByText(/6 documentaries found/i)).toBeInTheDocument();
   });
 
   it('toggles between grid and list views', async () => {
     const user = userEvent.setup();
     render(<DocumentaryPage />);
 
-    // In grid view, there is no visible "Watch" button text on the cards
+    await screen.findByText(/6 documentaries found/i);
+
     expect(screen.queryByRole('button', { name: /watch$/i })).not.toBeInTheDocument();
 
-    // Switch to list view and assert "Watch" buttons are present
     const toggleButtons = screen.getAllByRole('button', { name: '' });
-    await user.click(toggleButtons[1]); // List
-    const watchButtons = screen.getAllByRole('button', { name: /watch$/i });
+    await user.click(toggleButtons[1]);
+    const watchButtons = await screen.findAllByRole('button', { name: /watch$/i });
     expect(watchButtons.length).toBeGreaterThanOrEqual(1);
 
-    // Back to grid view removes those "Watch" buttons
-    await user.click(toggleButtons[0]); // Grid
+    await user.click(toggleButtons[0]);
     expect(screen.queryByRole('button', { name: /watch$/i })).not.toBeInTheDocument();
   });
 
-  it('renders all EnhancedCarousel sections with correct item counts', () => {
+  it('renders all EnhancedCarousel sections with correct item counts', async () => {
     render(<DocumentaryPage />);
 
-    // Latest Documentaries: release_date >= 2023-09-01 => 4
-    const latest = screen.getByTestId('enhanced-carousel-Latest Documentaries');
+    const latest = await screen.findByTestId('enhanced-carousel-Latest Documentaries');
     expect(latest).toHaveTextContent('Latest Documentaries: 4');
 
-    // Top Rated Collection: top 6 of 6 => 6
-    const topRated = screen.getByTestId('enhanced-carousel-Top Rated Collection');
+    const topRated = await screen.findByTestId('enhanced-carousel-Top Rated Collection');
     expect(topRated).toHaveTextContent('Top Rated Collection: 6');
 
-    // Science & Consciousness: Science => 2
-    const science = screen.getByTestId('enhanced-carousel-Science & Consciousness');
+    const science = await screen.findByTestId('enhanced-carousel-Science & Consciousness');
     expect(science).toHaveTextContent('Science & Consciousness: 2');
 
-    // Educational Insights: Education => 2
-    const education = screen.getByTestId('enhanced-carousel-Educational Insights');
+    const education = await screen.findByTestId('enhanced-carousel-Educational Insights');
     expect(education).toHaveTextContent('Educational Insights: 2');
   });
 
-  it('shows rating and action buttons in the featured block', () => {
-    render(<DocumentaryPage />);
-    // Rating number shown alongside stars - use getAllByText since there are multiple instances
-    const ratingElements = screen.getAllByText(/4\.9/i);
-    expect(ratingElements.length).toBeGreaterThanOrEqual(1);
+  it('skips carousel rendering when documentary collections are empty', async () => {
+    fetchMock.mockImplementation(async (url: RequestInfo | URL) => {
+      const path = typeof url === 'string' ? url : url.toString();
 
-    // Featured action buttons
-    expect(screen.getByRole('button', { name: /watch now/i })).toBeInTheDocument();
+      if (path.includes('/api/documentaries/featured')) {
+        return createResponse({ items: [] });
+      }
+
+      if (path.includes('/api/documentaries')) {
+        return createResponse({ items: [] });
+      }
+
+      return createResponse({ items: [] });
+    });
+
+    render(<DocumentaryPage />);
+
+    await screen.findByText(/0 documentaries found/i);
+
+    expect(screen.queryByTestId('enhanced-carousel-Latest Documentaries')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('enhanced-carousel-Top Rated Collection')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('enhanced-carousel-Science & Consciousness')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('enhanced-carousel-Educational Insights')).not.toBeInTheDocument();
+  });
+
+  it('shows rating and action buttons in the featured block', async () => {
+    render(<DocumentaryPage />);
+
+    expect(await screen.findByText(String(mockDocumentaries[0].rating))).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /watch now/i })).toBeInTheDocument();
+  });
+
+  it('navigates to the watch page when watch actions are clicked', async () => {
+    const user = userEvent.setup();
+    render(<DocumentaryPage />);
+
+    const watchNow = await screen.findByRole('button', { name: /watch now/i });
+    await user.click(watchNow);
+    expect(mockPush).toHaveBeenNthCalledWith(1, '/watch/doc-1');
+
+    const toggleButtons = screen.getAllByRole('button', { name: '' });
+    await user.click(toggleButtons[1]);
+
+    const listWatchButtons = await screen.findAllByRole('button', { name: /^watch$/i });
+    await user.click(listWatchButtons[0]);
+    expect(mockPush).toHaveBeenNthCalledWith(2, '/watch/doc-2');
   });
 });
