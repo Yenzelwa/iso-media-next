@@ -97,19 +97,19 @@
 
 ### Epic: Profile � Plan Details
 
-- [ ] **Task 1: Manage Plan modal fix**
+- [x] **Task 1: Manage Plan modal fix**
   - **Input:** Click Manage Plan.
   - **Expected Outcome:** Modal visible immediately.
   - **Validation:** No scroll required.
-- [ ] **Task 2: Cancel Plan modal fix**
+- [x] **Task 2: Cancel Plan modal fix**
   - **Input:** Click Cancel Plan.
   - **Expected Outcome:** Modal visible immediately.
   - **Validation:** No scroll required.
-- [ ] **Task 3: Change Plan modal fix**
+- [x] **Task 3: Change Plan modal fix**
   - **Input:** Click Change Plan.
   - **Expected Outcome:** Modal visible immediately.
   - **Validation:** No scroll required.
-- [ ] **Task 4: Confirmation modal styling**
+- [x] **Task 4: Confirmation modal styling**
   - **Input:** Click upgrade/downgrade.
   - **Expected Outcome:** Styled confirmation modal shown.
   - **Validation:** Modal appears and styled correctly.
@@ -181,3 +181,4 @@
   - **Input:** Payment page load.
   - **Expected Outcome:** Nav not displayed.
   - **Validation:** Confirm hidden.
+

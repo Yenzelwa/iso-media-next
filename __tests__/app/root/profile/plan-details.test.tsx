@@ -70,10 +70,14 @@ describe('PlanDetails', () => {
   
   });
 
-  test('clicking plan action buttons triggers alerts with correct upgrade/downgrade intent', () => {
+  test('clicking plan action buttons opens confirm modal then alerts on confirm', () => {
     render(<PlanDetails />);
    const divCard = screen.getByTestId('plan_summary').closest('div')!;
     fireEvent.click(within(divCard).getByRole('button', {name: /downgrade plan/i}));
+    // Confirmation modal appears
+    expect(screen.getByTestId('confirm-change-modal')).toBeInTheDocument();
+    // Confirm the change
+    fireEvent.click(screen.getByTestId('confirm-plan-change'));
     expect(window.alert).toHaveBeenCalledWith(
       'Downgrading to Basic plan for $9.99/month'
     );
@@ -87,8 +91,12 @@ describe('PlanDetails', () => {
 
     // Open
     openModalByButton(/manage-plan/i);
-    const modal = screen.getByRole('heading', { name: /manage plan/i }).closest('div')!;
+    const modal = screen.getByRole('dialog', { name: /manage plan/i });
     expect(modal).toBeInTheDocument();
+    // aria-modal and focus
+    expect(modal).toHaveAttribute('aria-modal', 'true');
+    const heading = screen.getByRole('heading', { name: /manage plan/i });
+    expect(heading).toHaveFocus();
 
     // Continue -> alert and close
     fireEvent.click(screen.getByRole('button', { name: /continue/i }));
@@ -108,7 +116,9 @@ describe('PlanDetails', () => {
 
     // Open
     openModalByButton(/cancel-subscription/i);
-    expect(screen.getByRole('heading', { name: /cancel subscription/i })).toBeInTheDocument();
+    const cancelDialog = screen.getByRole('dialog', { name: /cancel subscription/i });
+    expect(cancelDialog).toBeInTheDocument();
+    expect(cancelDialog).toHaveAttribute('aria-modal', 'true');
     // Confirm Cancellation -> alert and close
     fireEvent.click(screen.getByRole('button', { name: /confirm cancellation/i }));
     expect(window.alert).toHaveBeenCalledWith(
@@ -121,6 +131,17 @@ describe('PlanDetails', () => {
     expect(screen.getByRole('heading', { name: /cancel subscription/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /keep subscription/i }));
     expect(screen.queryByRole('heading', { name: /cancel subscription/i })).not.toBeInTheDocument();
+  });
+
+  test('Body scroll is locked when any modal is open', () => {
+    render(<PlanDetails />);
+    expect(document.body.style.overflow).not.toBe('hidden');
+
+    openModalByButton(/manage-plan/i);
+    expect(document.body.style.overflow).toBe('hidden');
+
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+    expect(document.body.style.overflow).not.toBe('hidden');
   });
 
   test.skip('Downgrade Plan modal: open, Downgrade Now (alerts & closes), reopen and Maybe Later (closes)', () => {
