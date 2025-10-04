@@ -80,15 +80,15 @@
 
 ### Epic: Profile � Account Details
 
-- [ ] **Task 1: Update phone number flow**
+- [x] **Task 1: Update phone number flow**
   - **Input:** Edit phone number.
   - **Expected Outcome:** Works like full name update.
   - **Validation:** Save/update phone successfully.
-- [ ] **Task 2: Update card modal visibility**
+- [x] **Task 2: Update card modal visibility**
   - **Input:** Open update card modal.
   - **Expected Outcome:** Modal visible without scroll.
   - **Validation:** Modal opens at viewport center.
-- [ ] **Task 3: Load StripeCheckoutForm in modal**
+- [x] **Task 3: Load StripeCheckoutForm in modal**
   - **Input:** Open card update modal.
   - **Expected Outcome:** StripeCheckoutForm loads inside modal (not redirect).
   - **Validation:** Test with API + ensure full payment flow works.

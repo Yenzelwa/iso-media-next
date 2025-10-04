@@ -1,5 +1,4 @@
-import React from "react";
-import {  ReactNode } from "react";
+import React, { ReactNode, useId } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -16,19 +15,26 @@ export default function Modal({
 }: ModalProps) {
   if (!isOpen) return null;
 
+  const titleId = useId();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        aria-hidden="true"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative bg-app-card border border-app-border/30 rounded-2xl shadow-2xl shadow-black/20 w-full max-w-md mx-4 animate-in fade-in duration-200">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="relative bg-app-card border border-app-border/30 rounded-2xl shadow-2xl shadow-black/20 w-full max-w-md mx-4 animate-in fade-in duration-200"
+      >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-app-border/30">
-          <h2 className="text-white text-xl font-bold">{title}</h2>
+          <h2 id={titleId} className="text-white text-xl font-bold">{title}</h2>
           <button
             onClick={onClose}
             className="text-app-gray hover:text-white transition-colors duration-200"
