@@ -1,6 +1,6 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import Modal from "./Modal";
-
+import { formatPhoneNumber } from "@/src/utils/phone";
 interface ChangePhoneModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,24 +14,7 @@ export default function ChangePhoneModal({
   currentPhone,
   onSave,
 }: ChangePhoneModalProps) {
-  const [phone, setPhone] = useState(currentPhone);
-
-  const formatPhoneNumber = (value: string) => {
-    // Remove all non-digits
-    const phoneNumber = value.replace(/\D/g, "");
-
-    // Format as (XXX) XXX-XXXX
-    if (phoneNumber.length <= 3) {
-      return phoneNumber;
-    }
-    if (phoneNumber.length <= 6) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    }
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
-      3,
-      6,
-    )}-${phoneNumber.slice(6, 10)}`;
-  };
+  const [phone, setPhone] = useState(formatPhoneNumber(currentPhone));
 
   const handlePhoneChange = (value: string) => {
     const formatted = formatPhoneNumber(value);
@@ -96,3 +79,5 @@ export default function ChangePhoneModal({
     </Modal>
   );
 }
+
+

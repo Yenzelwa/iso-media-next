@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { CreditCard, Edit3, Calendar, History, X, Eye, EyeOff } from 'lucide-react';
+import { formatPhoneNumber } from '@/src/utils/phone';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { InlineStripeForm } from '@/src/components/InlineStripeForm';
 
 interface BillingTransaction {
   id: number;
@@ -25,7 +29,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
   const [error, setError] = useState<string>('');
   const [editValues, setEditValues] = useState({
     name: user?.name || '',
-    phone: user?.phone || '',
+    phone: formatPhoneNumber(user?.phone || ''),
     cardholderName: user?.cardholderName || '',
     cardNumber: "",
     cardExpiry: user?.cardExpiry || '',
@@ -39,6 +43,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     }
   });
 
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
   // Fetch billing history from API
   useEffect(() => {
     const fetchBillingHistory = async () => {
@@ -86,7 +91,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     if (user) {
       setEditValues({
         name: user.name || '',
-        phone: user.phone || '',
+        phone: formatPhoneNumber(user.phone || ''),
         cardholderName: user.cardholderName || '',
         cardNumber: "",
         cardExpiry: user.cardExpiry || '',
@@ -102,8 +107,40 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     }
   }, [user]);
 
+  const sanitizePhone = (value: string) => value.replace(/\D/g, '');
+
   const handleSave = (field: string) => {
-    updateUser({ [field]: editValues[field as keyof typeof editValues] });
+    const value = editValues[field as keyof typeof editValues];
+
+    if (field === 'phone') {
+      if (typeof value !== 'string') {
+        return;
+      }
+
+      const digits = sanitizePhone(value);
+      const currentDigits = sanitizePhone(user?.phone || '');
+
+      if (digits.length !== 10 || digits === currentDigits) {
+        return;
+      }
+
+      const correlationId =
+        typeof window !== 'undefined' &&
+        window.crypto &&
+        'randomUUID' in window.crypto
+          ? window.crypto.randomUUID()
+          : 'phone-' + Date.now();
+
+      console.info('profile.phone.update', {
+        status: 'submitted',
+        userId: user?.id ?? 'unknown',
+        last4: digits.slice(-4) || null,
+        correlation_id: correlationId,
+        user_role: user?.role ?? 'unknown',
+      });
+    }
+
+    updateUser({ [field]: value });
     setIsEditing(null);
   };
 
@@ -158,35 +195,32 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     }
   };
 
-  const handlePhoneChange = async () => {
-    const newPhone = prompt("Enter new phone number:", user.phone);
-    if (newPhone && newPhone !== user.phone) {
-      try {
-        const response = await fetch('/api/me/phone/change', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${user?.token || ''}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ phone: newPhone }),
-        });
-
-        if (response.ok) {
-          updateUser({ phone: newPhone });
-        } else {
-          throw new Error('Failed to update phone number');
-        }
-      } catch (err) {
-        console.error('Error updating phone:', err);
-        setError('Failed to update phone number. Please try again.');
-        // Still update local state as fallback
-        updateUser({ phone: newPhone });
-      }
-    }
+  const handlePhoneInputChange = (value: string) => {
+    setEditValues(prev => ({
+      ...prev,
+      phone: formatPhoneNumber(value),
+    }));
   };
 
-  const displayedTransactions = showAllTransactions ? billingHistory : billingHistory.slice(0, 5);
+  const handlePhoneCancel = () => {
+    setEditValues(prev => ({
+      ...prev,
+      phone: formatPhoneNumber(user?.phone || ''),
+    }));
+    setIsEditing(null);
+  };
 
+  const userPhoneDigits = sanitizePhone(user?.phone || '');
+  const editPhoneDigits = sanitizePhone(editValues.phone || '');
+  const canSavePhone = editPhoneDigits.length === 10 && editPhoneDigits !== userPhoneDigits;
+  const displayedPhone = formatPhoneNumber(user?.phone || '');
+  // TODO: remove debug artifacts; inserted for patch anchoring
+  /*
+
+  const displayedTransactions = showAllTransactions ? billingHistory : billingHistory.slice(0, 5);\n\n  console.log('debug-phone', editValues.phone, canSavePhone);
+
+  */
+  const displayedTransactions = showAllTransactions ? billingHistory : billingHistory.slice(0, 5);
   return (
     <div className="space-y-8">
       {/* Error Message */}
@@ -252,21 +286,57 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
 
 
           {/* Phone Field */}
-          <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
+          <div data-testid="phone-section" className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 hover:border-red-500/30 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                 <div>
-                  <label className="text-gray-400 text-sm font-medium">Phone Number</label>
-                  <p className="text-white font-semibold mt-1">{user.phone}</p>
+                  <label htmlFor="account-phone-input" className="text-gray-400 text-sm font-medium">Phone Number</label>
+                  {isEditing === 'phone' ? (
+                    <input
+                      id="account-phone-input"
+                      type="tel"
+                      value={editValues.phone}
+                      onChange={(e) => handlePhoneInputChange(e.target.value)}
+                      placeholder="(555) 123-4567"
+                      maxLength={14}
+                      className="mt-1 bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  ) : (
+                    <p className="text-white font-semibold mt-1">{displayedPhone || 'Not provided'}</p>
+                  )}
                 </div>
               </div>
-              <button
-                onClick={handlePhoneChange}
-                className="bg-red-600/20 text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30"
-              >
-                Change
-              </button>
+              <div className="flex items-center space-x-2">
+                {isEditing === 'phone' ? (
+                  <>
+                    <button
+                      onClick={() => handleSave('phone')}
+                      disabled={!canSavePhone}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        canSavePhone
+                          ? 'bg-red-600 text-white hover:bg-red-700'
+                          : 'bg-gray-600/40 text-gray-400 cursor-not-allowed'
+                      }`}
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={handlePhoneCancel}
+                      className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setIsEditing('phone')}
+                    className="bg-red-600/20 text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600/30 transition-colors border border-red-500/30"
+                  >
+                    Change
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -373,7 +443,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
                       </div>
                       <div>
                         <p className="text-white font-medium">{transaction.description}</p>
-                        <p className="text-gray-400 text-sm">{transaction.date} • {transaction.method}</p>
+                        <p className="text-gray-400 text-sm">{transaction.date} â€¢ {transaction.method}</p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -393,9 +463,9 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
       {/* Update Card Popup Modal */}
       {showCardPopup && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div role="dialog" aria-modal="true" aria-labelledby="update-payment-title" className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-white">Update Payment Details</h3>
+              <h3 id="update-payment-title" className="text-2xl font-bold text-white">Update Payment Details</h3>
               <button
                 onClick={() => setShowCardPopup(false)}
                 className="text-gray-400 hover:text-white transition-colors"
@@ -403,128 +473,26 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
                 <X className="w-6 h-6" />
               </button>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <label className="text-gray-400 text-sm font-medium">Cardholder Name</label>
-                <input
-                  type="text"
-                  value={editValues.cardholderName}
-                  onChange={(e) => setEditValues(prev => ({ ...prev, cardholderName: e.target.value }))}
-                  className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm font-medium">Card Number</label>
-                <input
-                  type="text"
-                  placeholder="1234 5678 9012 3456"
-                  value={editValues.cardNumber}
-                  onChange={(e) => setEditValues(prev => ({ ...prev, cardNumber: e.target.value }))}
-                  className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm font-medium">Expiry Date</label>
-                <input
-                  type="text"
-                  placeholder="MM/YY"
-                  value={editValues.cardExpiry}
-                  onChange={(e) => setEditValues(prev => ({ ...prev, cardExpiry: e.target.value }))}
-                  className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm font-medium">CVV</label>
-                <input
-                  type="text"
-                  placeholder="123"
-                  value={editValues.cvv}
-                  onChange={(e) => setEditValues(prev => ({ ...prev, cvv: e.target.value }))}
-                  className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
-              </div>
-            </div>
-
-            {/* Billing Address Form */}
+            {/* Secure Stripe Card Form in modal */}
             <div className="mb-6">
-              <h4 className="text-white font-medium mb-4">Billing Address</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="text-gray-400 text-sm font-medium">Street Address</label>
-                  <input
-                    type="text"
-                    value={editValues.billingAddress.street}
-                    onChange={(e) => setEditValues(prev => ({
-                      ...prev,
-                      billingAddress: { ...prev.billingAddress, street: e.target.value }
-                    }))}
-                    className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              {stripePromise && (
+                <Elements stripe={stripePromise}>
+                  <InlineStripeForm
+                    onSuccess={(pmLabel) => {
+                      updateUser({ paymentMethod: pmLabel });
+                      setShowCardPopup(false);
+                    }}
                   />
-                </div>
-                <div>
-                  <label className="text-gray-400 text-sm font-medium">City</label>
-                  <input
-                    type="text"
-                    value={editValues.billingAddress.city}
-                    onChange={(e) => setEditValues(prev => ({
-                      ...prev,
-                      billingAddress: { ...prev.billingAddress, city: e.target.value }
-                    }))}
-                    className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-400 text-sm font-medium">State</label>
-                  <input
-                    type="text"
-                    value={editValues.billingAddress.state}
-                    onChange={(e) => setEditValues(prev => ({
-                      ...prev,
-                      billingAddress: { ...prev.billingAddress, state: e.target.value }
-                    }))}
-                    className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-400 text-sm font-medium">ZIP Code</label>
-                  <input
-                    type="text"
-                    value={editValues.billingAddress.zipCode}
-                    onChange={(e) => setEditValues(prev => ({
-                      ...prev,
-                      billingAddress: { ...prev.billingAddress, zipCode: e.target.value }
-                    }))}
-                    className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-400 text-sm font-medium">Country</label>
-                  <input
-                    type="text"
-                    value={editValues.billingAddress.country}
-                    onChange={(e) => setEditValues(prev => ({
-                      ...prev,
-                      billingAddress: { ...prev.billingAddress, country: e.target.value }
-                    }))}
-                    className="mt-1 w-full bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-              </div>
+                </Elements>
+              )}
             </div>
 
             <div className="flex space-x-3">
               <button
-                onClick={handleBillingUpdate}
-                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl font-medium hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105"
-              >
-                Update Payment Method
-              </button>
-              <button
                 onClick={() => setShowCardPopup(false)}
                 className="bg-gray-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-700 transition-colors"
               >
-                Cancel
+                Close
               </button>
             </div>
           </div>
@@ -533,3 +501,12 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     </div>
   );
 };
+
+
+
+
+
+
+
+
+
