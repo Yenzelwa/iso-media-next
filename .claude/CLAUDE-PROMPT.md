@@ -3,9 +3,9 @@
 **Goal:** Deliver new features or refinements safely, moving each change through ingest -> map -> design -> plan -> implement -> validate -> document -> ship, with user value, resilience, and rollback readiness front of mind.
 
 ## Workflow Cycle
-At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1–6 sequentially with confirmation checkpoints.
+At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1�6 sequentially with confirmation checkpoints.
 
-- Ingest product and technical context, framing work as task triples (Input → Expected Outcome → Validation).  
+- Ingest product and technical context, framing work as task triples (Input ? Expected Outcome ? Validation).  
 - Map repository touchpoints, reuse opportunities, and constraints before coding.  
 - Design incremental slices; plan tests, observability hooks, and SDL checks up front.  
 - Implement via small, reviewable diffs with TDD where practical.  
@@ -25,7 +25,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 
 ## Principles
 - Incremental delivery  
-- Minimal diffs per commit (aim ≤ 300 LOC net change; **exceptions allowed for cross-cutting refactors or large migrations — must be documented in PR notes**)  
+- Minimal diffs per commit (aim = 300 LOC net change; **exceptions allowed for cross-cutting refactors or large migrations � must be documented in PR notes**)  
 - Tests-first (TDD where possible)  
 - Observability-first (logs, metrics, traces)  
 - Document assumptions & risks early  
@@ -37,21 +37,21 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - **Branching & PRs**  
   - One PR per Epic (`feat/<epic-slug>`); no feature work directly on master.  
   - Small, atomic commits; PR must stay green.  
-  - Note: *“Single PR per Epic” vs. “Minimal diffs”* can create workflow tension.  
+  - Note: *�Single PR per Epic� vs. �Minimal diffs�* can create workflow tension.  
     - For larger refactors or cross-cutting changes, allow **stacked PRs** or **sub-branches** linked to the main Epic PR.  
     - Keep traceability by referencing the Epic ticket in all sub-PRs.
 
 - **Code Quality**  
-  - Unit test coverage ≥ 80% on touched files.  
+  - Unit test coverage = 80% on touched files.  
   - E2E tests for critical flows.  
   - No secrets in source.  
   - No hardcoded strings; use i18n.  
   - Never use Tailwind min-h-screen; preserve footer layout with spacing primitives  
 
 - **Performance**  
-  - Lighthouse ≥ 90.  
-  - LCP ≤ 2.5s.  
-  - TTFB ≤ 200ms (edge)/500ms (node).  
+  - Lighthouse = 90.  
+  - LCP = 2.5s.  
+  - TTFB = 200ms (edge)/500ms (node).  
   - Bundle < 200KB gz per route.  
 
 - **Accessibility**  
@@ -61,7 +61,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 
 - **Operational**  
   - All features behind flags.  
-  - Rollout must support 0% → canary → staged release.  
+  - Rollout must support 0% ? canary ? staged release.  
   - Rollback plan required in release notes.  
 
 - **Security**  
@@ -82,7 +82,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 ---
 
 ## Performance & Accessibility Budgets
-- Performance: Lighthouse ≥ 90; LCP ≤ 2.5s; TTFB within limits  
+- Performance: Lighthouse = 90; LCP = 2.5s; TTFB within limits  
 - Accessibility: WCAG AA; 0 critical axe issues; full keyboard nav verified  
 - Bundle size: < 200KB gz per new route  
 - i18n: No hardcoded strings  
@@ -94,7 +94,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - At least 2 named reviewers  
 - Single PR per Epic; branch feat/<epic-slug>; use feature flags  
 - Continuous review during Epic PR  
-- Timebox: Spec ≤ 2h, Plan ≤ 2h, First commit ≤ 1 day per slice  
+- Timebox: Spec = 2h, Plan = 2h, First commit = 1 day per slice  
 - Explicitly state non-goals in spec  
 
 - **Bootstrap Check (Kickoff Step)**  
@@ -108,12 +108,12 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - **CI/CD Integration**  
   - All PRs must trigger CI pipelines:  
     - Lint + typecheck  
-    - Unit tests (≥ 80% coverage on touched files)  
+    - Unit tests (= 80% coverage on touched files)  
     - E2E tests for critical flows  
     - Accessibility (axe) & performance budgets (Lighthouse)  
     - Security scans: `npm audit`, `semgrep`, `gitleaks`  
   - PRs must build preview deployments (e.g., **Vercel Preview** or equivalent) for reviewer validation.  
-  - Merges to `master` must trigger automatic staging → production pipeline with rollback support.   
+  - Merges to `master` must trigger automatic staging ? production pipeline with rollback support.   
 
 ---
 
@@ -124,7 +124,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - Dashboards: PR must link dashboards  
 - Event Spec: Include name, props, type, sampling, owner  
 
-### 🔹 Real-World Example: Checkout → Payment (Stripe)
+### ?? Real-World Example: Checkout ? Payment (Stripe)
 **Event (User Action Tracking)**  
 - Name: `checkout.payment.submit.success` / `checkout.payment.submit.failure`  
 - Props: `{correlation_id, user_role, payment_provider: "stripe"}`  
@@ -147,7 +147,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - Graph: Stripe error codes  
 - Table: recent failures linked by correlation_id  
 
-📌 **Usage:** This ensures developers and SREs can trace a user payment end-to-end, debug slowdowns, and track conversion drop-offs.  
+?? **Usage:** This ensures developers and SREs can trace a user payment end-to-end, debug slowdowns, and track conversion drop-offs.  
 
 ---
 
@@ -155,7 +155,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 ## Resilience & External API Rules
 - Retries: Exponential backoff + jitter (max 3)  
 - Idempotency required for payments (Stripe)  
-- Rate limiting: Client throttling (≥ 250ms); handle 429 gracefully  
+- Rate limiting: Client throttling (= 250ms); handle 429 gracefully  
 - Fallbacks: Cached content or skeleton states if API unavailable  
 - Secrets: All secrets in env vars; never in source  
 
@@ -175,33 +175,33 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
   - **Design:** theme tokens, responsive breakpoints, accessibility (WCAG AA).  
   - **Operational:** release must be behind feature flag, rollback ready.  
   - **Security/Privacy:** no PII/PCI in logs, secrets in env vars only.  
-  - **Testing:** â‰¥ 80% coverage on touched files, E2E for core flows, contract tests for APIs.  
+  - **Testing:** ≥ 80% coverage on touched files, E2E for core flows, contract tests for APIs.  
   - **Prompt-engineering:** capture the Task Triple up front and outline the TCRTE scaffold (Task, Context, References, Testing, Enhancement).  
-  - **Performance budgets:** Lighthouse â‰¥ 90; LCP â‰¤ 2.5s; TTFB â‰¤ 200ms (edge).  
+  - **Performance budgets:** Lighthouse ≥ 90; LCP ≤ 2.5s; TTFB ≤ 200ms (edge).  
 
 - **Testing & prompting focus:** Define the unit/integration/E2E scope, required observability hooks, and how success evidence (tests, payload diffs, telemetry) will be captured and shared.  
 
 **Output now:**  
 ### Check-out to the collect branch  
 ### Assumptions & Open Questions  
-1. â€¦  
-2. â€¦  
-3. â€¦  
-(5â€“8 bullets) â€” include prompt-oriented clarifications (missing context, data contracts, evaluation criteria) before advancing.  
+1. …  
+2. …  
+3. …  
+(5–8 bullets) — include prompt-oriented clarifications (missing context, data contracts, evaluation criteria) before advancing.  
 
 ---
 
 ## 2) Implementation Plan (Single PR per Epic + Per-Task Loop)
 
 **Approach: TDD-first + Small Batches**
-- Follow **TDD (Red → Green → Refactor)** per Task.
+- Follow **TDD (Red ? Green ? Refactor)** per Task.
 - Maintain **one long-lived PR** on `feat/<epic-slug>`.
 - After each task/sub-task: push small commits + request incremental review.
 - **Confirmation gate:** before each sub-step, **ask to proceed**.
 
-**Per-Task Execution Loop (2.1 → 2.6) — use the Task Triple**
+**Per-Task Execution Loop (2.1 ? 2.6) � use the Task Triple**
 
-### 2.1 Map Task → modify vs create
+### 2.1 Map Task ? modify vs create
 - Create/update `feat/<epic-slug>`; sync with `master`.
 - Identify modules to extend vs create; note state mgmt integration.
 - Reuse components/hooks/utils (e.g., `Modal`, `Button`, `Hero`).
@@ -233,7 +233,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - Update: **Implementation Checklist**, **Test Plan** (appendix), **Observability Plan** (fields/spans/metrics), **Release Plan** (exposure/rollback).
 
 **CI Gates (must stay green on the single Epic PR)**
-- Unit ≥ **80%** on touched files, **E2E passing**, visual diffs approved, **lint/typecheck clean**, **0 high vulns**, a11y budgets met.
+- Unit = **80%** on touched files, **E2E passing**, visual diffs approved, **lint/typecheck clean**, **0 high vulns**, a11y budgets met.
 
 
 ## 3) Implement (Minimal Diffs)
@@ -259,11 +259,41 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 ## 4) Validate
 
 **Tasks**  
+- [ ] Build repo.  
 - [ ] Unit/component tests.  
 - [ ] Integration/E2E tests for main flows.  
 - [ ] Verify SEO/perf if new SSR/ISR routes added.  
 - [ ] Run accessibility & security checks.  
 - [ ] Confirm observability: logs, metrics, traces visible.  
+
+**Build and run repo**  
+- Lint/typecheck: `npm run lint`  
+  - Note: if `next lint` is deprecated in the project, migrate to ESLint CLI or run your local ESLint task.   
+- Run project : `npm run dev`
+
+**Unit test component**  
+- Run targeted tests: `npm run test -- __tests__/app/root/profile/plan-details.test.tsx`  
+
+**Run Integration/E2E**  
+- Tag-based selection (Playwright):  
+  - Add @epic:<slug> tags in tests for the Epic.  
+  - PowerShell: $Env:EPIC='profile-plan-details'; npx playwright test --grep @epic:  
+  - bash: EPIC=profile-plan-details npx playwright test --grep @epic:  
+- Spec-based selection:  
+  - 
+px playwright test tests/visual/<epic-slug>.visual.spec.ts  
+  - Update baselines: 
+px playwright test tests/visual/<epic-slug>.visual.spec.ts --update-snapshots  
+- Main user flows (examples):  
+  - Login → Profile → Plan Details → open/close each modal; confirm change path.  
+  - Register → Plan Selection → Payment (stub/mocked) → Success page.  
+  - Browse → Series → Watch → basic player assertions.  
+- Env/mocks notes: set aseURL in playwright.config.ts (or --base-url); use MSW handlers; --workers=1 if shared state; add axe checks on key pages.
+
+**Commit the feature**  
+- Commit and push PR branch:  
+  - `git add -A && git commit -m "feat(profile-plan): modal visibility via portal + confirm modal [task:PlanDetails]"`  
+  - `git push -u origin feat/profile-plan-details` 
 
 **Artifacts (Output)**  
 - Test Summary  
@@ -293,9 +323,9 @@ Business problem: <summary>
 Epic: <link to Jira/epic>  
 
 ## How (Task-by-Task)
-- Task 1 â€” <name>: <key changes>
-- Task 2 â€” <name>: <key changes>
-- Task n â€” <name>: <key changes>
+- Task 1 — <name>: <key changes>
+- Task 2 — <name>: <key changes>
+- Task n — <name>: <key changes>
 
 
 ## Tests
@@ -315,7 +345,7 @@ Epic: <link to Jira/epic>
 
 ## Risk & Rollback
 - Risk: <low/med/high>
-- Rollback: toggle <flags> â†’ revert PR if needed
+- Rollback: toggle <flags> → revert PR if needed
 
 ## Notes for Reviewers
 - <assumptions, open questions, special considerations>
@@ -331,20 +361,24 @@ Epic: <link to Jira/epic>
 
 ---
 
-## Kickoff Flow (Dynamic per Epic â€” Ask Before Execute)
+
+---
+
+## Kickoff Flow (Dynamic per Epic — Ask Before Execute)
 
 - Before Step 0, identify the active epic/task by scanning `.claude/UI_todo_list.md` for the first unchecked `[ ]` item and record it in planning artifacts.
 - When starting a new epic, execute Steps 1 through 7 sequentially before implementation.
 
 0. Ensure the feature branch (`feat/<epic-slug>`) exists and is checked out; create it if missing before continuing.
 1. Read Epic tasks from `UI_todo_list.md`.  
-2. Inputs (Â§1).  
-2. Plan with TDD, observability, SDL (Â§2) (ask to proceed).  
-3. Implement minimal diffs (Â§3) (ask to proceed).  
-4. Validate (Â§4) (ask to proceed).  
-5. Document & PR (Â§5) (ask to proceed).  
+2. Inputs (§1).  
+2. Plan with TDD, observability, SDL (§2) (ask to proceed).  
+3. Implement minimal diffs (§3) (ask to proceed).  
+4. Validate (§4) (ask to proceed).  
+5. Document & PR (§5) (ask to proceed).  
    - [ ] Ensure branch is pushed to remote and open PR using the latest draft content.
    - [ ] Attach required artifacts (checklist, release plan, etc.) to the PR and request review.
-6. Deliverables at Each Step, Ship & update release notes (Â§6) (ask to proceed).  
+6. Deliverables at Each Step, Ship & update release notes (§6) (ask to proceed).  
    - [ ] Merge the approved PR into master.
    - [ ] Update release notes/changelog to reflect the shipped tasks.
+

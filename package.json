@@ -15,7 +15,9 @@
     "lint": "next lint",
     "test": "jest --config jest.config.js --coverage",
     "test:watch": "jest --config jest.config.js --watch",
-    "flow": "flow"
+    "flow": "flow",
+    "test:e2e":  "playwright test",
+    "test:e2e:ui":  "playwright test --ui"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^15.3.2",
