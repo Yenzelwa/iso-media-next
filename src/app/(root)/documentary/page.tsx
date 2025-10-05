@@ -19,10 +19,10 @@ const FeaturedDocumentary: React.FC<{ documentary: Video; onWatch: (id: Video['i
               <span className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs px-4 py-2 rounded-full font-bold">
                 FEATURED
               </span>
-              {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
               <span
                 data-testid="featured-category-chip"
                 tabIndex={0}
+                role="button"
                 aria-label={`${documentary.type.category.name} category`}
                 className="inline-flex items-center rounded-full border border-red-500/50 bg-red-600/80 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition-colors duration-200 hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
               >
