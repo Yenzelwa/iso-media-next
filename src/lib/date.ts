@@ -1,11 +1,4 @@
-// utils/date.ts (or inline)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function yearFrom(dateLike: unknown, fallback = '—') {
-  if (typeof dateLike !== 'string' || !dateLike) return fallback;
-  const d = new Date(dateLike);
-  return Number.isNaN(d.getTime()) ? fallback : String(d.getFullYear());
-}
-// utils/date.ts
+// Date formatting utilities
 export function yearFrom(dateLike: unknown, fallback = ''): string {
   if (typeof dateLike !== 'string' || !dateLike) return fallback;
   const d = new Date(dateLike);
@@ -21,3 +14,4 @@ export function formatYYYYMMDD(dateLike: unknown, fallback = ''): string {
   const day = String(d.getDate()).padStart(2, '0');
   return `${y}/${m}/${day}`;
 }
+
