@@ -1,21 +1,8 @@
-**Dynamic Validation Template (adapt per Epic/Task)**  
-- Set the Epic slug and primary Jest suite path:  
-  - PowerShell: `$Env:EPIC_SLUG = 'profile-plan-details'; $Env:JEST_SUITE = "__tests__/app/root/profile/plan-details.test.tsx"`  
-  - bash: `export EPIC_SLUG=profile-plan-details JEST_SUITE=__tests__/app/root/profile/plan-details.test.tsx`  
-- Run unit/integration tests for touched area: `npm run test -- $Env:JEST_SUITE` (PowerShell) or `npm run test -- $JEST_SUITE` (bash).  
-- Lint/typecheck: `npx eslint .` or project�s configured lint script.  
-- Commit and push:  
-  - `git add -A && git commit -m "feat($Env:EPIC_SLUG): apply changes [task:$Env:EPIC_SLUG]"`  
-  - `git push -u origin feat/$Env:EPIC_SLUG`  
+// utils/date.ts (or inline)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function yearFrom(dateLike: unknown, fallback = '—') {
+  if (typeof dateLike !== 'string' || !dateLike) return fallback;
+  const d = new Date(dateLike);
+  return Number.isNaN(d.getTime()) ? fallback : String(d.getFullYear());
+}
 
-**Artifacts (Output)**  
-- Test Summary  
-- Before/After Evidence  
-- Perf Note  
-
----
-
-## 5) Documentation & PR (Single PR per Epic)
-
-**PR Preparation**  
-- PR Title: `feat(<epic-slug>): <Epic title>` (single PR).  
