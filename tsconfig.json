@@ -37,13 +37,17 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
     "src/app/actions/stripe.js",
     "src/app/lib/stripe.js",
     "jest.setup.js",
     "src/components/Input.jsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next/**",
+    "__tests__/**",
+    "tests/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

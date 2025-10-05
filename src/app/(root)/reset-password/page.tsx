@@ -43,8 +43,8 @@ const ResetPasswordPage = () => {
     }
 
     // Enable button if both passwords match and meet requirements
-    const isValidPassword = watchPassword && watchPassword.length >= 8;
-    const passwordsMatch = watchPassword === watchConfirmPassword && watchConfirmPassword;
+    const isValidPassword = !!watchPassword && watchPassword.length >= 8;
+    const passwordsMatch = watchPassword === watchConfirmPassword && !!watchConfirmPassword;
     setIsButtonEnabled(isValidPassword && passwordsMatch);
   }, [token, watchPassword, watchConfirmPassword]);
 

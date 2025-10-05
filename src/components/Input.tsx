@@ -53,11 +53,8 @@ export const Input = ({ label, type, id, placeholder, name, validation, hideLabe
 
       <AnimatePresence mode="wait" initial={false}>
         {inputError && (
-          <motion.p
-            className="text-red-500 text-sm mt-1"
-            {...framer_error}
-          >
-            {inputError.message}
+          <motion.p className="text-red-500 text-sm mt-1" {...framer_error}>
+            {String((inputError as any)?.message ?? '')}
           </motion.p>
         )}
       </AnimatePresence>
