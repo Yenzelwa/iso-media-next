@@ -21,7 +21,6 @@ const FeaturedDocumentary: React.FC<{ documentary: Video; onWatch: (id: Video['i
               </span>
               <span
                 data-testid="featured-category-chip"
-                tabIndex={0}
                 aria-label={`${documentary.type.category.name} category`}
                 className="inline-flex items-center rounded-full border border-red-500/50 bg-red-600/80 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition-colors duration-200 hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
               >

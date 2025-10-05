@@ -99,7 +99,7 @@ const ContactUsPage = () => {
           <div className="max-w-6xl mx-auto">
             <div className="mb-8">
               <h1 className="text-4xl lg:text-5xl font-bold text-white mb-2">Contact Us</h1>
-              <p className="text-gray-400 text-sm">We're here to help you on your consciousness journey</p>
+              <p className="text-gray-400 text-sm">We&apos;re here to help you on your consciousness journey</p>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

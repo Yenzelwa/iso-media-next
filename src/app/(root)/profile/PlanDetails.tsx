@@ -539,7 +539,7 @@ export const PlanDetails: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <h3
                 id="manage-plan-heading"
-                ref={(el) => { manageHeadingRef.current = el; try { el?.focus(); } catch {} }}
+                ref={(el) => { manageHeadingRef.current = el; try { el?.focus(); } catch { /* ignore */ } }}
                 tabIndex={-1}
                 className="text-2xl font-bold text-white"
               >

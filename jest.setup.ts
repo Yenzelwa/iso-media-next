@@ -23,6 +23,6 @@ try {
   beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
-} catch (e) {
+} catch {
   // MSW not available; continue without network mocking
 }
