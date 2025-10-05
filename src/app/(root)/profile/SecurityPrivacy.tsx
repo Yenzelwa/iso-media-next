@@ -374,7 +374,11 @@ export const SecurityPrivacy: React.FC = () => {
                   <p className="text-gray-400 text-sm">Add extra security layer to your account</p>
                 </div>
               </div>
-              <button data-testid="toggle"
+              <button
+                data-testid="toggle"
+                aria-label="Toggle two-factor authentication"
+                role="switch"
+                aria-checked={settings.twoFactorEnabled}
                 onClick={() => handleToggle('twoFactorEnabled')}
                 className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
                   settings.twoFactorEnabled ? 'bg-red-600' : 'bg-gray-600'
@@ -401,7 +405,10 @@ export const SecurityPrivacy: React.FC = () => {
                   <p className="text-gray-400 text-sm">Automatically log out after inactivity</p>
                 </div>
               </div>
+              <label htmlFor="auto-logout-select" className="sr-only">Auto Logout</label>
               <select
+                id="auto-logout-select"
+                aria-label="Auto Logout"
                 value={settings.autoLogout}
                 onChange={(e) => handleAutoLogoutChange(e.target.value)}
                 className="bg-gray-700/50 border border-gray-600 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"

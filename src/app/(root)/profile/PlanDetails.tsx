@@ -717,6 +717,7 @@ export const PlanDetails: React.FC = () => {
                 <div className="space-y-3">
                   {plans.filter(plan => plan.id !== currentPlan?.id).map(plan => (
                     <button
+                      data-testid="plan-option"
                       key={plan.id}
                       onClick={() => {
                         const action = Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'upgrade' : 'downgrade';

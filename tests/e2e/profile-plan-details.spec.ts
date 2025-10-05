@@ -55,7 +55,9 @@ test.describe('@epic:profile-plan-details Plan Details main flows', () => {
       await expect(page.getByRole('dialog', { name: /change plan/i })).toBeVisible()
 
       // Pick the first available plan option if present
-      const optionsListFirst = page.locator('div', { hasText: /available plan options/i }).locator('button').first()
+      const optionsListFirst = page
+        .getByRole('dialog', { name: /change plan/i })
+        .locator('[data-testid="plan-option"]').first()
       if (await optionsListFirst.count()) {
         await optionsListFirst.click()
         await expect(page.getByTestId('confirm-change-modal')).toBeVisible()
