@@ -99,6 +99,11 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - Timebox: Spec = 2h, Plan = 2h, First commit = 1 day per slice  
 - Explicitly state non-goals in spec  
 
+- Mandatory Gates (every task slice)
+  - 2.2 Fixtures/Mocks: Add or update MSW/Nock handlers for all touched endpoints; include fixtures so tests run offline.
+  - 2.3 Accessibility: Add/keep axe checks for changed routes/components; verify keyboard path; fix or justify any violations in PR.
+  - 2.4 Observability: Add minimal structured events + error logs for user actions; instrument spans for network calls when applicable; link artifacts in PR.
+
 - **Bootstrap Check (Kickoff Step)**  
   - Verify essential tooling exists before starting Epic work:  
     - Playwright (visual testing)  
@@ -200,6 +205,11 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 - Maintain **one long-lived PR** on `feat/<epic-slug>`.
 - After each task/sub-task: push small commits + request incremental review.
 - **Confirmation gate:** before each sub-step, **ask to proceed**.
+
+> Mandatory Gates (do not skip)
+> - 2.2 Fixtures/Mocks: Add or update MSW/Nock handlers for all touched endpoints; include fixtures to run offline.
+> - 2.3 Accessibility: Add/keep axe checks for changed routes/components; verify keyboard path; fix or justify any violations in PR.
+> - 2.4 Observability: Add minimal structured events and error logs for user actions; instrument spans for network calls when applicable; link artifacts in PR.
 
 **Per-Task Execution Loop (2.1 → 2.6) — use the Task Triple**
 

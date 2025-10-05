@@ -16,9 +16,10 @@ interface InputProps {
   placeholder: string;
   name: string;
   validation: any; // Validation rules for react-hook-form
+  hideLabel?: boolean; // Visually hide label but keep for a11y
 }
 
-export const Input = ({ label, type, id, placeholder, name, validation }: InputProps) => {
+export const Input = ({ label, type, id, placeholder, name, validation, hideLabel = false }: InputProps) => {
   const {
     register,
     trigger,
@@ -30,7 +31,7 @@ export const Input = ({ label, type, id, placeholder, name, validation }: InputP
   return (
     <div className="flex flex-col w-full gap-2">
       <div className="flex justify-between">
-        <label htmlFor={id} className="text-left">
+        <label htmlFor={id} className={`text-left ${hideLabel ? 'sr-only' : ''}`}>
           {label}
         </label>
       </div>
@@ -45,6 +46,7 @@ export const Input = ({ label, type, id, placeholder, name, validation }: InputP
             }`
           }`}
         placeholder={placeholder}
+        aria-label={hideLabel ? label : undefined}
         {...register(id, validation)}
         onKeyUp={() => trigger(name)}
       />
