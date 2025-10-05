@@ -1,0 +1,216 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - region "Notifications alt+T"
+  - region "Notifications alt+T"
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e7]:
+        - link "IsolaKwaMUNTU Premium Streaming Elevate Your Consciousness" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e15] [cursor=pointer]:
+            - generic [ref=e16] [cursor=pointer]: IsolaKwaMUNTU
+            - generic [ref=e17] [cursor=pointer]: Premium Streaming
+            - generic [ref=e18] [cursor=pointer]: Elevate Your Consciousness
+        - generic [ref=e20]:
+          - link "BROWSE" [ref=e21] [cursor=pointer]:
+            - /url: /
+          - link "SERIES" [ref=e22] [cursor=pointer]:
+            - /url: /series/
+          - link "DOCUMENTARY" [ref=e23] [cursor=pointer]:
+            - /url: /documentary/
+        - button "toggle" [ref=e26] [cursor=pointer]:
+          - generic [ref=e28] [cursor=pointer]: AJ
+          - generic [ref=e29] [cursor=pointer]:
+            - generic [ref=e30] [cursor=pointer]:
+              - generic [ref=e31] [cursor=pointer]: Alex Johnson
+              - generic [ref=e32] [cursor=pointer]: alex.johnson@example.com
+            - img [ref=e33] [cursor=pointer]
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - heading "My Profile" [level=1] [ref=e40]
+          - paragraph [ref=e41]: Manage your account settings and preferences
+        - generic [ref=e42]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e47]
+              - heading "Alex Johnson" [level=3] [ref=e50]
+              - paragraph [ref=e51]: alex.johnson@example.com
+            - navigation [ref=e52]:
+              - button "Account Settings" [ref=e53] [cursor=pointer]:
+                - img [ref=e54] [cursor=pointer]
+                - generic [ref=e56] [cursor=pointer]: Account Settings
+              - button "Plan Details" [ref=e57] [cursor=pointer]:
+                - img [ref=e58] [cursor=pointer]
+                - generic [ref=e61] [cursor=pointer]: Plan Details
+              - button "Security & Privacy" [ref=e62] [cursor=pointer]:
+                - img [ref=e63] [cursor=pointer]
+                - generic [ref=e65] [cursor=pointer]: Security & Privacy
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - heading "Security Settings" [level=2] [ref=e71]
+              - paragraph [ref=e72]: Manage your account security and authentication
+              - generic [ref=e73]:
+                - generic [ref=e75]:
+                  - generic [ref=e76]:
+                    - img [ref=e78]
+                    - generic [ref=e80]:
+                      - generic [ref=e81]: Two-Factor Authentication
+                      - paragraph [ref=e82]: Add extra security layer to your account
+                  - button [ref=e83] [cursor=pointer]
+                - generic [ref=e86]:
+                  - generic [ref=e87]:
+                    - img [ref=e89]
+                    - generic [ref=e91]:
+                      - generic [ref=e92]: Auto Logout
+                      - paragraph [ref=e93]: Automatically log out after inactivity
+                  - combobox [ref=e94]:
+                    - option "15 minutes"
+                    - option "30 minutes" [selected]
+                    - option "1 hour"
+                    - option "2 hours"
+                    - option "8 hours"
+                    - option "Never"
+            - generic [ref=e95]:
+              - heading "Active Devices" [level=2] [ref=e97]
+              - paragraph [ref=e98]: Manage devices that have access to your account
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - generic [ref=e101]: 3 active sessions found
+                  - button "Logout All Other Devices" [ref=e102] [cursor=pointer]:
+                    - img [ref=e103] [cursor=pointer]
+                    - generic [ref=e107] [cursor=pointer]: Logout All Other Devices
+                - region "MacBook Pro" [ref=e108]:
+                  - generic [ref=e109]:
+                    - generic [ref=e110]:
+                      - img [ref=e112]
+                      - generic [ref=e115]:
+                        - generic [ref=e116]:
+                          - generic [ref=e117]: MacBook Pro
+                          - generic [ref=e118]: Current Device
+                        - paragraph [ref=e119]: Chrome 118.0 • San Francisco, CA
+                        - paragraph [ref=e120]: "IP: 192.168.1.100 •"
+                    - generic [ref=e125]: Active
+                - region "iPhone 15" [ref=e126]:
+                  - generic [ref=e127]:
+                    - generic [ref=e128]:
+                      - img [ref=e130]
+                      - generic [ref=e133]:
+                        - generic [ref=e135]: iPhone 15
+                        - paragraph [ref=e136]: Safari 17.0 • San Francisco, CA
+                        - paragraph [ref=e137]: "IP: 192.168.1.101 •"
+                    - generic [ref=e138]:
+                      - generic [ref=e142]: Inactive
+                      - button "Logout" [ref=e143] [cursor=pointer]
+                - region "Windows Desktop" [ref=e144]:
+                  - generic [ref=e145]:
+                    - generic [ref=e146]:
+                      - img [ref=e148]
+                      - generic [ref=e151]:
+                        - generic [ref=e153]: Windows Desktop
+                        - paragraph [ref=e154]: Firefox 119.0 • New York, NY
+                        - paragraph [ref=e155]: "IP: 203.0.113.45 •"
+                    - generic [ref=e156]:
+                      - generic [ref=e160]: Inactive
+                      - button "Logout" [ref=e161] [cursor=pointer]
+            - dialog "Enable Two-Factor Authentication" [ref=e163]:
+              - generic [ref=e164]:
+                - img [ref=e166]
+                - heading "Enable Two-Factor Authentication" [active] [level=3] [ref=e168]
+                - paragraph [ref=e169]: Secure your account with an additional verification step
+              - generic [ref=e170]:
+                - generic [ref=e171]:
+                  - 'heading "Step 1: Download an Authenticator App" [level=4] [ref=e172]'
+                  - paragraph [ref=e173]: Use Google Authenticator, Authy, or similar apps
+                - generic [ref=e174]:
+                  - 'heading "Step 2: Scan QR Code" [level=4] [ref=e175]'
+                  - generic [ref=e177]:
+                    - text: QR Code
+                    - text: Placeholder
+                - generic [ref=e178]:
+                  - 'heading "Step 3: Enter Verification Code" [level=4] [ref=e179]'
+                  - textbox "Enter 6-digit code" [ref=e180]
+              - generic [ref=e181]:
+                - button "Cancel" [ref=e182] [cursor=pointer]
+                - button "Complete Setup" [ref=e183] [cursor=pointer]
+    - generic [ref=e185]:
+      - generic [ref=e186]:
+        - generic [ref=e187]:
+          - link "IsolaKwaMUNTU Elevate Your Consciousness" [ref=e188] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e193] [cursor=pointer]:
+              - generic [ref=e194] [cursor=pointer]: IsolaKwaMUNTU
+              - generic [ref=e195] [cursor=pointer]: Elevate Your Consciousness
+          - paragraph [ref=e196]: Your premier destination for transformative African content. Watch unlimited movies, series, and documentaries that elevate consciousness and inspire spiritual growth.
+          - generic [ref=e197]:
+            - link "Facebook" [ref=e198] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e199] [cursor=pointer]
+            - link "Twitter" [ref=e201] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e202] [cursor=pointer]
+            - link "Instagram" [ref=e204] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e205] [cursor=pointer]
+            - link "YouTube" [ref=e207] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e208] [cursor=pointer]
+        - generic [ref=e210]:
+          - heading "Resources" [level=3] [ref=e211]: Resources
+          - list [ref=e213]:
+            - listitem [ref=e214]:
+              - link "About Us" [ref=e215] [cursor=pointer]:
+                - /url: /about-us/
+                - text: About Us
+            - listitem [ref=e218]:
+              - link "Contact Us" [ref=e219] [cursor=pointer]:
+                - /url: /contact-us/
+                - text: Contact Us
+            - listitem [ref=e222]:
+              - link "FAQs" [ref=e223] [cursor=pointer]:
+                - /url: /faqs/
+                - text: FAQs
+            - listitem [ref=e226]:
+              - link "Blog" [ref=e227] [cursor=pointer]:
+                - /url: /blog/
+                - text: Blog
+        - generic [ref=e230]:
+          - heading "Legal" [level=3] [ref=e231]: Legal
+          - list [ref=e233]:
+            - listitem [ref=e234]:
+              - link "Privacy Policy" [ref=e235] [cursor=pointer]:
+                - /url: /privacy-policy/
+                - text: Privacy Policy
+            - listitem [ref=e238]:
+              - link "Terms & Conditions" [ref=e239] [cursor=pointer]:
+                - /url: /terms-conditions/
+                - text: Terms & Conditions
+            - listitem [ref=e242]:
+              - link "Cookie Policy" [ref=e243] [cursor=pointer]:
+                - /url: /cookies/
+                - text: Cookie Policy
+        - generic [ref=e246]:
+          - heading "Stay Connected" [level=3] [ref=e247]: Stay Connected
+          - paragraph [ref=e249]: Subscribe to our newsletter for updates, exclusive content, and spiritual insights delivered to your inbox.
+          - generic [ref=e250]:
+            - textbox "Enter your email address" [ref=e252]
+            - button "Subscribe Now" [ref=e253] [cursor=pointer]
+      - generic [ref=e255]:
+        - generic [ref=e256]:
+          - paragraph [ref=e257]: © 2025 IsolaKwaMUNTU. All rights reserved.
+          - generic [ref=e258]:
+            - generic [ref=e259]: "|"
+            - link "Sitemap" [ref=e260] [cursor=pointer]:
+              - /url: /sitemap/
+            - generic [ref=e261]: "|"
+            - link "Accessibility" [ref=e262] [cursor=pointer]:
+              - /url: /accessibility/
+        - generic [ref=e263]:
+          - generic [ref=e264]: Made with
+          - generic [ref=e266]: for conscious living
+  - button "Open Next.js Dev Tools" [ref=e272] [cursor=pointer]:
+    - img [ref=e273] [cursor=pointer]
+  - alert [ref=e276]
+```

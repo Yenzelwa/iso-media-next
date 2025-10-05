@@ -131,15 +131,15 @@
 
 ### Epic: Register Page
 
-- [ ] **Task 1: Hide label from user**
+- [x] **Task 1: Hide label from user**
   - **Input:** Register page load.
   - **Expected Outcome:** Label hidden.
   - **Validation:** UI check.
-- [ ] **Task 2: Background + styling match Login**
+- [x] **Task 2: Background + styling match Login**
   - **Input:** Register page load.
   - **Expected Outcome:** Styling consistent with Login.
   - **Validation:** Compare UI.
-- [ ] **Task 3: Style Create button**
+- [x] **Task 3: Style Create button**
   - **Input:** Register page load.
   - **Expected Outcome:** Create button matches Login button style.
   - **Validation:** Visual check.
@@ -148,15 +148,15 @@
 
 ### Epic: Plan Selection Page
 
-- [ ] **Task 1: Style button**
+- [x] **Task 1: Style button**
   - **Input:** Plan selection load.
   - **Expected Outcome:** Button matches Create page style.
   - **Validation:** UI check.
-- [ ] **Task 2: Reduce spacing**
+- [x] **Task 2: Reduce spacing**
   - **Input:** Page load.
   - **Expected Outcome:** Space between "Choose your plan" & back arrow reduced.
   - **Validation:** Visual check.
-- [ ] **Task 3: Hide Navigation component**
+- [x] **Task 3: Hide Navigation component**
   - **Input:** Plan selection load.
   - **Expected Outcome:** Nav component not displayed.
   - **Validation:** Confirm hidden.

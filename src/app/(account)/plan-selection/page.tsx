@@ -171,10 +171,10 @@ const PlanSelection: React.FC = () => {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
       </div>
 
-      <section className="relative w-full max-w-7xl mx-auto px-6 pt-24 pb-24 overflow-hidden z-10">
+      <section className="relative w-full max-w-7xl mx-auto px-6 pt-20 pb-20 overflow-hidden z-10">
 
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Link
             href="/register"
             className="inline-flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-300 group"
@@ -184,7 +184,7 @@ const PlanSelection: React.FC = () => {
           </Link>
         </div>
 
-        <header className="text-center relative mb-16">
+        <header className="text-center relative mb-8">
 
           <div className="space-y-4">
             <h1 className="text-5xl lg:text-6xl font-black text-white mb-6">
