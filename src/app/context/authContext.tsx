@@ -1,7 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { setCookie, getCookie, deleteCookie } from 'cookies-next'; // Correct function for removing cookies
+import { track } from '@/src/lib/obs/events';
 
 // Define the shape of the context
 interface AuthContextType {
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Check if there's a token and user stored in cookies
   useEffect(() => {
@@ -33,6 +35,50 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
      setLoading(false);
   }, []);
+
+  // Idle auto-logout based on local preference (minutes)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const getMinutes = () => {
+      try {
+        const v = localStorage.getItem('auto_logout_minutes');
+        if (!v || v === 'never') return null;
+        const n = Number(v);
+        return Number.isFinite(n) && n > 0 ? n : 30;
+      } catch {
+        return 30;
+      }
+    };
+
+    const resetTimer = () => {
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      const mins = getMinutes();
+      if (mins == null) return; // disabled
+      idleTimerRef.current = setTimeout(() => {
+        // Only auto-logout if user is logged in
+        if (token) {
+          track('auth.session.auto_logout');
+          logout();
+        }
+      }, mins * 60 * 1000);
+    };
+
+    const events: (keyof WindowEventMap)[] = [
+      'mousemove',
+      'keydown',
+      'click',
+      'scroll',
+      'touchstart',
+    ];
+
+    events.forEach((e) => window.addEventListener(e, resetTimer, { passive: true } as any));
+    resetTimer();
+    return () => {
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      events.forEach((e) => window.removeEventListener(e, resetTimer));
+    };
+  }, [token]);
   
   const updateUser = (newUser: any) => {
     setUser(newUser);

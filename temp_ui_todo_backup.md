@@ -118,11 +118,11 @@
 
 ### Epic: Profile � Settings & Privacy
 
-- [x] **Task 1: 2FA modal visibility fix**
+- [ ] **Task 1: 2FA modal visibility fix**
   - **Input:** Toggle 2FA.
   - **Expected Outcome:** Modal visible without scroll.
   - **Validation:** Modal appears correctly.
-- [x] **Task 2: Auto logout functionality**
+- [ ] **Task 2: Auto logout functionality**
   - **Input:** Stay idle past timeout.
   - **Expected Outcome:** User auto-logged out.
   - **Validation:** Session ends automatically.
