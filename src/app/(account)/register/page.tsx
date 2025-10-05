@@ -9,6 +9,7 @@ import { Input } from '@/src/components/Input';
 import { email_validation, firstName_validation, password_register_validation, termsAndConditions_validation } from '@/src/utils/inputValidations';
 import { useRouter } from 'next/navigation';
 import { themeClasses } from '@/src/lib/theme';
+import { trackEvent, trackError } from '@/src/lib/obs';
 
 type FormData = {
   first_name: string;
@@ -33,6 +34,7 @@ const Register = () => {
   const onSubmit = methods.handleSubmit(async (data: FormData) => {
     setIsLoading(true);
     try {
+      trackEvent('register.submit.start', { email: data.email });
       // Mock API call structure (commented for demo)
       
       const response = await fetch('/api/auth/register', {
@@ -50,6 +52,7 @@ const Register = () => {
       const authData = await response.json();
       const token = authData.access_token;
       login(token, authData.user)
+      trackEvent('register.submit.success', { email: data.email });
       router.push('plan-selection')
     
       }
@@ -57,17 +60,31 @@ const Register = () => {
       {
         const error = await response.json()
         setErrorMessage(error)
+        trackError('register.submit.failure', { code: 'server_error' })
       }
 
     } catch  {
       setErrorMessage('Something went wrong');
+      trackError('register.submit.exception', { reason: 'network_error' })
     } finally {
       setIsLoading(false);
     }
   });
 
   return (
-    <div className={`min-h-screen ${themeClasses.pageBackground()} text-white`}>
+    <div className="flex flex-col items-center justify-center min-h-screen py-8 relative overflow-hidden text-white">
+      {/* Dynamic background to match Login */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-red-950/20"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599456039-e5d9af20a5d1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-950/10 via-transparent to-red-950/10 animate-pulse"></div>
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-red-500/20 rounded-full animate-ping"></div>
+          <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-red-400/30 rounded-full animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-red-300/25 rounded-full animate-ping delay-500"></div>
+        </div>
+      </div>
       {/* Netflix-style Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/95 to-transparent">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -195,6 +212,7 @@ const Register = () => {
               </div>
             </div>
           ) : (
+            <div className="relative z-10 bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-gray-700/50 max-w-lg w-full mx-4 transform transition-all duration-700 hover:shadow-[0_25px_50px_rgba(239,68,68,0.15)] hover:border-red-500/30">
             <FormProvider {...methods}>
               <form
                 onSubmit={onSubmit}
@@ -223,13 +241,13 @@ const Register = () => {
                 )}
                 <div className="space-y-6">
                   <div className="text-white">
-                    <Input {...firstName_validation} />
+                    <Input {...firstName_validation} hideLabel />
                   </div>
                   <div className="text-white">
-                    <Input {...email_validation} />
+                    <Input {...email_validation} hideLabel />
                   </div>
                   <div className="text-white">
-                    <Input {...password_register_validation} />
+                    <Input {...password_register_validation} hideLabel />
                   </div>
                 </div>
 
@@ -286,10 +304,10 @@ const Register = () => {
                   ) : (
                     <button
                       type="submit"
-                      className={`group relative w-full py-4 rounded-2xl text-white font-semibold text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center space-x-3 ${
+                      className={`group relative w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-500 transform overflow-hidden inline-flex items-center justify-center space-x-3 ${
                         LoginBtnEnable
                           ? 'bg-gray-600 cursor-not-allowed'
-                          : 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-xl hover:shadow-red-500/50'
+                          : 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-[0_8px_25px_rgba(239,68,68,0.4)] hover:shadow-[0_12px_35px_rgba(239,68,68,0.6)] hover:scale-[1.02] active:scale-[0.98]'
                       }`}
                       disabled={LoginBtnEnable || isLoading}
                     >
@@ -321,6 +339,7 @@ const Register = () => {
                 </div>
               </form>
             </FormProvider>
+            </div>
           )}
         </div>
       </div>
