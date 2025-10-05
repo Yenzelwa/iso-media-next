@@ -1,5 +1,267 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e2]: Internal Server Error
+- generic [active] [ref=e1]:
+  - region "Notifications alt+T"
+  - region "Notifications alt+T"
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e7]:
+        - link "IsolaKwaMUNTU Premium Streaming Elevate Your Consciousness" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e15] [cursor=pointer]:
+            - generic [ref=e16] [cursor=pointer]: IsolaKwaMUNTU
+            - generic [ref=e17] [cursor=pointer]: Premium Streaming
+            - generic [ref=e18] [cursor=pointer]: Elevate Your Consciousness
+        - generic [ref=e20]:
+          - link "BROWSE" [ref=e21] [cursor=pointer]:
+            - /url: /
+          - link "SERIES" [ref=e22] [cursor=pointer]:
+            - /url: /series/
+          - link "DOCUMENTARY" [ref=e23] [cursor=pointer]:
+            - /url: /documentary/
+        - button "toggle" [ref=e26] [cursor=pointer]:
+          - generic [ref=e28] [cursor=pointer]: AJ
+          - generic [ref=e29] [cursor=pointer]:
+            - generic [ref=e30] [cursor=pointer]:
+              - generic [ref=e31] [cursor=pointer]: Alex Johnson
+              - generic [ref=e32] [cursor=pointer]: alex.johnson@example.com
+            - img [ref=e33] [cursor=pointer]
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - heading "My Profile" [level=1] [ref=e40]
+          - paragraph [ref=e41]: Manage your account settings and preferences
+        - generic [ref=e42]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e47]
+              - heading "Alex Johnson" [level=3] [ref=e50]
+              - paragraph [ref=e51]: alex.johnson@example.com
+            - navigation [ref=e52]:
+              - button "Account Settings" [ref=e53] [cursor=pointer]:
+                - img [ref=e54] [cursor=pointer]
+                - generic [ref=e56] [cursor=pointer]: Account Settings
+              - button "Plan Details" [ref=e57] [cursor=pointer]:
+                - img [ref=e58] [cursor=pointer]
+                - generic [ref=e61] [cursor=pointer]: Plan Details
+              - button "Security & Privacy" [ref=e62] [cursor=pointer]:
+                - img [ref=e63] [cursor=pointer]
+                - generic [ref=e65] [cursor=pointer]: Security & Privacy
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - heading "Current Plan" [level=2] [ref=e71]
+              - paragraph [ref=e72]: Your active subscription and plan details
+              - generic [ref=e75]:
+                - generic [ref=e76]:
+                  - generic [ref=e77]:
+                    - generic [ref=e78]:
+                      - img [ref=e80]
+                      - heading "Premium Plan" [level=3] [ref=e82]
+                    - paragraph [ref=e83]: Active since January 15, 2024
+                    - paragraph [ref=e84]: "Next billing: February 15, 2024"
+                  - generic [ref=e85]:
+                    - generic [ref=e86]: $19.99
+                    - generic [ref=e87]: per month
+                    - generic [ref=e90]: Active Subscription
+                - generic [ref=e91]:
+                  - generic [ref=e92]:
+                    - generic [ref=e93]: Streaming Quality
+                    - generic [ref=e94]: 4K
+                  - generic [ref=e95]:
+                    - generic [ref=e96]: Simultaneous Streaming
+                    - generic [ref=e97]: 4 Devices
+                  - generic [ref=e98]:
+                    - generic [ref=e99]: Downloads
+                    - generic [ref=e100]: Unlimited
+                - generic [ref=e101]:
+                  - generic [ref=e102]:
+                    - button "Manage Plan" [ref=e103] [cursor=pointer]
+                    - button "Cancel Subscription" [ref=e104] [cursor=pointer]
+                  - button "Change Plan" [ref=e105] [cursor=pointer]
+            - generic [ref=e106]:
+              - heading "All Available Plans" [level=2] [ref=e108]
+              - paragraph [ref=e109]: Compare features and choose the perfect plan for you
+              - generic [ref=e110]:
+                - generic [ref=e111]:
+                  - generic [ref=e112]:
+                    - img [ref=e114]
+                    - heading "Basic" [level=3] [ref=e117]
+                    - generic [ref=e118]:
+                      - generic [ref=e119]: $9.99
+                      - generic [ref=e120]: / month
+                  - generic [ref=e121]:
+                    - generic [ref=e122]:
+                      - generic [ref=e123]: Quality
+                      - generic [ref=e124]: HD
+                    - generic [ref=e125]:
+                      - generic [ref=e126]: Devices
+                      - generic [ref=e127]: 1 Device
+                  - generic [ref=e128]:
+                    - generic [ref=e131]: HD streaming on 1 device
+                    - generic [ref=e134]: Complete content library access
+                    - generic [ref=e137]: Limited offline downloads
+                  - button "Downgrade Plan" [ref=e138] [cursor=pointer]
+                - generic [ref=e139]:
+                  - generic [ref=e141]: CURRENT PLAN
+                  - generic [ref=e142]:
+                    - img [ref=e144]
+                    - heading "Premium" [level=3] [ref=e147]
+                    - generic [ref=e148]:
+                      - generic [ref=e149]: $19.99
+                      - generic [ref=e150]: / month
+                  - generic [ref=e151]:
+                    - generic [ref=e152]:
+                      - generic [ref=e153]: Quality
+                      - generic [ref=e154]: 4K
+                    - generic [ref=e155]:
+                      - generic [ref=e156]: Devices
+                      - generic [ref=e157]: 4 Devices
+                  - generic [ref=e158]:
+                    - generic [ref=e161]: 4K streaming on 4 devices
+                    - generic [ref=e164]: Complete content library access
+                    - generic [ref=e167]: Unlimited offline downloads
+                  - button "premium" [disabled] [ref=e168]: Current Plan
+                - generic [ref=e169]:
+                  - generic [ref=e170]:
+                    - img [ref=e172]
+                    - heading "Basic Annual" [level=3] [ref=e175]
+                    - generic [ref=e176]:
+                      - generic [ref=e177]: $99.99
+                      - generic [ref=e178]: / year
+                  - generic [ref=e179]:
+                    - generic [ref=e180]:
+                      - generic [ref=e181]: Quality
+                      - generic [ref=e182]: HD
+                    - generic [ref=e183]:
+                      - generic [ref=e184]: Devices
+                      - generic [ref=e185]: 1 Device
+                  - generic [ref=e186]:
+                    - generic [ref=e189]: HD streaming on 1 device
+                    - generic [ref=e192]: Complete content library access
+                    - generic [ref=e195]: Limited offline downloads
+                  - button "Upgrade Plan" [ref=e196] [cursor=pointer]
+                - generic [ref=e197]:
+                  - generic [ref=e198]:
+                    - img [ref=e200]
+                    - heading "Premium Annual" [level=3] [ref=e203]
+                    - generic [ref=e204]:
+                      - generic [ref=e205]: $199.99
+                      - generic [ref=e206]: / year
+                  - generic [ref=e207]:
+                    - generic [ref=e208]:
+                      - generic [ref=e209]: Quality
+                      - generic [ref=e210]: 4K
+                    - generic [ref=e211]:
+                      - generic [ref=e212]: Devices
+                      - generic [ref=e213]: 4 Devices
+                  - generic [ref=e214]:
+                    - generic [ref=e217]: 4K streaming on 4 devices
+                    - generic [ref=e220]: Complete content library access
+                    - generic [ref=e223]: Unlimited offline downloads
+                  - button "Upgrade Plan" [ref=e224] [cursor=pointer]
+            - generic [ref=e225]:
+              - heading "Feature Comparison" [level=2] [ref=e227]
+              - paragraph [ref=e228]: Detailed comparison of all plan features
+              - table [ref=e231]:
+                - rowgroup [ref=e232]:
+                  - row "Features Basic Premium" [ref=e233]:
+                    - cell "Features" [ref=e234]
+                    - cell "Basic" [ref=e235]
+                    - cell "Premium" [ref=e236]
+                - rowgroup [ref=e237]:
+                  - row "Streaming Quality HD 720p 4K Ultra HD" [ref=e238]:
+                    - cell "Streaming Quality" [ref=e239]
+                    - cell "HD 720p" [ref=e240]
+                    - cell "4K Ultra HD" [ref=e241]
+                  - row "Simultaneous Streams 1 Device 4 Devices" [ref=e242]:
+                    - cell "Simultaneous Streams" [ref=e243]
+                    - cell "1 Device" [ref=e244]
+                    - cell "4 Devices" [ref=e245]
+                  - row "Offline Downloads Limited Unlimited" [ref=e246]:
+                    - cell "Offline Downloads" [ref=e247]
+                    - cell "Limited" [ref=e248]
+                    - cell "Unlimited" [ref=e249]
+                  - row "User Profiles 1 Profile 4 Profiles" [ref=e250]:
+                    - cell "User Profiles" [ref=e251]
+                    - cell "1 Profile" [ref=e252]
+                    - cell "4 Profiles" [ref=e253]
+    - generic [ref=e255]:
+      - generic [ref=e256]:
+        - generic [ref=e257]:
+          - link "IsolaKwaMUNTU Elevate Your Consciousness" [ref=e258] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e263] [cursor=pointer]:
+              - generic [ref=e264] [cursor=pointer]: IsolaKwaMUNTU
+              - generic [ref=e265] [cursor=pointer]: Elevate Your Consciousness
+          - paragraph [ref=e266]: Your premier destination for transformative African content. Watch unlimited movies, series, and documentaries that elevate consciousness and inspire spiritual growth.
+          - generic [ref=e267]:
+            - link "Facebook" [ref=e268] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e269] [cursor=pointer]
+            - link "Twitter" [ref=e271] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e272] [cursor=pointer]
+            - link "Instagram" [ref=e274] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e275] [cursor=pointer]
+            - link "YouTube" [ref=e277] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e278] [cursor=pointer]
+        - generic [ref=e280]:
+          - heading "Resources" [level=3] [ref=e281]: Resources
+          - list [ref=e283]:
+            - listitem [ref=e284]:
+              - link "About Us" [ref=e285] [cursor=pointer]:
+                - /url: /about-us/
+                - text: About Us
+            - listitem [ref=e288]:
+              - link "Contact Us" [ref=e289] [cursor=pointer]:
+                - /url: /contact-us/
+                - text: Contact Us
+            - listitem [ref=e292]:
+              - link "FAQs" [ref=e293] [cursor=pointer]:
+                - /url: /faqs/
+                - text: FAQs
+            - listitem [ref=e296]:
+              - link "Blog" [ref=e297] [cursor=pointer]:
+                - /url: /blog/
+                - text: Blog
+        - generic [ref=e300]:
+          - heading "Legal" [level=3] [ref=e301]: Legal
+          - list [ref=e303]:
+            - listitem [ref=e304]:
+              - link "Privacy Policy" [ref=e305] [cursor=pointer]:
+                - /url: /privacy-policy/
+                - text: Privacy Policy
+            - listitem [ref=e308]:
+              - link "Terms & Conditions" [ref=e309] [cursor=pointer]:
+                - /url: /terms-conditions/
+                - text: Terms & Conditions
+            - listitem [ref=e312]:
+              - link "Cookie Policy" [ref=e313] [cursor=pointer]:
+                - /url: /cookies/
+                - text: Cookie Policy
+        - generic [ref=e316]:
+          - heading "Stay Connected" [level=3] [ref=e317]: Stay Connected
+          - paragraph [ref=e319]: Subscribe to our newsletter for updates, exclusive content, and spiritual insights delivered to your inbox.
+          - generic [ref=e320]:
+            - textbox "Enter your email address" [ref=e322]
+            - button "Subscribe Now" [ref=e323] [cursor=pointer]
+      - generic [ref=e325]:
+        - generic [ref=e326]:
+          - paragraph [ref=e327]: © 2025 IsolaKwaMUNTU. All rights reserved.
+          - generic [ref=e328]:
+            - generic [ref=e329]: "|"
+            - link "Sitemap" [ref=e330] [cursor=pointer]:
+              - /url: /sitemap/
+            - generic [ref=e331]: "|"
+            - link "Accessibility" [ref=e332] [cursor=pointer]:
+              - /url: /accessibility/
+        - generic [ref=e333]:
+          - generic [ref=e334]: Made with
+          - generic [ref=e336]: for conscious living
+  - button "Open Next.js Dev Tools" [ref=e342] [cursor=pointer]:
+    - img [ref=e343] [cursor=pointer]
+  - alert [ref=e346]
 ```

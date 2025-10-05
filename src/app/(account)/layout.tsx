@@ -4,6 +4,7 @@ import "@/src/globals.css";
 import { AuthProvider } from "../context/authContext";
 import { Navigation } from "@/src/components/Navigation";
 import { themeClasses } from "@/src/lib/theme";
+import { usePathname } from "next/navigation";
 
 
 
@@ -12,6 +13,10 @@ interface Props {
 }
 
 const AccountRootLayout: React.FC <Props> = ({ children } ) => {
+  const pathname = usePathname();
+  const hideNavRoutes = new Set(["/plan-selection"]);
+  const showNavigation = !hideNavRoutes.has(pathname ?? "");
+
   return (
      <html lang="en">
       <body>
@@ -19,11 +24,13 @@ const AccountRootLayout: React.FC <Props> = ({ children } ) => {
       <div className={themeClasses.pageBackground()}>
       
 
-    <div className="flex-shrink-0 text-white "> 
-        <div className="border-b bg-slate-100">
-    <Navigation/>
-      </div>
-      </div>
+    {showNavigation && (
+      <div className="flex-shrink-0 text-white "> 
+          <div className="border-b bg-slate-100">
+      <Navigation/>
+        </div>
+        </div>
+    )}
         <div className="p-12 flex items-center justify-center text-white">
 
         {children}

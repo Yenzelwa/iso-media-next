@@ -6,6 +6,7 @@ import { useAuth } from '../../context/authContext';
 import { UserMenu } from '@/src/components/UserMenu';
 import { themeClasses } from '@/src/lib/theme';
 import { PricingCard } from '@/src/components/PriceCard';
+import { trackEvent } from '@/src/lib/obs';
 
 interface Plan {
   id: string;
@@ -171,10 +172,10 @@ const PlanSelection: React.FC = () => {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
       </div>
 
-      <section className="relative w-full max-w-7xl mx-auto px-6 pt-24 pb-24 overflow-hidden z-10">
+      <section className="relative w-full max-w-7xl mx-auto px-6 pt-20 pb-20 overflow-hidden z-10">
 
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Link
             href="/register"
             className="inline-flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-300 group"
@@ -184,7 +185,7 @@ const PlanSelection: React.FC = () => {
           </Link>
         </div>
 
-        <header className="text-center relative mb-16">
+        <header className="text-center relative mb-8">
 
           <div className="space-y-4">
             <h1 className="text-5xl lg:text-6xl font-black text-white mb-6">
@@ -255,6 +256,7 @@ const PlanSelection: React.FC = () => {
           <Link id="payment-link"
             href="/payment"
             className="group relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-12 py-4 rounded-2xl inline-flex items-center space-x-3 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-red-500/50 font-semibold text-lg min-w-[280px] justify-center"
+            onClick={() => trackEvent('plan-selection.continue', { selected_plan: selectedPlan })}
           >
             <span>Continue to Payment</span>
             <ArrowLeft className="w-5 h-5 rotate-180 group-hover:translate-x-1 transition-transform duration-300" />
