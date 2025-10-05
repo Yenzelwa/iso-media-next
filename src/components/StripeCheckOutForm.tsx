@@ -6,6 +6,7 @@ import { useAuth } from "../app/context/authContext";
 import { useRouter } from "next/navigation";
 import { UserMenu } from "./UserMenu";
 import { CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { trackEvent, trackError } from "@/src/lib/obs";
 
 export const StripeCheckOutForm: React.FC = () => {
   const stripe = useStripe();
@@ -40,6 +41,7 @@ export const StripeCheckOutForm: React.FC = () => {
   
     setIsProcessing(true);
     setError(''); // Reset any previous errors
+    trackEvent('payment.submit.start', { has_name: !!billingInfo.cardHolder });
   
     try {
       // Create a PaymentMethod with the individual elements
@@ -54,6 +56,7 @@ export const StripeCheckOutForm: React.FC = () => {
       if (error) {
         console.error('Payment Method Error:', error.message);
         setError(error.message || 'An error occurred while processing the payment.');
+        trackError('payment.submit.failure', { stage: 'createPaymentMethod', message: error.message || 'unknown' });
         setIsProcessing(false); // Reset loading state in case of error
         return;
       }
@@ -72,6 +75,7 @@ export const StripeCheckOutForm: React.FC = () => {
       });
   
       if (!customerResponse.ok) {
+        trackError('payment.submit.failure', { stage: 'createCustomer', status: customerResponse.status });
         throw new Error('Failed to create customer');
       }
 
@@ -97,15 +101,18 @@ export const StripeCheckOutForm: React.FC = () => {
     });
   
     if (!paymentResponse.ok) {
+      trackError('payment.submit.failure', { stage: 'createSubscription', status: paymentResponse.status });
       throw new Error('Payment processing failed');
     }
   }
   
       // Redirect after payment method creation (replace with success page)
+      trackEvent('payment.submit.success', { next: 'home' });
       router.push('/');
     } catch (err) {
       console.error('Error processing payment:', err);
       setError('An error occurred while processing the payment.');
+      trackError('payment.submit.failure', { stage: 'unknown' });
     } finally {
       setIsProcessing(false); // Reset loading state
     }
