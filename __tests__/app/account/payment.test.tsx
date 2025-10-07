@@ -76,6 +76,15 @@ describe('StripeCheckOutForm Component', () => {
     expect(screen.getByText('CVV')).toBeInTheDocument();
   });
 
+  it('shows a link to Plan Selection from plan summary area', () => {
+    mockUseAuth.mockReturnValue({ user: { email: 'test@example.com', id: 'user123' , name: 'Joe Doe' } });
+
+    render(<PaymentPage />);
+
+    const link = screen.getByRole('link', { name: /view or change plan on plan selection/i });
+    expect(link).toBeInTheDocument();
+  });
+
   it('disables submit button when card holder name is empty', () => {
     mockUseAuth.mockReturnValue({ user: { email: 'test@example.com', id: 'user123' } });
 

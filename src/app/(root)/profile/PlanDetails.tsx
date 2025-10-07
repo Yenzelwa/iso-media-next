@@ -539,7 +539,7 @@ export const PlanDetails: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <h3
                 id="manage-plan-heading"
-                ref={(el) => { manageHeadingRef.current = el; try { el?.focus(); } catch {} }}
+                ref={(el) => { manageHeadingRef.current = el; try { el?.focus(); } catch { /* ignore */ } }}
                 tabIndex={-1}
                 className="text-2xl font-bold text-white"
               >
@@ -717,6 +717,7 @@ export const PlanDetails: React.FC = () => {
                 <div className="space-y-3">
                   {plans.filter(plan => plan.id !== currentPlan?.id).map(plan => (
                     <button
+                      data-testid="plan-option"
                       key={plan.id}
                       onClick={() => {
                         const action = Number(plan.price.replace(/[^0-9.]/g, '')) > Number((currentPlan?.price ?? '0').replace(/[^0-9.]/g, '')) ? 'upgrade' : 'downgrade';

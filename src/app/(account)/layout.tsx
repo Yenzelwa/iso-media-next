@@ -14,7 +14,7 @@ interface Props {
 
 const AccountRootLayout: React.FC <Props> = ({ children } ) => {
   const pathname = usePathname();
-  const hideNavRoutes = new Set(["/plan-selection"]);
+  const hideNavRoutes = new Set(["/plan-selection", "/payment"]);
   const showNavigation = !hideNavRoutes.has(pathname ?? "");
 
   return (

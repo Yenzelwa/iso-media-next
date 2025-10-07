@@ -35,8 +35,8 @@ const Login = () => {
 
   useEffect(() => {
     // Enable button only if email is valid and password is at least 6 characters
-    const isValidEmail = watchEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchEmail);
-    const isValidPassword = watchPassword && watchPassword.length >= 6;
+    const isValidEmail = !!watchEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchEmail);
+    const isValidPassword = !!watchPassword && watchPassword.length >= 6;
     setIsButtonEnabled(isValidEmail && isValidPassword);
   }, [watchEmail, watchPassword]);
 

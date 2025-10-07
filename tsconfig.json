@@ -34,16 +34,21 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
+    "jest.setup.js",
+    "next-env.d.ts",
     "src/app/actions/stripe.js",
     "src/app/lib/stripe.js",
-    "jest.setup.js",
-    "src/components/Input.jsx"
+    "src/components/Input.jsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next/**",
+    "__tests__/**",
+    "tests/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

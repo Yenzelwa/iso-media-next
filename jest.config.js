@@ -21,6 +21,7 @@ const customJestConfig = {
     '/__mocks__/',    // Ignore __mocks__ directory
     '/__tests__/__mocks__/fileMock.js', // Ignore image mocks
     '/__tests__/__mocks__/styleMock.js', // Ignore style mocks
+    '<rootDir>/tests/e2e/', // Exclude Playwright tests from Jest
   ],
 
   // Babel transformation for JS/TS files and handling CSS imports

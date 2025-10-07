@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Play, Star, Calendar, ChevronLeft } from 'lucide-react';
+import { formatYYYYMMDD } from '@/src/lib/date';
 import { Video } from '@/typings';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -303,7 +304,7 @@ const SeriesDetail = () => {
                         {episode.description}
                       </p>
                       <p className="text-gray-400 text-xs">
-                        Released {episode.release_date.toLocaleDateString()}
+                        Released {formatYYYYMMDD(episode.release_date)}
                       </p>
                     </div>
                   </div>

@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     // Enable button only if email is valid
-    const isValidEmail = watchEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchEmail);
+    const isValidEmail = !!watchEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchEmail);
     setIsButtonEnabled(isValidEmail);
   }, [watchEmail]);
 

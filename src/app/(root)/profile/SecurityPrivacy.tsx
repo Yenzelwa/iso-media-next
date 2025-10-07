@@ -40,7 +40,7 @@ export const SecurityPrivacy: React.FC = () => {
         // Test or non-browser env: use fallback immediately
         if (typeof fetch !== 'function') {
           setSettings({ twoFactorEnabled: false, emailNotifications: true, autoLogout: '30' });
-          try { localStorage.setItem('auto_logout_minutes', '30'); } catch {}
+          try { localStorage.setItem('auto_logout_minutes', '30'); } catch { /* ignore */ }
           setDevices([
             { id: 1, device: "MacBook Pro", browser: "Chrome", location: "Los Angeles, CA", lastActive: "Active now", current: true, ip: "192.168.1.100" },
             { id: 2, device: "iPhone 14 Pro", browser: "Safari", location: "Los Angeles, CA", lastActive: "2 hours ago", current: false, ip: "192.168.1.101" },
@@ -70,7 +70,7 @@ export const SecurityPrivacy: React.FC = () => {
             if (settingsData?.autoLogout) {
               localStorage.setItem('auto_logout_minutes', String(settingsData.autoLogout));
             }
-          } catch {}
+          } catch { /* ignore */ }
         }
 
         // Fetch active devices
@@ -232,7 +232,7 @@ export const SecurityPrivacy: React.FC = () => {
     try {
       if (typeof fetch !== 'function') {
         setSettings(prev => ({ ...prev, autoLogout: value }));
-        try { localStorage.setItem('auto_logout_minutes', String(value)); } catch {}
+        try { localStorage.setItem('auto_logout_minutes', String(value)); } catch { /* ignore */ }
         return;
       }
       const response = await fetch('/api/security', {
@@ -248,7 +248,7 @@ export const SecurityPrivacy: React.FC = () => {
         setSettings(prev => ({ ...prev, autoLogout: value }));
         try {
           localStorage.setItem('auto_logout_minutes', String(value));
-        } catch {}
+        } catch { /* ignore */ }
       } else {
         throw new Error('Failed to update auto logout setting');
       }
@@ -259,7 +259,7 @@ export const SecurityPrivacy: React.FC = () => {
       setSettings(prev => ({ ...prev, autoLogout: value }));
       try {
         localStorage.setItem('auto_logout_minutes', String(value));
-      } catch {}
+      } catch { /* ignore */ }
     }
   };
 
@@ -374,7 +374,11 @@ export const SecurityPrivacy: React.FC = () => {
                   <p className="text-gray-400 text-sm">Add extra security layer to your account</p>
                 </div>
               </div>
-              <button data-testid="toggle"
+              <button
+                data-testid="toggle"
+                aria-label="Toggle two-factor authentication"
+                role="switch"
+                aria-checked={settings.twoFactorEnabled}
                 onClick={() => handleToggle('twoFactorEnabled')}
                 className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
                   settings.twoFactorEnabled ? 'bg-red-600' : 'bg-gray-600'
@@ -401,7 +405,10 @@ export const SecurityPrivacy: React.FC = () => {
                   <p className="text-gray-400 text-sm">Automatically log out after inactivity</p>
                 </div>
               </div>
+              <label htmlFor="auto-logout-select" className="sr-only">Auto Logout</label>
               <select
+                id="auto-logout-select"
+                aria-label="Auto Logout"
                 value={settings.autoLogout}
                 onChange={(e) => handleAutoLogoutChange(e.target.value)}
                 className="bg-gray-700/50 border border-gray-600 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"

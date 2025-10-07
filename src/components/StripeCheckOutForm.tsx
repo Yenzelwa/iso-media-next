@@ -6,6 +6,7 @@ import { useAuth } from "../app/context/authContext";
 import { useRouter } from "next/navigation";
 import { UserMenu } from "./UserMenu";
 import { CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { trackEvent, trackError } from "@/src/lib/obs";
 
 export const StripeCheckOutForm: React.FC = () => {
   const stripe = useStripe();
@@ -40,6 +41,7 @@ export const StripeCheckOutForm: React.FC = () => {
   
     setIsProcessing(true);
     setError(''); // Reset any previous errors
+    trackEvent('payment.submit.start', { has_name: !!billingInfo.cardHolder });
   
     try {
       // Create a PaymentMethod with the individual elements
@@ -54,6 +56,7 @@ export const StripeCheckOutForm: React.FC = () => {
       if (error) {
         console.error('Payment Method Error:', error.message);
         setError(error.message || 'An error occurred while processing the payment.');
+        trackError('payment.submit.failure', { stage: 'createPaymentMethod', message: error.message || 'unknown' });
         setIsProcessing(false); // Reset loading state in case of error
         return;
       }
@@ -72,6 +75,7 @@ export const StripeCheckOutForm: React.FC = () => {
       });
   
       if (!customerResponse.ok) {
+        trackError('payment.submit.failure', { stage: 'createCustomer', status: customerResponse.status });
         throw new Error('Failed to create customer');
       }
 
@@ -97,15 +101,18 @@ export const StripeCheckOutForm: React.FC = () => {
     });
   
     if (!paymentResponse.ok) {
+      trackError('payment.submit.failure', { stage: 'createSubscription', status: paymentResponse.status });
       throw new Error('Payment processing failed');
     }
   }
   
       // Redirect after payment method creation (replace with success page)
+      trackEvent('payment.submit.success', { next: 'home' });
       router.push('/');
     } catch (err) {
       console.error('Error processing payment:', err);
       setError('An error occurred while processing the payment.');
+      trackError('payment.submit.failure', { stage: 'unknown' });
     } finally {
       setIsProcessing(false); // Reset loading state
     }
@@ -276,7 +283,7 @@ export const StripeCheckOutForm: React.FC = () => {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
       </div>
 
-      <main className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 z-10 pt-24">
+      <main className="min-h-[100dvh] relative flex items-center justify-center py-12 px-4 sm:px-6 z-10 pt-24">
         <div className="w-full max-w-md">
           {/* Back Button */}
           <div className="mb-8">
@@ -359,20 +366,20 @@ export const StripeCheckOutForm: React.FC = () => {
               </div>
             </div>
 
-            {/* Plan Summary */}
-            <div className="mt-6 p-4 bg-gray-800/30 rounded-xl border border-gray-700/30">
+            {/* Plan Summary (moved to Plan Selection link) */}
+            <Link
+              href="/plan-selection"
+              aria-label="View or change plan on Plan Selection"
+              className="mt-6 block p-4 bg-gray-800/30 rounded-xl border border-gray-700/30 hover:bg-gray-800/50 transition-colors"
+            >
               <div className="flex items-center justify-between">
-                <div className="text-gray-300 text-left">
-                  <p className="font-bold text-white">$7.99/month</p>
-                  <p className="font-medium text-sm">Premium Monthly Plan</p>
-                  <p className="text-xs text-gray-400">First month $1.99</p>
+                <div className="text-left">
+                  <p className="font-semibold text-white">View plan and pricing</p>
+                  <p className="text-xs text-gray-400">Go to Plan Selection to review details</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-red-400">$1.99</p>
-                  <p className="text-xs text-gray-500">Today&apos;s charge</p>
-                </div>
+                <div className="text-right text-red-400 font-semibold">Change</div>
               </div>
-            </div>
+            </Link>
 
             {/* Submit Button */}
             <div className="mt-8">

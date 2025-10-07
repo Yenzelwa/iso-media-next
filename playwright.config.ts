@@ -1,12 +1,16 @@
-﻿import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test'
+
+const isCI = !!process.env.CI
 
 const webServer = process.env.PW_SKIP_WEB_SERVER
   ? undefined
   : {
-      command: process.env.PLAYWRIGHT_WEB_SERVER || 'npm run dev',
+      command:
+        process.env.PLAYWRIGHT_WEB_SERVER ||
+        (isCI ? 'npm run build && npm run start' : 'npm run dev'),
       port: Number(process.env.PLAYWRIGHT_PORT || 3000),
-      reuseExistingServer: true,
-      timeout: 120_000,
+      reuseExistingServer: !isCI,
+      timeout: 300_000,
     }
 
 export default defineConfig({
