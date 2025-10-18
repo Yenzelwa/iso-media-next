@@ -200,18 +200,7 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
                   {user.name}
                 </h3>
                 <p className="text-gray-400 text-sm truncate mt-1">{user.email}</p>
-                <div className="flex items-center space-x-2 mt-2">
-                  <div className="flex items-center space-x-1 bg-gradient-to-r from-red-600/20 to-red-500/10 px-3 py-1 rounded-full border border-red-500/20">
-                    {getSubscriptionIcon()}
-                    <span className="text-xs text-red-300 font-semibold">
-                      {getSubscriptionLabel()} Member
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-400 font-medium">Online</span>
-                  </div>
-                </div>
+               
               </div>
             </div>
           </div>

@@ -60,7 +60,7 @@ const SeriesPage = () => {
 
   if (loading) {
     return (
-      <div className="bg-background text-foreground flex items-center justify-center py-32">
+      <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white min-h-screen flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
           <span className="text-lg text-gray-300">Loading series...</span>

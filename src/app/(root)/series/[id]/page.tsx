@@ -81,7 +81,7 @@ const SeriesDetail = () => {
 
   if (loading) {
     return (
-      <div className="bg-background text-foreground min-h-screen flex items-center justify-center">
+      <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white min-h-screen flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
           <span className="text-lg text-gray-300">Loading series details...</span>
@@ -128,7 +128,7 @@ const SeriesDetail = () => {
   };
 
   return (
-    <div className="bg-background text-foreground">
+    <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white">
 
       <main className="pt-14 sm:pt-16 lg:pt-20 xl:pt-24">
         {/* Hero Section */}
@@ -150,21 +150,10 @@ const SeriesDetail = () => {
           {/* Hero Content */}
           <div className="relative z-10 flex items-center h-full px-4 lg:px-16">
             <div className="max-w-4xl">
-              {/* Breadcrumb */}
-              <div className="flex items-center space-x-2 mb-6 text-gray-300">
-                <button data-testid="hero-btn"
-                  onClick={() => router.push('/series')}
-                  className="hover:text-white transition-colors flex items-center space-x-1"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Series</span>
-                </button>
-                <span>/</span>
-                <span className="text-white">{series.title}</span>
-              </div>
+         
 
               {/* Series Badges */}
-              <div className="flex items-center space-x-3 mb-4">
+              <div className="flex items-center space-x-2 mb-4">
                 <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
                   {seasonCount} Season{seasonCount !== 1 ? 's' : ''}
                 </span>

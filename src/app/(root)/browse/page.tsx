@@ -77,7 +77,7 @@ const BrowsePage = () => {
 
   if (loading) {
     return (
-      <div className="bg-background text-foreground flex items-center justify-center">
+      <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white min-h-screen flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
           <span className="text-lg text-muted-foreground">Loading content...</span>
@@ -88,7 +88,7 @@ const BrowsePage = () => {
 
   return (
     <div className="bg-background text-foreground">
-      <main className="pt-24 md:pt-28 lg:pt-32">
+      <main>
         <Hero videos={heroVideos} />
 
         <section className="bg-gradient-to-b from-gray-900 via-black to-gray-900/80 py-14 md:py-16 lg:py-20">
