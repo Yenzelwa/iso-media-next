@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from 'msw';
+﻿import { http, HttpResponse, delay } from 'msw';
 
 // Handlers for billing-related endpoints used by Payment page
 export const billingHandlers = [
@@ -36,5 +36,16 @@ export const billingHandlers = [
     await delay(100);
     return HttpResponse.json({ status: 'active', id: 'sub_test_123' }, { status: 200 });
   }),
-];
 
+  // Attach payment method (set as default)
+  http.post('/api/billing/payment-methods/attach', async ({ request }) => {
+    const body = (await request.json()) as {
+      payment_method_id?: string;
+      profile_id?: string | number;
+    };
+    if (!body?.payment_method_id || !body?.profile_id) {
+      return HttpResponse.json({ error: 'invalid_request' }, { status: 400 });
+    }
+    await delay(80);
+    return HttpResponse.json({ status: 'attached', default: true }, { status: 200 });
+  }),]\n\n;

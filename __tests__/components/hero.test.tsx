@@ -18,6 +18,7 @@ jest.mock('lucide-react', () => ({
   ChevronLeft: () => <span data-testid="chevron-left" />,
   ChevronRight: () => <span data-testid="chevron-right" />,
   Play: () => <span data-testid="play-icon" />,
+  Calendar: () => <span data-testid="calendar-icon" />,
 }));
 
 jest.mock('@/src/app/context/authContext', () => ({
@@ -27,7 +28,7 @@ jest.mock('@/src/app/context/authContext', () => ({
 const mockUseAuth = useAuth as jest.Mock;
 
 const videos = [
-  { id: 'a', title: 'Alpha', description: 'A', image_path: '/a.jpg', rating: 4.5, type: { name: 'Movie' } },
+  { id: 'a', title: 'Alpha', description: 'A', image_path: '/a.jpg', rating: 4.5, type: { name: 'Movie' }, release_date: new Date(2024, 0, 1).toISOString() },
   { id: 'b', title: 'Beta', description: 'B', image_path: '/b.jpg', rating: 3.7, type: { name: 'Series' } },
   { id: 'c', title: 'Gamma', description: 'C', image_path: '/c.jpg', rating: 5, type: { name: 'Doc' } },
 ] as any;
@@ -55,7 +56,9 @@ describe('Hero', () => {
 
     expect(screen.getByText('Alpha')).toBeInTheDocument();
     expect(screen.getByTestId('star-rating')).toHaveTextContent('5');
-
+    // Year meta visible for first item
+    expect(screen.getByTestId('calendar-icon')).toBeInTheDocument();
+  
     const trialButton = screen.getByRole('button', { name: /start free trial/i });
     fireEvent.click(trialButton);
     expect(push).toHaveBeenCalledWith('/login');
@@ -105,5 +108,26 @@ describe('Hero', () => {
     const playButton = screen.getByRole('button', { name: /play now/i });
     fireEvent.click(playButton);
     expect(push).toHaveBeenCalledWith('/watch/a');
+  });
+
+  test('routes to series page when active item is a series', () => {
+    mockUseAuth.mockReturnValue({ user: { id: '1' }, login: jest.fn(), logout: jest.fn() });
+    render(<Hero videos={videos} />);
+
+    // Move to the second slide which is a Series
+    fireEvent.click(screen.getByLabelText(/next hero item/i));
+    flushTransition();
+
+    const playButton = screen.getByRole('button', { name: /play now/i });
+    fireEvent.click(playButton);
+    expect(push).toHaveBeenCalledWith('/series/b');
+  });
+
+  test('hero background includes enhanced carousel gradient overlay', () => {
+    render(<Hero videos={videos.slice(0, 1)} />);
+    const overlay = screen.getByTestId('hero-bg-enhanced-overlay');
+    expect(overlay).toBeInTheDocument();
+    // sanity: class includes diagonal gradient hint
+    expect(overlay.className).toContain('bg-gradient-to-br');
   });
 });

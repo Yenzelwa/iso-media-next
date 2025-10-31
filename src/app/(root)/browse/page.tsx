@@ -91,16 +91,21 @@ const BrowsePage = () => {
       <main>
         <Hero videos={heroVideos} />
 
-        <section className="bg-gradient-to-b from-gray-900 via-black to-gray-900/80 py-14 md:py-16 lg:py-20">
+        <section className="relative bg-gradient-to-b from-gray-900/90 via-black to-gray-900/80 pt-2 md:pt-4 lg:pt-6 pb-14 md:pb-16 lg:pb-20 -mt-4 md:-mt-6 lg:-mt-8 border-t border-white/5">
           <div className="space-y-12">
-            {carouselContent.map(section => (
-              <EnhancedCarousel
-                key={section.title}
-                title={section.title}
-                movies={section.movies}
-                variant="home"
-              />
-            ))}
+            {carouselContent.map(section => {
+              const variant = section.title.toLowerCase().includes('documentary')
+                ? 'documentary'
+                : 'home';
+              return (
+                <EnhancedCarousel
+                  key={section.title}
+                  title={section.title}
+                  movies={section.movies}
+                  variant={variant as 'home' | 'documentary'}
+                />
+              );
+            })}
           </div>
         </section>
       </main>

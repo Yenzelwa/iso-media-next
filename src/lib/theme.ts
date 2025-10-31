@@ -77,6 +77,38 @@ export const themeClasses = {
   
   // Button styles
   primaryButton: () => `${siteTheme.gradients.primary} hover:${siteTheme.gradients.primaryHover.replace('bg-gradient-to-r', '')} ${siteTheme.text.primary}`,
+  // Primary CTA: subtler glassy red with gentle glow
+  primaryCta: () => [
+    'bg-gradient-to-b from-red-600/35 via-red-600/25 to-red-700/30',
+    'hover:from-red-600/45 hover:via-red-600/35 hover:to-red-700/40',
+    'text-white',
+    'border border-red-500/35',
+    'backdrop-blur-md',
+    'shadow-[0_10px_24px_-12px_rgba(239,68,68,0.45)]',
+    'hover:shadow-[0_14px_32px_-10px_rgba(239,68,68,0.55)]',
+  ].join(' '),
+
+  // Navigation pills (top menu)
+  // Inactive top menu pill: subtle glass with faint red ring + glow
+  navPill: () => [
+    'text-gray-200',
+    'bg-black/35',
+    'hover:bg-black/45',
+    'border',
+    'border-red-500/25',
+    'shadow-[0_0_14px_rgba(239,68,68,0.14)]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60',
+  ].join(' '),
+  // Active top menu pill: darker red-tinted glass with stronger ring + glow
+  navPillActive: () => [
+    'text-white',
+    'bg-gradient-to-b from-red-900/35 to-red-700/15',
+    'border',
+    'border-red-400/70',
+    'shadow-[0_0_32px_rgba(239,68,68,0.4)]',
+    'hover:shadow-[0_0_42px_rgba(239,68,68,0.55)]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/70',
+  ].join(' '),
   
   // Card backgrounds
   cardBackground: () => `${siteTheme.gradients.card} backdrop-blur-xl ${siteTheme.borders.default}`,

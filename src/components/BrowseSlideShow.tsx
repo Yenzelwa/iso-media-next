@@ -8,6 +8,7 @@ import { RxDotFilled } from "react-icons/rx";
 import StarIcon from "./shared/StarIcon";
 import { useRouter } from "next/navigation"; // Assuming you now use the custom AuthContext
 import { useAuth } from "../app/context/authContext";
+import { themeClasses } from '@/src/lib/theme';
 
 interface BrowseSlideShowProps {
   videos: Video[];
@@ -120,7 +121,7 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
                 <button
                   onClick={() => redirectToWatch()}
                   type="submit"
-                  className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md"
+                  className={`${themeClasses.primaryCta()} px-5 py-2.5 rounded-xl inline-flex items-center gap-2`}
                 >
                   Play Now
                 </button>
@@ -128,7 +129,7 @@ const BrowseSlideShow: React.FC<BrowseSlideShowProps> = ({ videos }) => {
                 <button
                   onClick={() => redirectToSignIn()}
                   type="submit"
-                  className="bg-red text-white px-4 py-2 hover:bg-red-600 rounded-md"
+                  className={`${themeClasses.primaryCta()} px-5 py-2.5 rounded-xl inline-flex items-center gap-2`}
                 >
                   Try 14 days trial
                 </button>

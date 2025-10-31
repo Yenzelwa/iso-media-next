@@ -26,6 +26,7 @@ export async function getSeriesEpisodesService(seriesId: string, season: string)
   if (seriesId === 'not_found') {
     throw new Error('Series not found');
   }
+  // Return mock as-is to satisfy Episode.schema (no extra fields)
   return Promise.resolve(episodesSeasonMock);
 }
 

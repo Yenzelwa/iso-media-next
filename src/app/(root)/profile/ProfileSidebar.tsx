@@ -1,5 +1,7 @@
 import React from 'react';
-import { User } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/authContext';
+import { useRouter } from 'next/navigation';
 
 interface ProfileSidebarProps {
   user: any;
@@ -18,6 +20,9 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
   setActiveTab,
   tabs
 }) => {
+  const { logout } = useAuth();
+  const router = useRouter();
+
   return (
     <div className="lg:col-span-1">
       <div className="bg-gradient-to-br from-gray-900/80 to-slate-900/80 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-6 sticky top-24">
@@ -50,6 +55,19 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
             );
           })}
         </nav>
+
+        {/* Divider */}
+        <div className="my-4 border-t border-gray-700/40" />
+
+        {/* Logout */}
+        <button
+          onClick={() => { logout(); router.push('/'); }}
+          className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl text-gray-300 hover:text-white bg-gray-800/40 hover:bg-gray-700/50 border border-gray-700/40 transition-all duration-300"
+          aria-label="Sign out"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Sign Out</span>
+        </button>
       </div>
     </div>
   );

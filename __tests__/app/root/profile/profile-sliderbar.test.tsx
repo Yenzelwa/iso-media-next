@@ -3,12 +3,22 @@ import React from 'react';
 import { render, screen, within, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ProfileSidebar } from '@/src/app/(root)/profile/ProfileSidebar';
+import { AuthProvider } from '@/src/app/context/authContext';
+
+// Mock next/navigation router used inside the component
+const push = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push }),
+}));
 
 // Mock lucide-react's User icon used inside the component
 jest.mock('lucide-react', () => ({
   // forward className/props so we can assert classes
   User: (props: React.SVGProps<SVGSVGElement>) => (
     <svg data-testid="icon-user" {...props} />
+  ),
+  LogOut: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg data-testid="icon-logout" {...props} />
   ),
 }));
 
@@ -34,12 +44,14 @@ describe('ProfileSidebar', () => {
   test('renders user avatar/info and the User icon with correct classes', () => {
     const setActiveTab = jest.fn();
     render(
-      <ProfileSidebar
-        user={user}
-        activeTab="profile"
-        setActiveTab={setActiveTab}
-        tabs={tabs}
-      />
+      <AuthProvider>
+        <ProfileSidebar
+          user={user}
+          activeTab="profile"
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+        />
+      </AuthProvider>
     );
 
     // User name & email
@@ -55,12 +67,14 @@ describe('ProfileSidebar', () => {
   test('renders all tabs with icons, highlights the active tab, and calls setActiveTab on click', () => {
     const setActiveTab = jest.fn();
     const { rerender } = render(
-      <ProfileSidebar
-        user={user}
-        activeTab="profile"
-        setActiveTab={setActiveTab}
-        tabs={tabs}
-      />
+      <AuthProvider>
+        <ProfileSidebar
+          user={user}
+          activeTab="profile"
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+        />
+      </AuthProvider>
     );
 
     // All tabs render as buttons with visible names
@@ -89,12 +103,14 @@ describe('ProfileSidebar', () => {
 
     // Re-render with a different active tab to cover both branches of the className ternary
     rerender(
-      <ProfileSidebar
-        user={user}
-        activeTab="billing"
-        setActiveTab={setActiveTab}
-        tabs={tabs}
-      />
+      <AuthProvider>
+        <ProfileSidebar
+          user={user}
+          activeTab="billing"
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+        />
+      </AuthProvider>
     );
 
     // Now billing should be active; others inactive

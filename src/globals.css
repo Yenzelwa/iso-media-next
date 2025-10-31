@@ -127,6 +127,16 @@
   }
 }
 
+/* Subtle red border on all buttons for modern outline look */
+@layer base {
+  button {
+    @apply border border-red-500/25 rounded-xl; /* default subtle border */
+  }
+  button:hover {
+    @apply border-red-400/40; /* slightly stronger on hover */
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

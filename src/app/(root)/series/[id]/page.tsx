@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Play, Star, Calendar, ChevronLeft } from 'lucide-react';
+import { Play, Star, Calendar, ChevronLeft, Layers, Clapperboard } from 'lucide-react';
 import { formatYYYYMMDD } from '@/src/lib/date';
 import { Video } from '@/typings';
 import { useParams, useRouter } from 'next/navigation';
@@ -53,7 +53,7 @@ const SeriesDetail = () => {
           throw new Error('Failed to fetch series details');
         }
 
-        // Fetch episodes for the first season
+        // Fetch episodes for the selected season (use route id directly)
         const episodesResponse = await fetch(`/api/series/${id}/seasons/${selectedSeason}/episodes`);
         if (episodesResponse.ok) {
           const episodesData = await episodesResponse.json();
@@ -77,7 +77,8 @@ const SeriesDetail = () => {
     }
   }, [episodes]);
 
-  const seasonEpisodes = episodes.filter(ep => ep.season_number === selectedSeason);
+  // API already returns episodes for the selected season; no extra filtering
+  const seasonEpisodes = episodes;
 
   if (loading) {
     return (
@@ -97,7 +98,7 @@ const SeriesDetail = () => {
           <div className="text-red-500 text-xl mb-4">{error || 'Series not found'}</div>
           <button
             onClick={() => router.push('/series')}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+            className="bg-gradient-to-b from-red-600/35 via-red-600/25 to-red-700/30 hover:from-red-600/45 hover:via-red-600/35 hover:to-red-700/40 text-white px-6 py-3 rounded-xl border border-red-500/35 backdrop-blur-md transition-all"
           >
             Back to Series
           </button>
@@ -128,7 +129,7 @@ const SeriesDetail = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-black via-slate-900 to-black text-white">
+    <div className="bg-background text-foreground">
 
       <main className="pt-14 sm:pt-16 lg:pt-20 xl:pt-24">
         {/* Hero Section */}
@@ -150,21 +151,46 @@ const SeriesDetail = () => {
           {/* Hero Content */}
           <div className="relative z-10 flex items-center h-full px-4 lg:px-16">
             <div className="max-w-4xl">
-         
+              {/* Breadcrumb / Back */}
+              <div className="flex items-center space-x-2 mb-6 text-gray-300">
+                <button
+                  className="hover:text-white transition-colors flex items-center space-x-1"
+                  data-testid="hero-btn"
+                  onClick={() => router.push('/series')}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Series</span>
+                </button>
+                <span>/</span>
+                <span className="text-white">{series.title}</span>
+              </div>
+
 
               {/* Series Badges */}
-              <div className="flex items-center space-x-2 mb-4">
-                <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-                  {seasonCount} Season{seasonCount !== 1 ? 's' : ''}
-                </span>
+              <div className="flex items-center gap-3 mb-5">
+                {/* Seasons pill */}
+                <div className="group inline-flex rounded-full p-[1px] bg-gradient-to-r from-rose-500/70 via-red-500/70 to-rose-600/70 transition-all duration-300 hover:from-rose-400 hover:via-red-500 hover:to-rose-500">
+                  <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-black/60 backdrop-blur-md text-sm text-white ring-1 ring-white/10 shadow-[0_6px_20px_-8px_rgba(244,63,94,0.45)]">
+                    <Layers className="w-4 h-4 text-rose-300" />
+                    <span className="font-medium">
+                      {seasonCount} Season{seasonCount !== 1 ? 's' : ''}
+                    </span>
+                  </span>
+                </div>
 
-                <span className="bg-gray-900/80 backdrop-blur-sm text-white text-sm px-3 py-2 rounded-lg">
-                  {episodeCount} Episode{episodeCount !== 1 ? 's' : ''}
-                </span>
+                {/* Episodes pill */}
+                <div className="group inline-flex rounded-full p-[1px] bg-gradient-to-r from-rose-500/70 via-red-500/70 to-rose-600/70 transition-all duration-300 hover:from-rose-400 hover:via-red-500 hover:to-rose-500">
+                  <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-black/60 backdrop-blur-md text-sm text-white ring-1 ring-white/10 shadow-[0_6px_20px_-8px_rgba(244,63,94,0.45)]">
+                    <Clapperboard className="w-4 h-4 text-rose-300" />
+                    <span className="font-medium">
+                      {episodeCount} Episode{episodeCount !== 1 ? 's' : ''}
+                    </span>
+                  </span>
+                </div>
               </div>
 
               {/* Title */}
-              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              <h1 className="text-3xl lg:text-3xl font-bold text-white mb-6 leading-tight">
                 {series.title}
               </h1>
 
@@ -185,13 +211,16 @@ const SeriesDetail = () => {
               </div>
 
               {/* Genre Tags */}
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2.5 mb-8">
                 {(series.genre || [series.type?.category?.name].filter(Boolean)).map((g, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-gray-800/70 backdrop-blur-sm text-gray-200 rounded-full text-sm border border-gray-600/30"
+                    className="inline-flex items-center gap-1.5 rounded-full p-[1px] bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 transition-colors"
                   >
-                    {g}
+                    <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 bg-black/50 text-gray-100 backdrop-blur-md ring-1 ring-white/10">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_0_3px_rgba(244,63,94,0.25)]" />
+                      <span className="text-xs font-medium tracking-wide">{g}</span>
+                    </span>
                   </span>
                 ))}
               </div>
@@ -205,7 +234,7 @@ const SeriesDetail = () => {
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => currentEpisode && handlePlayEpisode(currentEpisode)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-600/25"
+                  className="bg-gradient-to-b from-red-600/35 via-red-600/25 to-red-700/30 hover:from-red-600/45 hover:via-red-600/35 hover:to-red-700/40 text-white px-8 py-4 rounded-xl font-semibold flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 border border-red-500/35 backdrop-blur-md shadow-[0_10px_24px_-12px_rgba(239,68,68,0.45)] hover:shadow-[0_14px_32px_-10px_rgba(239,68,68,0.55)]"
                 >
                   <Play className="w-5 h-5" />
                   <span>Play Series</span>
@@ -230,17 +259,19 @@ const SeriesDetail = () => {
               </h2>
               
               {/* Season Selector */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <span className="text-gray-400">Season:</span>
-                <div className="flex space-x-1">
-                  {Array.from({ length: series.seasons || 1 }, (_, i) => i + 1).map((season) => (
+                <div className="inline-flex rounded-full p-[2px] bg-gradient-to-r from-white/10 to-white/5 ring-1 ring-white/10 backdrop-blur-md">
+                  {Array.from({ length: seasonCount || 1 }, (_, i) => i + 1).map((season) => (
                     <button
                       key={season}
                       onClick={() => setSelectedSeason(season)}
-                      className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                      aria-pressed={selectedSeason === season}
+                      aria-label={`Season ${season}`}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
                         selectedSeason === season
-                          ? 'bg-red-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? 'bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-[0_8px_20px_-10px_rgba(244,63,94,0.5)]'
+                          : 'text-gray-300 hover:text-white hover:bg-white/10'
                       }`}
                     >
                       {season}
@@ -278,8 +309,11 @@ const SeriesDetail = () => {
 
                     {/* Duration */}
                     <div className="absolute top-3 right-3">
-                      <span className="bg-black/80 text-white text-xs px-2 py-1 rounded-lg font-medium">
-                        {episode.duration}
+                      <span className="inline-flex items-center gap-1.5 rounded-full p-[1px] bg-gradient-to-r from-white/30 to-white/10">
+                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 bg-black/60 text-white backdrop-blur-md text-[11px] ring-1 ring-white/10">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-300" />
+                          <span>{episode.duration || 'HD'}</span>
+                        </span>
                       </span>
                     </div>
 

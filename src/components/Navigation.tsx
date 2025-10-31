@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { UserMenu } from './UserMenu';
 import { useAuth } from '../app/context/authContext';
+import { themeClasses } from '@/src/lib/theme';
 
 export const Navigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -71,33 +72,33 @@ export const Navigation: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-2">
-            <div className="flex items-center space-x-1 bg-white/5 backdrop-blur-sm rounded-xl p-1 border border-white/10">
+            <div className="flex items-center space-x-1 bg-black/25 backdrop-blur-sm rounded-2xl p-1.5 border border-red-500/15 shadow-[0_0_36px_rgba(239,68,68,0.14)]">
               <Link
                 href="/"
-                className={`px-3 xl:px-4 py-2 xl:py-2.5 rounded-lg font-bold text-xs xl:text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
+                className={`px-3.5 xl:px-5 py-2 xl:py-2.5 rounded-xl font-bold text-xs xl:text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
                   isActiveRoute("/")
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 border border-red-400/50'
-                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    ? `${themeClasses.navPillActive()}`
+                    : `${themeClasses.navPill()}`
                 }`}
               >
                 BROWSE
               </Link>
               <Link
                 href="/series"
-                className={`px-3 xl:px-4 py-2 xl:py-2.5 rounded-lg font-bold text-xs xl:text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
+                className={`px-3.5 xl:px-5 py-2 xl:py-2.5 rounded-xl font-bold text-xs xl:text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
                   isActiveRoute("/series")
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 border border-red-400/50'
-                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    ? `${themeClasses.navPillActive()}`
+                    : `${themeClasses.navPill()}`
                 }`}
               >
                 SERIES
               </Link>
               <Link
                 href="/documentary"
-                className={`px-3 xl:px-4 py-2 xl:py-2.5 rounded-lg font-bold text-xs xl:text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
+                className={`px-3.5 xl:px-5 py-2 xl:py-2.5 rounded-xl font-bold text-xs xl:text-sm tracking-wide transition-all duration-300 transform hover:scale-105 ${
                   isActiveRoute("/documentary")
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 border border-red-400/50'
-                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    ? `${themeClasses.navPillActive()}`
+                    : `${themeClasses.navPill()}`
                 }`}
               >
                 DOCUMENTARY
@@ -123,7 +124,7 @@ export const Navigation: React.FC = () => {
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 xl:px-6 py-2 xl:py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/30 border border-red-500/30"
+                  className={`${themeClasses.primaryCta()} px-4 xl:px-6 py-2 xl:py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 border border-red-500/30`}
                 >
                   Get Started
                 </Link>
@@ -164,33 +165,21 @@ export const Navigation: React.FC = () => {
                 <Link
                   href="/"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    isActiveRoute("/")
-                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}
+                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${isActiveRoute("/") ? themeClasses.navPillActive() : themeClasses.navPill()}`}
                 >
                   BROWSE
                 </Link>
                 <Link
                   href="/series"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    isActiveRoute("/series")
-                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}
+                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${isActiveRoute("/series") ? themeClasses.navPillActive() : themeClasses.navPill()}`}
                 >
                   SERIES
                 </Link>
                 <Link
                   href="/documentary"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    isActiveRoute("/documentary")
-                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}
+                  className={`block px-4 py-3 rounded-xl font-bold transition-all duration-300 ${isActiveRoute("/documentary") ? themeClasses.navPillActive() : themeClasses.navPill()}`}
                 >
                   DOCUMENTARY
                 </Link>
@@ -203,7 +192,7 @@ export const Navigation: React.FC = () => {
                     <Link
                       href="/profile"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300 shadow-lg border border-red-500/30"
+                      className={`block w-full ${themeClasses.primaryCta()} px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300 border border-red-500/30`}
                     >
                       My Profile
                     </Link>
@@ -222,7 +211,7 @@ export const Navigation: React.FC = () => {
                     <Link
                       href="/register"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300 shadow-lg border border-red-500/30"
+                      className={`block w-full ${themeClasses.primaryCta()} px-6 py-3 rounded-xl font-semibold text-center transition-all duration-300 border border-red-500/30`}
                     >
                       Get Started
                     </Link>

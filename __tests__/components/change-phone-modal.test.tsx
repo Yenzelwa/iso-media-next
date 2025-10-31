@@ -28,7 +28,7 @@ const setup = (override: Partial<React.ComponentProps<typeof ChangePhoneModal>> 
       {...override}
     />
   );
-  const phoneInput = () => screen.getByPlaceholderText(/\(555\) 123-4567/i) as HTMLInputElement;
+  const phoneInput = () => screen.getByRole('textbox') as HTMLInputElement;
   const cancel = () => screen.getByRole('button', { name: /cancel/i });
   const send = () => screen.getByRole('button', { name: /send verification/i });
   return { utils, onClose, onSave, phoneInput, cancel, send };
@@ -45,7 +45,7 @@ test('does not render when isOpen=false', () => {
 
 test('initializes with currentPhone and disables send', () => {
   const { phoneInput, send } = setup();
-  expect(phoneInput().value).toBe('(555) 111-2222');
+  expect(phoneInput().value).toBe('+1 (555) 111-2222');
   expect(send()).toBeDisabled();
 });
 
@@ -53,10 +53,10 @@ test('formats input as (XXX) XXX-XXXX and strips non-digits', () => {
   const { phoneInput } = setup({ currentPhone: '' });
   // type raw digits more than needed and some symbols
   fireEvent.change(phoneInput(), { target: { value: '123-45x67890!!' } });
-  // After formatting: (123) 456-7890
-  expect(phoneInput().value).toBe('(123) 456-7890');
-  // maxLength attribute is 14
-  expect(phoneInput().getAttribute('maxLength')).toBe('14');
+  // After formatting: +1 (123) 456-7890
+  expect(phoneInput().value).toBe('+1 (123) 456-7890');
+  // maxLength attribute increased for international
+  expect(phoneInput().getAttribute('maxLength')).toBe('20');
 });
 
 test('keeps send disabled until length 14 and different from current', () => {
@@ -64,7 +64,7 @@ test('keeps send disabled until length 14 and different from current', () => {
   fireEvent.change(phoneInput(), { target: { value: '12' } });
   expect(send()).toBeDisabled();
   fireEvent.change(phoneInput(), { target: { value: '1234567890' } });
-  expect(phoneInput().value).toBe('(123) 456-7890');
+  expect(phoneInput().value).toBe('+1 (123) 456-7890');
   expect(send()).toBeEnabled();
 });
 
@@ -79,10 +79,10 @@ test('does not save if value equals currentPhone', () => {
 test('valid formatted phone triggers onSave and onClose', () => {
   const { phoneInput, send, onSave, onClose } = setup({ currentPhone: '' });
   fireEvent.change(phoneInput(), { target: { value: '9876543210' } });
-  expect(phoneInput().value).toBe('(987) 654-3210');
+  expect(phoneInput().value).toBe('+1 (987) 654-3210');
   expect(send()).toBeEnabled();
   fireEvent.click(send());
-  expect(onSave).toHaveBeenCalledWith('(987) 654-3210');
+  expect(onSave).toHaveBeenCalledWith('+1 (987) 654-3210');
   expect(onClose).toHaveBeenCalled();
 });
 

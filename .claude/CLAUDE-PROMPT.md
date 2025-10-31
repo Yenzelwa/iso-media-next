@@ -196,6 +196,7 @@ At kickoff, read the first unchecked Epic in `UI_todo_list.md`, then run Steps 1
 3. …  
 (5–8 bullets) — include prompt-oriented clarifications (missing context, data contracts, evaluation criteria) before advancing.  
 
+**Confirmation gate:** before each sub-step, **ask to proceed**.
 ---
 
 ## 2) Implementation Plan (Single PR per Epic + Per-Task Loop)
@@ -274,6 +275,7 @@ export const <feature>Handlers = [
     return HttpResponse.json({ phone: body.phone }, { status: 200 });
   }),
 ];
+
 ```
 
 #### 3) Start the MSW server (Node tests)
@@ -330,6 +332,7 @@ Test environment guidance
 - Component/DOM tests: use `jsdom`; avoid a global fetch polyfill if components offer offline fallbacks, or add `whatwg-fetch` where real fetch semantics are required.
 - Node integration tests (MSW node): use Jest `testEnvironment: 'node'` and a Node HTTP client (e.g., axios). Target URLs like `http://localhost/api/...` so MSW node intercepts them.
 - For in-app Next.js routes (`/api/...`), prefer regex matchers with MSW (e.g., `/\\/api\\/security$/`) or wildcard origins (`'*/api/security'`) to work across envs.
+
 
 #### 6) Minimal API client (so handlers intercept real calls)
 **`src/lib/api/<feature>.ts`**
@@ -840,7 +843,7 @@ Epic: <link to Jira/epic>
 
 0. Always create a new feature branch (`feat/<epic-slug>`) for a new Epic/feature and check it out before any changes; do not proceed until on the correct branch.
 1. Read Epic tasks from `UI_todo_list.md`.  
-2. Inputs (§1).  
+2. Inputs (§1) (ask to proceed).  
 2. Plan with TDD, observability, SDL (§2) (ask to proceed).  
 3. Implement minimal diffs (§3) (ask to proceed).  
 4. Validate (§4) (ask to proceed).  

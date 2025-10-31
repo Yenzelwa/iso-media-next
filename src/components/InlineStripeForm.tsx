@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from "react";
 import { useAuth } from "@/src/app/context/authContext";
 import { CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
@@ -121,4 +121,7 @@ export const InlineStripeForm: React.FC<InlineStripeFormProps> = ({ onSuccess })
     </form>
   );
 };
+
+
+
 

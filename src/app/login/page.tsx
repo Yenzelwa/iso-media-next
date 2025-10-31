@@ -103,16 +103,16 @@ const Login = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-red-950/20"></div>
 
         {/* Cinematic background image */}
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599456039-e5d9af20a5d1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599456039-e5d9af20a5d1?auto=format&fit=crop&w=1200&q=50')] bg-cover bg-center opacity-20 hidden sm:block"></div>
 
         {/* Overlay with blur */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-black/60 sm:backdrop-blur-[1px]"></div>
 
         {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-red-950/10 via-transparent to-red-950/10 animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-950/10 via-transparent to-red-950/10 animate-pulse hidden sm:block"></div>
 
         {/* Floating particles effect */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 hidden sm:block">
           <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-red-500/20 rounded-full animate-ping"></div>
           <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-red-400/30 rounded-full animate-pulse delay-1000"></div>
           <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-red-300/25 rounded-full animate-ping delay-500"></div>
@@ -120,7 +120,7 @@ const Login = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-gray-700/50 max-w-lg w-full mx-4 transform transition-all duration-700 hover:shadow-[0_25px_50px_rgba(239,68,68,0.15)] hover:border-red-500/30">
+      <div className="relative z-10 bg-black/40 backdrop-blur-sm p-6 sm:p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-gray-700/50 max-w-lg w-full mx-4 transform transition-all duration-700 hover:shadow-[0_25px_50px_rgba(239,68,68,0.15)] hover:border-red-500/30">
         {/* Welcome Section */}
         <div className="text-center mb-6">
           <div className="mb-3 flex justify-center">

@@ -263,11 +263,7 @@ const Player: React.FC<PlayerProps> = ({ video_path }) => {
         </div>
       </div>
 
-      {/* Gradient Borders */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-600 to-red-500"></div>
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-600 to-red-500"></div>
-      </div>
+      {/* Decorative borders removed per design request */}
 
       <style jsx>{`
         .slider::-webkit-slider-thumb {

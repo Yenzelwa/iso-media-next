@@ -147,7 +147,7 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
               className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/10 group-hover:ring-red-400/30 transition-all duration-300"
             />
           ) : (
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-xs sm:text-sm font-bold shadow-lg ring-2 ring-white/10 group-hover:ring-red-400/30 group-hover:shadow-red-500/30 transition-all duration-300">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-gray-900 to-black rounded-lg sm:rounded-xl flex items-center justify-center text-white text-xs sm:text-sm font-bold shadow-lg ring-2 ring-white/10 group-hover:ring-white/20 group-hover:shadow-black/40 transition-all duration-300">
               {getInitials(user.name)}
             </div>
           )}
@@ -187,7 +187,7 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
                     className="w-16 h-16 rounded-2xl object-cover ring-3 ring-white/10 shadow-xl"
                   />
                 ) : (
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center text-white text-lg font-bold shadow-xl ring-3 ring-white/10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-gray-900 to-black rounded-2xl flex items-center justify-center text-white text-lg font-bold shadow-xl ring-3 ring-white/10">
                     {getInitials(user.name)}
                   </div>
                 )}
@@ -200,6 +200,14 @@ const isRegistrationPage = ['/register', '/plan-selection', '/payment'].includes
                   {user.name}
                 </h3>
                 <p className="text-gray-400 text-sm truncate mt-1">{user.email}</p>
+                {/* Subscription label for tests and clarity */}
+                <p className="text-xs text-gray-300 mt-1">
+                  {user.subscription === 'premium'
+                    ? 'Premium Member'
+                    : user.subscription === 'family'
+                    ? 'Family Member'
+                    : 'Basic Member'}
+                </p>
                
               </div>
             </div>

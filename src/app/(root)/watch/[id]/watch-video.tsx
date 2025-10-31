@@ -22,6 +22,7 @@ export function WatchPage({ params }: WatchPageProps) {
   const [series, setSeries] = useState<Series | undefined>();
   const [error, setError] = useState<string>('');
   const [showSeasons, setShowSeasons] = useState<boolean>(false);
+  const [loadingSeasons, setLoadingSeasons] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,12 +34,49 @@ export function WatchPage({ params }: WatchPageProps) {
           const episodeData = await episodeResponse.json();
           setCurrentVideo(episodeData);
 
+          // Try to enrich with next_episode_id for UI visibility
+          try {
+            if (!episodeData.next_episode_id) {
+              const nextRes = await fetch(`/api/episodes/${episodeData.id}/next`);
+              if (nextRes.ok) {
+                const nextPayload = await nextRes.json();
+                if (nextPayload && typeof nextPayload.next_episode_id !== 'undefined') {
+                  setCurrentVideo((prev) => prev ? { ...prev, next_episode_id: nextPayload.next_episode_id } : prev);
+                }
+              }
+            }
+          } catch {}
+
           // If episode has series_id, fetch series data
           if (episodeData.series_id) {
             const seriesResponse = await fetch(`/api/series/${episodeData.series_id}`);
             if (seriesResponse.ok) {
               const seriesData = await seriesResponse.json();
-              setSeries(seriesData);
+              // Build a seasons list tolerant of API returning either a number or an array
+              const seasons = Array.isArray(seriesData.seasons)
+                ? seriesData.seasons
+                : (Number(seriesData.seasons) > 0
+                    ? Array.from({ length: Number(seriesData.seasons) }, (_, i) => ({ id: i + 1, seasonNumber: i + 1 }))
+                    : []);
+              setLoadingSeasons(true);
+              const hydrated = await Promise.all(
+                seasons.map(async (s: any) => {
+                  if (Array.isArray(s.episodes) && s.episodes.length > 0) {
+                    return s;
+                  }
+                  try {
+                    const resp = await fetch(`/api/series/${seriesData.id}/seasons/${s.seasonNumber}/episodes`);
+                    if (resp.ok) {
+                      const payload = await resp.json();
+                      const items = Array.isArray(payload) ? payload : payload?.items ?? [];
+                      return { ...s, episodes: items };
+                    }
+                  } catch {}
+                  return { ...s, episodes: [] };
+                })
+              );
+              setSeries({ ...seriesData, seasons: hydrated });
+              setLoadingSeasons(false);
             }
           }
         } else {
@@ -53,21 +91,61 @@ export function WatchPage({ params }: WatchPageProps) {
     fetchEpisodeData();
   }, [params.id]);
 
-  const playNextVideo = () => {
-  if (!currentVideo?.next_episode_id || !series) return;
+  const playNextVideo = async () => {
+    if (!currentVideo) return;
 
-  // Find the episode with the matching id in any season
-  const nextEp = series.seasons
-    .flatMap(season => season.episodes)
-    .find(ep => ep.id === currentVideo.next_episode_id);
+    // Strategy A: explicit next id available
+    if (currentVideo.next_episode_id) {
+      const fromLocalById = series?.seasons
+        ?.flatMap((s: any) => s.episodes || [])
+        .find((ep: any) => ep.id === currentVideo.next_episode_id);
+      if (fromLocalById) {
+        setCurrentVideo(fromLocalById);
+        router.push(`/watch/${fromLocalById.id}`);
+        return;
+      }
+    }
 
-  if (nextEp) {
-    setCurrentVideo(nextEp);
-    router.push(`/watch/${nextEp.id}`);
-  } else {
-    console.warn('Next episode not found');
-  }
-};
+    // Strategy B: derive next by sequence within the same season
+    const allEpisodes = series?.seasons?.flatMap((s: any) => s.episodes || []) ?? [];
+    const sameSeason = allEpisodes.filter((ep: any) => ep.season_id === currentVideo.season_id);
+    if (sameSeason.length > 0) {
+      const ordered = sameSeason.sort((a: any, b: any) => (a.episode_number ?? 0) - (b.episode_number ?? 0));
+      const idx = ordered.findIndex((ep: any) => ep.id === currentVideo.id);
+      if (idx >= 0 && idx + 1 < ordered.length) {
+        const nextEp = ordered[idx + 1];
+        setCurrentVideo(nextEp);
+        router.push(`/watch/${nextEp.id}`);
+        return;
+      }
+    }
+
+    // Fallback: fetch next episode details
+    try {
+      const nextId = currentVideo.next_episode_id;
+      const res = nextId
+        ? await fetch(`/api/episodes/${nextId}`)
+        : await fetch(`/api/episodes/${currentVideo.id}/next`).then(async (r) => {
+            if (!r.ok) return r;
+            const p = await r.json();
+            if (p && typeof p.next_episode_id !== 'undefined') {
+              return fetch(`/api/episodes/${p.next_episode_id}`);
+            }
+            return r; // will fall through to not ok
+          });
+      if (res.ok) {
+        const ep = await res.json();
+        if (ep && typeof ep.id !== 'undefined') {
+          setCurrentVideo(ep);
+          router.push(`/watch/${ep.id}`);
+          return;
+        }
+      }
+      console.warn('Next episode not found');
+    } catch (e) {
+      console.warn('Error loading next episode');
+    }
+  };
 
 
 const updateLikes = async (like: boolean) => {
@@ -165,7 +243,7 @@ const updateDislikes = async (dislike: boolean) => {
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <main className="pt-20">
         {/* Video Player */}
-        <section className="relative w-full aspect-video bg-black">
+        <section className="relative mx-auto aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
           <Player key={currentVideo?.id} video_path={currentVideo?.video_path} />
         </section>
 
@@ -241,17 +319,20 @@ const updateDislikes = async (dislike: boolean) => {
                 {/* Seasons Toggle Button */}
                 <button
                   onClick={() => setShowSeasons(!showSeasons)}
-                  className="text-white font-semibold py-2 px-4 flex items-center space-x-2 transition-all duration-300 hover:text-red-400"
+                  className="group inline-flex items-center rounded-full p-[2px] bg-gradient-to-r from-white/10 to-white/5 ring-1 ring-white/10 text-white transition-all duration-300 hover:from-white/20 hover:to-white/10"
+                  aria-expanded={showSeasons}
                 >
-                  <span className="text-sm">All Episodes</span>
-                  <svg
-                    className={`w-4 h-4 transform transition-transform duration-200 ${showSeasons ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-black/40 backdrop-blur-md text-sm">
+                    <span>All Episodes</span>
+                    <svg
+                      className={`w-4 h-4 transform transition-transform duration-200 ${showSeasons ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </span>
                 </button>
               </div>
             </div>
@@ -276,13 +357,27 @@ const updateDislikes = async (dislike: boolean) => {
           {/* Seasons Panel */}
           {showSeasons && (
             <section className="mt-8 bg-gradient-to-br from-gray-900/80 to-slate-900/80 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8">
-              <Seasons 
-                seasons={series?.seasons ?? []} 
-                onEpisodeSelect={(episode) => {
-                  setCurrentVideo(episode);
-                  router.push(`/watch/${episode.id}`);
-                }}
-              />
+              {loadingSeasons ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" aria-busy="true" aria-live="polite">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="animate-pulse rounded-xl overflow-hidden">
+                      <div className="h-24 bg-gray-800/60" />
+                      <div className="p-4 space-y-2">
+                        <div className="h-4 bg-gray-800/60 w-3/4 rounded" />
+                        <div className="h-3 bg-gray-800/60 w-5/6 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <Seasons 
+                  seasons={series?.seasons ?? []} 
+                  onEpisodeSelect={(episode) => {
+                    setCurrentVideo(episode);
+                    router.push(`/watch/${episode.id}`);
+                  }}
+                />
+              )}
             </section>
           )}
 

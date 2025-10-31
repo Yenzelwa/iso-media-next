@@ -8,19 +8,20 @@ interface SeasonsProps {
 }
 
 const Seasons: React.FC<SeasonsProps> = ({ seasons, onEpisodeSelect }) => {
-  const [selectedSeason, setSelectedSeason] = useState<number>(seasons[0]?.id || 1);
+  const [selectedSeason, setSelectedSeason] = useState<any>(seasons[0]?.id ?? 1);
 
   const currentSeason = seasons.find(season => season.id === selectedSeason);
 
   return (
     <div className="space-y-6">
       {/* Season Selector */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center gap-4">
         <h3 className="text-xl font-bold text-white">Episodes</h3>
         <select
+          aria-label="Season"
           value={selectedSeason}
           onChange={(e) => setSelectedSeason(Number(e.target.value))}
-          className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="sr-only"
         >
           {seasons.map((season) => (
             <option key={season.id} value={season.id}>
@@ -28,40 +29,57 @@ const Seasons: React.FC<SeasonsProps> = ({ seasons, onEpisodeSelect }) => {
             </option>
           ))}
         </select>
+        <div className="inline-flex rounded-full p-[2px] bg-gradient-to-r from-white/10 to-white/5 ring-1 ring-white/10 backdrop-blur-md">
+          {seasons.map((season) => (
+            <button
+              key={season.id}
+              onClick={() => setSelectedSeason(season.id)}
+              aria-pressed={selectedSeason === season.id}
+              aria-label={`Season ${season.seasonNumber}`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                selectedSeason === season.id
+                  ? 'bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-[0_8px_20px_-10px_rgba(244,63,94,0.5)]'
+                  : 'text-gray-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {season.seasonNumber}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Episodes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {currentSeason?.episodes.map((episode) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {(currentSeason?.episodes ?? []).map((episode) => (
           <div
             key={episode.id}
-            className="bg-gray-700/50 rounded-lg overflow-hidden hover:bg-gray-700 transition-colors duration-300 cursor-pointer group"
+            className="relative rounded-2xl overflow-hidden cursor-pointer group ring-1 ring-gray-700/30 hover:ring-red-500/40 transition-all duration-300 bg-gradient-to-b from-gray-800/50 to-gray-800/30"
             onClick={() => onEpisodeSelect?.(episode)}
           >
             <div className="relative">
               <img
                 src={episode.image_path}
                 alt={episode.title}
-                className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full aspect-video max-h-32 md:max-h-36 object-cover object-center rounded-t-2xl transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="bg-red-600 rounded-full p-3">
+              {/* Dim overlay for readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              {/* Play on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="bg-red-600/90 rounded-full p-3 shadow-lg shadow-red-600/30">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
                 </div>
               </div>
-              <div className="absolute bottom-2 left-2">
-                <span className="bg-black/80 text-white text-xs px-2 py-1 rounded">
-                  {episode.episode_short_detail}
-                </span>
-              </div>
+              {/* Removed bottom-left pill to declutter thumbnails */}
             </div>
             
             <div className="p-4">
-              <h4 className="text-white font-semibold text-sm line-clamp-2 mb-2">
+              <h4 className="text-white font-semibold text-sm line-clamp-2 mb-1">
                 {episode.title}
               </h4>
+              <span className="text-[11px] text-gray-400 mb-1 block">{episode.episode_short_detail}</span>
               <p className="text-gray-400 text-xs line-clamp-2 mb-3">
                 {episode.description}
               </p>
@@ -84,7 +102,7 @@ const Seasons: React.FC<SeasonsProps> = ({ seasons, onEpisodeSelect }) => {
                 </div>
                 
                 <span className="text-gray-500">
-                  {episode.release_date.toLocaleDateString()}
+                  {new Date(String(episode.release_date)).toLocaleDateString()}
                 </span>
               </div>
             </div>

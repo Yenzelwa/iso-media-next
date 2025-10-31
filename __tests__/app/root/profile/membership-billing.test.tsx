@@ -51,7 +51,7 @@ describe('MembershipBilling', () => {
     expect(screen.getByText('Full Name')).toBeInTheDocument();
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     expect(screen.getByText('Phone Number')).toBeInTheDocument();
-    expect(screen.getByText('(123) 456-7890')).toBeInTheDocument();
+    expect(screen.getByText('+1 (123) 456-7890')).toBeInTheDocument();
 
     expect(screen.getByText('Billing Details')).toBeInTheDocument();
     expect(screen.getByText('Primary Payment Method')).toBeInTheDocument();
@@ -65,7 +65,7 @@ describe('MembershipBilling', () => {
     fireEvent.click(within(phoneSection).getByRole('button', { name: /change/i }));
 
     const input = within(phoneSection).getByLabelText(/phone number/i) as HTMLInputElement;
-    expect(input.value).toBe('(123) 456-7890');
+    expect(input.value).toBe('+1 (123) 456-7890');
 
     const saveButton = within(phoneSection).getByRole('button', { name: /save/i });
     expect(saveButton).toBeDisabled();
@@ -76,17 +76,17 @@ describe('MembershipBilling', () => {
     const infoSpy = jest.spyOn(console, 'info').mockImplementation(() => {});
     fireEvent.click(saveButton);
 
-    expect(updateUser).toHaveBeenCalledWith({ phone: '(999) 000-1111' });
+    expect(updateUser).toHaveBeenCalledWith({ phone: '+1 (999) 000-1111' });
     expect(infoSpy).toHaveBeenCalledWith(
       'profile.phone.update',
       expect.objectContaining({ last4: '1111' }),
     );
     infoSpy.mockRestore();
 
-    const updatedUser = { ...user, phone: '(999) 000-1111' };
+    const updatedUser = { ...user, phone: '+1 (999) 000-1111' };
     rerender(<MembershipBilling user={updatedUser} updateUser={updateUser} />);
 
-    expect(screen.getByText('(999) 000-1111')).toBeInTheDocument();
+    expect(screen.getByText('+1 (999) 000-1111')).toBeInTheDocument();
     expect(screen.queryByLabelText(/phone number/i)).not.toBeInTheDocument();
   });
 
@@ -112,7 +112,7 @@ describe('MembershipBilling', () => {
 
     expect(updateUser).not.toHaveBeenCalled();
     expect(screen.queryByLabelText(/phone number/i)).not.toBeInTheDocument();
-    expect(screen.getByText('(123) 456-7890')).toBeInTheDocument();
+    expect(screen.getByText('+1 (123) 456-7890')).toBeInTheDocument();
   });
 
   test('does not enable save when digits are unchanged', async () => {
@@ -126,5 +126,37 @@ describe('MembershipBilling', () => {
 
     fireEvent.change(input, { target: { value: '1234567890' } });
     await waitFor(() => expect(saveButton).toBeDisabled());
+  });
+
+  test('name edit flow validates and saves only when changed and >= 2 chars', async () => {
+    const { user, updateUser, rerender } = setup();
+
+    // Enter name edit mode
+    const editButton = screen.getByRole('button', { name: /edit/i });
+    fireEvent.click(editButton);
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const save = screen.getByRole('button', { name: /save/i });
+
+    // Initially unchanged -> disabled
+    expect(input.value).toBe(user.name);
+    expect(save).toBeDisabled();
+
+    // Too short -> disabled
+    fireEvent.change(input, { target: { value: 'J' } });
+    expect(save).toBeDisabled();
+
+    // Valid change -> enabled
+    fireEvent.change(input, { target: { value: 'Jane Smith' } });
+    await waitFor(() => expect(save).toBeEnabled());
+
+    fireEvent.click(save);
+    expect(updateUser).toHaveBeenCalledWith({ name: 'Jane Smith' });
+
+    // Rerender with updated user to ensure display state reflects saved value
+    const updatedUser = { ...user, name: 'Jane Smith' };
+    rerender(<MembershipBilling user={updatedUser} updateUser={updateUser} />);
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 });

@@ -29,6 +29,9 @@ jest.mock("lucide-react", () => {
     Star: Icon,
     Calendar: Icon,
     ChevronLeft: Icon,
+    Layers: Icon,
+    Clapperboard: Icon,
+    Clock: Icon,
   };
 });
 
@@ -214,8 +217,11 @@ describe("SeriesDetail page", () => {
     expect(push).toHaveBeenLastCalledWith("/watch/5");
   });
 
-  it("matches snapshot", async () => {
-    const { container } = await renderPage();
-    expect(container.firstChild).toMatchSnapshot();
+  it("renders genre chips and CTA", async () => {
+    await renderPage();
+    for (const g of mockSeriesResponse.genre) {
+      expect(screen.getByText(g)).toBeInTheDocument();
+    }
+    expect(screen.getByRole("button", { name: /play series/i })).toBeInTheDocument();
   });
 });

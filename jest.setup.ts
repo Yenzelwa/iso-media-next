@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // jest.setup.ts
 import '@testing-library/jest-dom';
+// Polyfill fetch for JSDOM environment
+// Note: do not globally polyfill fetch here to avoid Node internal issues in this environment.
 
 // Polyfill TextEncoder/TextDecoder for Node < 18
 import { TextEncoder, TextDecoder } from 'util';

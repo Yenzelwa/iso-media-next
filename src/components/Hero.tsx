@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Calendar } from "lucide-react";
 import { StarRating } from "./StarRating";
 import { Video } from "@/typings";
 import { useAuth } from "../app/context/authContext";
+import { trackEvent } from "@/src/lib/observability";
+import { themeClasses } from "@/src/lib/theme";
 
 interface HeroProps {
   videos: Video[];
@@ -59,7 +61,10 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
 
   const redirectToWatch = useCallback(() => {
     if (!activeVideo) return;
-    router.push(`/watch/${activeVideo.id}`);
+    const isSeries = activeVideo?.type?.name?.toLowerCase() === 'series';
+    const href = isSeries ? `/series/${activeVideo.id}` : `/watch/${activeVideo.id}`;
+    trackEvent('hero.play.click', { target: href, id: activeVideo.id, type: activeVideo?.type?.name });
+    router.push(href);
   }, [router, activeVideo]);
 
   const redirectToSignIn = () => {
@@ -85,9 +90,12 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
   const description =
     activeVideo.description ??
     "Discover immersive stories curated to inspire, educate, and transform.";
+  const releaseYear = activeVideo?.release_date
+    ? new Date(String(activeVideo.release_date)).getFullYear()
+    : undefined;
 
   return (
-    <section className="relative h-[calc(100vh-6rem)] sm:h-[calc(100vh-5rem)] lg:h-[calc(100vh-4rem)] overflow-hidden">
+    <section className="relative h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] xl:h-[calc(100vh-6rem)] overflow-hidden">
       <div className="absolute inset-0">
         <img
           src={activeVideo.image_path || "/images/2.jpg"}
@@ -96,35 +104,51 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
             isTransitioning ? "opacity-75" : "opacity-100"
           }`}
         />
+        {/* Diagonal soft panel to align with EnhancedCarousel home styling */}
+        <div
+          data-testid="hero-bg-enhanced-overlay"
+          className="absolute inset-0 bg-gradient-to-br from-slate-900/40 to-gray-900/40"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/80" />
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/90 to-transparent" />
       </div>
 
-      <div className="relative z-10 flex h-full items-center px-4 md:px-10 lg:px-16">
+      <div className="relative z-10 flex h-full items-center px-4 lg:px-16">
         <div
-          className={`max-w-3xl transition-all duration-500 ${
+          className={`max-w-4xl transition-all duration-500 ${
             contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
           <div className="flex items-center gap-3 mb-6">
-            <span className="bg-red-600 text-white text-xs md:text-sm px-3 py-1.5 rounded-md font-semibold tracking-wide">
+            <span className="bg-gray-900/80 backdrop-blur-sm text-white text-xs md:text-sm px-3 py-1.5 rounded-lg font-semibold tracking-wide border border-white/10">
               {categoryLabel}
             </span>
             {activeVideo.type?.category?.name && (
-              <span className="bg-white/10 text-white text-xs md:text-sm px-3 py-1.5 rounded-md backdrop-blur-sm border border-white/10">
+              <span className="bg-white/10 text-white text-xs md:text-sm px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
                 {activeVideo.type.category.name}
               </span>
             )}
           </div>
 
-          <StarRating rating={ratingValue} />
-
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+          <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
             {displayTitle}
           </h1>
 
-          <p className="text-sm md:text-base lg:text-lg text-gray-200 leading-7 max-w-2xl">
+          {/* Meta row: rating + release year */}
+          <div className="flex flex-wrap items-center gap-6 mb-6 text-white">
+            <div className="flex items-center gap-3">
+              <StarRating rating={ratingValue} />
+            </div>
+            {typeof releaseYear === 'number' && (
+              <div className="flex items-center space-x-2 text-white/90">
+                <Calendar className="w-5 h-5" />
+                <span className="text-base">{releaseYear}</span>
+              </div>
+            )}
+          </div>
+
+          <p className="text-lg text-gray-200 leading-relaxed max-w-3xl">
             {description}
           </p>
 
@@ -132,7 +156,7 @@ export const Hero: React.FC<HeroProps> = ({ videos }) => {
             <button
               onClick={user ? redirectToWatch : redirectToSignIn}
               type="button"
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-red-600/25"
+              className={`${themeClasses.primaryCta()} px-8 py-4 rounded-lg font-semibold flex items-center gap-2 transition-all duration-300 transform hover:scale-105`}
             >
               <Play className="w-4 h-4" />
               <span>{user ? "Play Now" : "Start Free Trial"}</span>

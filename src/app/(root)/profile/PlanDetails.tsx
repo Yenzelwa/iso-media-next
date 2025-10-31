@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { CreditCard, Settings, X } from 'lucide-react';
 import { toCents } from '@/src/utils/cents';
+import { changeSubscriptionService } from '@/src/services/plans/changeSubscription';
 
 interface Plan {
   id: string;
@@ -305,20 +306,15 @@ export const PlanDetails: React.FC = () => {
                       setShowConfirmChange(false);
                       return;
                     }
-                    const response = await fetch('/api/subscription/change', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ new_plan_id: pendingPlan.id }),
-                    });
+                    // Use service to change subscription and update UI without reload
+                    const updated = await changeSubscriptionService({ plan_id: pendingPlan.id });
 
-                    if (response.ok) {
-                      alert(`Successfully ${pendingAction === 'upgrade' ? 'upgraded' : 'downgraded'} to ${pendingPlan.name} plan!`);
-                      window.location.reload();
-                    } else {
-                      throw new Error('Failed to change plan');
-                    }
+                    // Reflect new current plan in local state
+                    setPlans(prev => prev.map(p => ({ ...p, current: p.id === updated.plan.id })));
+                    setSubscription(updated as any);
+
+                    alert(`Successfully ${pendingAction === 'upgrade' ? 'upgraded' : 'downgraded'} to ${pendingPlan.name} plan!`);
+                    setShowConfirmChange(false);
                   } catch (err) {
                     console.error('Error changing plan:', err);
                     alert('Failed to change plan. Please try again later.');

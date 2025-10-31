@@ -13,9 +13,7 @@ interface Props {
 }
 
 const AccountRootLayout: React.FC <Props> = ({ children } ) => {
-  const pathname = usePathname();
-  const hideNavRoutes = new Set(["/plan-selection", "/payment"]);
-  const showNavigation = !hideNavRoutes.has(pathname ?? "");
+  
 
   return (
      <html lang="en">
@@ -24,13 +22,6 @@ const AccountRootLayout: React.FC <Props> = ({ children } ) => {
       <div className={themeClasses.pageBackground()}>
       
 
-    {showNavigation && (
-      <div className="flex-shrink-0 text-white "> 
-          <div className="border-b bg-slate-100">
-      <Navigation/>
-        </div>
-        </div>
-    )}
         <div className="p-12 flex items-center justify-center text-white">
 
         {children}

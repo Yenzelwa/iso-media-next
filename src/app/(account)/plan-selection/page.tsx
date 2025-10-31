@@ -1,12 +1,12 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import  Link  from 'next/link';
+import Link from 'next/link';
 import { ArrowLeft, CheckCircle, Shield, Play } from 'lucide-react';
 import { useAuth } from '../../context/authContext';
-import { UserMenu } from '@/src/components/UserMenu';
 import { themeClasses } from '@/src/lib/theme';
 import { PricingCard } from '@/src/components/PriceCard';
 import { trackEvent } from '@/src/lib/obs';
+import { AccountNav } from '@/src/components/AccountNav';
 
 interface Plan {
   id: string;
@@ -100,68 +100,8 @@ const PlanSelection: React.FC = () => {
   }, []);
 
   return (
-    <div className={`min-h-screen ${themeClasses.pageBackground()} text-white`}>
-      {/* Netflix-style Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/95 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo Section */}
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="flex items-center space-x-3 group">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-red-500/50 border border-red-400/30">
-                    <div className="w-6 h-6 bg-white rounded-lg transition-all duration-500 group-hover:rounded-full group-hover:scale-90 shadow-inner"></div>
-                  </div>
-                  <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-2xl opacity-0 group-hover:opacity-75 transition-all duration-500 animate-pulse blur-sm"></div>
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                </div>
-                <div className="hidden sm:block">
-                  <span className="text-2xl font-black text-white tracking-tight transition-all duration-300 group-hover:text-red-300 bg-gradient-to-r from-white to-gray-200 bg-clip-text">
-                    IsolaKwaMUNTU
-                  </span>
-                  <div className="text-xs text-gray-400 tracking-widest uppercase font-semibold opacity-75">
-                    Premium Streaming
-                  </div>
-                </div>
-              </Link>
-            </div>
-
-            {/* Step Indicator */}
-            <div className="hidden md:flex items-center space-x-2 text-sm text-gray-400">
-              <div className="flex items-center space-x-1">
-                <CheckCircle className="w-4 h-4 text-green-400" />
-                <span>Account</span>
-              </div>
-              <div className="w-8 h-px bg-gray-600"></div>
-              <div className="flex items-center space-x-1 text-red-400 font-semibold">
-                <div className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                </div>
-                <span>Choose Plan</span>
-              </div>
-              <div className="w-8 h-px bg-gray-600"></div>
-              <div className="flex items-center space-x-1">
-                <div className="w-4 h-4 rounded-full border-2 border-gray-600"></div>
-                <span>Payment</span>
-              </div>
-            </div>
-
-            {/* User Section */}
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <UserMenu />
-              ) : (
-                <Link
-                  href="/login"
-                  className="group relative bg-gradient-to-r from-gray-800/40 to-gray-700/40 hover:from-gray-700/60 hover:to-gray-600/60 text-gray-300 hover:text-white px-4 xl:px-6 py-2 xl:py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 mr-2 xl:mr-3 border border-gray-600/30 hover:border-gray-500/50 backdrop-blur-sm shadow-lg hover:shadow-gray-500/20 transform hover:scale-105"
-                >
-                  Sign In
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className={`min-h-[100dvh] ${themeClasses.pageBackground()} text-white overflow-x-hidden`}>
+      <AccountNav step="plan" />
 
       {/* Dynamic Background */}
       <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
@@ -255,7 +195,7 @@ const PlanSelection: React.FC = () => {
         <div className="flex flex-col items-center mt-16 space-y-6">
           <Link id="payment-link"
             href="/payment"
-            className="group relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-12 py-4 rounded-2xl inline-flex items-center space-x-3 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-red-500/50 font-semibold text-lg min-w-[280px] justify-center"
+            className={`group relative ${themeClasses.primaryCta()} px-12 py-4 rounded-2xl inline-flex items-center space-x-3 transition-all duration-300 transform hover:scale-105 font-semibold text-lg min-w-[280px] justify-center`}
             onClick={() => trackEvent('plan-selection.continue', { selected_plan: selectedPlan })}
           >
             <span>Continue to Payment</span>

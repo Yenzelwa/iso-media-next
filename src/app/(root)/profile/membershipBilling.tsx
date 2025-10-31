@@ -1,9 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { CreditCard, Edit3, Calendar, History, X, Eye, EyeOff } from 'lucide-react';
-import { formatPhoneNumber } from '@/src/utils/phone';
+import { formatPhoneNumber, toE164 } from '@/src/utils/phone';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { InlineStripeForm } from '@/src/components/InlineStripeForm';
+import UpdateStripeCardForm from '@/src/components/UpdateStripeCardForm';
 
 interface BillingTransaction {
   id: number;
@@ -108,6 +108,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
   }, [user]);
 
   const sanitizePhone = (value: string) => value.replace(/\D/g, '');
+  const e164Digits = (value: string) => toE164(value).replace(/\D/g, '');
 
   const handleSave = (field: string) => {
     const value = editValues[field as keyof typeof editValues];
@@ -117,10 +118,11 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
         return;
       }
 
-      const digits = sanitizePhone(value);
-      const currentDigits = sanitizePhone(user?.phone || '');
+      const currentDigits = e164Digits(user?.phone || '');
+      const newDigits = e164Digits(value);
 
-      if (digits.length !== 10 || digits === currentDigits) {
+      // Require at least 11 digits including country code and must differ
+      if (newDigits.length < 11 || newDigits === currentDigits) {
         return;
       }
 
@@ -134,10 +136,19 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
       console.info('profile.phone.update', {
         status: 'submitted',
         userId: user?.id ?? 'unknown',
-        last4: digits.slice(-4) || null,
+        last4: newDigits.slice(-4) || null,
         correlation_id: correlationId,
         user_role: user?.role ?? 'unknown',
       });
+    }
+
+    if (field === 'name') {
+      if (typeof value !== 'string') return;
+      const next = value.trim();
+      const current = (user?.name || '').trim();
+      if (!next || next.length < 2 || next === current) {
+        return;
+      }
     }
 
     updateUser({ [field]: value });
@@ -210,9 +221,9 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
     setIsEditing(null);
   };
 
-  const userPhoneDigits = sanitizePhone(user?.phone || '');
-  const editPhoneDigits = sanitizePhone(editValues.phone || '');
-  const canSavePhone = editPhoneDigits.length === 10 && editPhoneDigits !== userPhoneDigits;
+  const userPhoneDigits = e164Digits(user?.phone || '');
+  const editPhoneDigits = e164Digits(editValues.phone || '');
+  const canSavePhone = editPhoneDigits.length >= 11 && editPhoneDigits !== userPhoneDigits;
   const displayedPhone = formatPhoneNumber(user?.phone || '');
   // TODO: remove debug artifacts; inserted for patch anchoring
   /*
@@ -259,12 +270,18 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
               <div className="flex space-x-2">
                 {isEditing === 'name' ? (
                   <>
-                    <button
-                      onClick={() => handleSave('name')}
-                      className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
-                    >
-                      Save
-                    </button>
+                    {(() => {
+                      const canSaveName = (editValues.name ?? '').trim().length >= 2 && (editValues.name ?? '').trim() !== (user?.name ?? '');
+                      return (
+                        <button
+                          onClick={() => canSaveName && handleSave('name')}
+                          disabled={!canSaveName}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${canSaveName ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-600/40 text-gray-400 cursor-not-allowed'}`}
+                        >
+                          Save
+                        </button>
+                      );
+                    })()}
                     <button
                       onClick={() => setIsEditing(null)}
                       className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
@@ -366,6 +383,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setShowCardDetails(!showCardDetails)}
+                  aria-label={showCardDetails ? 'Hide card details' : 'Show card details'}
                   className="bg-gray-600/20 text-gray-400 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-600/30 transition-colors border border-gray-500/30"
                 >
                   {showCardDetails ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -446,7 +464,7 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
                       </div>
                       <div>
                         <p className="text-white font-medium">{transaction.description}</p>
-                        <p className="text-gray-400 text-sm">{transaction.date} â€¢ {transaction.method}</p>
+                        <p className="text-gray-400 text-sm">{transaction.date} · {transaction.method}</p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -465,22 +483,28 @@ export const MembershipBilling: React.FC<MembershipBillingProps> = ({ user, upda
 
       {/* Update Card Popup Modal */}
       {showCardPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div role="dialog" aria-modal="true" aria-labelledby="update-payment-title" className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="update-payment-title"
+            className="bg-gradient-to-br from-gray-900/95 to-slate-900/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-gray-700/50 shadow-2xl p-6 sm:p-8 max-w-xl sm:max-w-2xl w-full max-h-[80vh] overflow-hidden"
+          >
             <div className="flex items-center justify-between mb-6">
               <h3 id="update-payment-title" className="text-2xl font-bold text-white">Update Payment Details</h3>
               <button
                 onClick={() => setShowCardPopup(false)}
+                aria-label="Close update payment dialog"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
             {/* Secure Stripe Card Form in modal */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               {stripePromise && (
                 <Elements stripe={stripePromise}>
-                  <InlineStripeForm
+                  <UpdateStripeCardForm
                     onSuccess={(pmLabel) => {
                       updateUser({ paymentMethod: pmLabel });
                       setShowCardPopup(false);

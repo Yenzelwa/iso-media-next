@@ -7,6 +7,19 @@ import { EnhancedCarousel } from '@/src/components/EnhancedCarousel';
 // Mock lucide-react icons to inert spans
 jest.mock('lucide-react', () => new Proxy({}, { get: () => (props: any) => <span data-icon /> }));
 
+// Mock next/navigation router to avoid App Router invariant in tests
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: (url: string) => {
+      // emulate navigation for assertions that check window.location
+      // without requiring the Next.js app router
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      window.location.href = url;
+    },
+  }),
+}));
+
 // Faux scrolling element to mimic the scroll container
 class FauxScrollEl {
   scrollLeft = 0;
@@ -117,4 +130,59 @@ test('variant-specific rendering across home / documentary / series', () => {
 test('does not render when movies array empty', () => {
   const { container } = render(<EnhancedCarousel title="Empty Section" movies={[]} variant="home" />);
   expect(container.firstChild).toBeNull();
+});
+
+test('routes to series or watch based on type', () => {
+  const seriesMovie = { ...movies[0], id: 's1', type: { name: 'Series' } };
+  const docMovie = { ...movies[1], id: 'd1', type: { name: 'Documentary' } };
+  const localMovies = [seriesMovie, docMovie];
+
+  Object.defineProperty(window, 'location', {
+    value: { href: '' },
+    writable: true,
+  });
+
+  render(<EnhancedCarousel title="My List" movies={localMovies as any} variant="home" />);
+
+  // Click first card (series)
+  const cards = document.querySelectorAll('[data-variant="home"] .group\\/item');
+  (cards[0] as HTMLElement).click();
+  expect(window.location.href).toBe('/series/s1');
+
+  // Click play on second card (documentary)
+  const playButtons = document.querySelectorAll('button[title="Play video"]');
+  (playButtons[1] as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  expect(window.location.href).toBe('/watch/d1');
+});
+
+test('clicking play does not bubble to card click', () => {
+  const docMovie = { ...movies[1], id: 'd2', type: { name: 'Documentary' } };
+  const localMovies = [docMovie];
+
+  const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+  Object.defineProperty(window, 'location', {
+    value: { href: '' },
+    writable: true,
+  });
+
+  render(<EnhancedCarousel title="My List" movies={localMovies as any} variant="home" />);
+
+  const playButtons = document.querySelectorAll('button[title="Play video"]');
+  (playButtons[0] as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+  // Collect event names sent to console.debug
+  const calls = debugSpy.mock.calls.map(c => (c?.[1]?.name || c?.[0]));
+  expect(calls).toEqual(expect.arrayContaining(['browse.card.play']));
+  expect(calls).not.toEqual(expect.arrayContaining(['browse.card.click']));
+
+  expect(window.location.href).toBe('/watch/d2');
+  debugSpy.mockRestore();
+});
+
+test('renders with missing image_path without crashing', () => {
+  const badMovie = { ...movies[0], id: 'x1', image_path: undefined } as any;
+  const { getByText } = render(<EnhancedCarousel title="Edge" movies={[badMovie]} variant="home" />);
+  expect(getByText(badMovie.title)).toBeInTheDocument();
+  const img = document.querySelector('img');
+  expect(img?.getAttribute('src')).toBe('/images/2.jpg');
 });
